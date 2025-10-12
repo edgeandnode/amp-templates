@@ -25,7 +25,7 @@ services:
       retries: 5
 
   amp:
-    image: ghcr.io/edgeandnode/nozzle:latest
+    image: ghcr.io/edgeandnode/amp:latest
     command: ["--config", "/var/lib/amp/config.toml", "dev"]
     depends_on:
       db:
@@ -48,12 +48,13 @@ services:
 
   ampsync:
     image: ghcr.io/edgeandnode/ampsync:latest
+    command: ["sync"]
     environment:
       # Dataset name - schema is auto-fetched from admin-api
-      DATASET_NAME: "ampsync_example"
-      # DATASET_VERSION: "0.1.0"  # Optional: pin to specific version (omit for auto-update mode)
+      AMP_DATASET_NAME: "ampsync_example"
+      # AMP_DATASET_VERSION: "0.1.0"  # Optional: pin to specific version (omit for auto-update mode)
 
-      # Amp ArrowFlight URL. Used to stream data from Nozzle
+      # Amp ArrowFlight URL. Used to stream data from Amp
       AMP_FLIGHT_ADDR: http://amp:1602
       # Amp Admin API URL. Used to fetch dataset schema and detect version updates
       AMP_ADMIN_API_ADDR: http://amp:1610

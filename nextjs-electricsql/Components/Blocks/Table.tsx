@@ -61,6 +61,12 @@ export function AnvilBlocksTable() {
                 >
                   Hash
                 </th>
+                 <th
+                  scope="col"
+                  className="px-3 py-3.5 text-left text-sm font-semibold text-white"
+                >
+                  Nonce
+                </th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-200 dark:divide-white/10">
@@ -74,6 +80,9 @@ export function AnvilBlocksTable() {
                   </td>
                   <td className="px-3 py-4 text-sm whitespace-nowrap text-space-500">
                     {block.hash}
+                  </td>
+                  <td className="px-3 py-4 text-sm whitespace-nowrap text-space-500">
+                    {block.nonce}
                   </td>
                 </tr>
               ))}

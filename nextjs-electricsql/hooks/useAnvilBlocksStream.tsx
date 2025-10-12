@@ -7,7 +7,7 @@ export const AnvilBlock = Schema.Struct({
   block_num: Schema.String,
   timestamp: Schema.String,
   hash: Schema.String,
-  nonce: Schema.NonNegative,
+  nonce: Schema.String,
 });
 export type AnvilBlock = typeof AnvilBlock.Type;
 const AnvilBlockDecoder = Schema.decodeUnknownSync(AnvilBlock);

@@ -50,4 +50,4 @@ dev-app:
 # Start the amp development server (watch config changes)
 [private]
 dev-amp:
-    pnpm nozzl dev
+    pnpm amp dev

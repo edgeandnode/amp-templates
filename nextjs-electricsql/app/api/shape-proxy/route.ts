@@ -14,7 +14,7 @@ export async function GET(request: Request) {
   });
 
   // Set the table server-side - not from client params
-  // the table name: blocks comes from the nozzle.config.ts.
+  // the table name: blocks comes from the amp.config.ts.
   // when ampsync starts, it will create the table: blocks in the database;
   // which electric-sql then reads from
   electricSqlUrl.searchParams.set(`table`, `blocks`);

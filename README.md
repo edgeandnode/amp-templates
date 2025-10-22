@@ -44,8 +44,8 @@ See the [Create Amp README](./packages/create-amp/README.md) for detailed usage 
 
 ### Prerequisites
 
-- Node.js >= 20.0.0
-- pnpm >= 9.0.0
+- Node.js >= 22.0.0
+- pnpm >= 10.19.0
 
 ### Setup
 

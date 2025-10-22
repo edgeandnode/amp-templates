@@ -26,7 +26,7 @@ amp-templates/
 - **Package Manager**: pnpm v10.19.0+
 - **Workspace Configuration**: `pnpm-workspace.yaml`
   - Packages: `packages/*`
-- **Node Version**: v20+ (specified in engines field)
+- **Node Version**: v22+ (specified in engines field)
 
 ## Commands Reference
 
@@ -199,7 +199,7 @@ The CLI (`packages/create-amp`) provides project scaffolding:
 
 ## Key Technologies
 
-- **Runtime**: Node.js v20+, TypeScript 5.8+
+- **Runtime**: Node.js v22+, TypeScript 5.9+
 - **CLI Framework**: @clack/prompts for interactive prompts
 - **Templates**: Next.js 15, Vite, React, TypeScript
 - **Styling**: Tailwind CSS

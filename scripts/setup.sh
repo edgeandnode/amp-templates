@@ -25,8 +25,8 @@ fi
 
 # Check Node version
 NODE_VERSION=$(node --version | cut -d'v' -f2 | cut -d'.' -f1)
-if [ "$NODE_VERSION" -lt 20 ]; then
-    echo -e "${RED}ERROR: Node.js version 20 or higher is required. Current version: $(node --version)${NC}"
+if [ "$NODE_VERSION" -lt 22 ]; then
+    echo -e "${RED}ERROR: Node.js version 22 or higher is required. Current version: $(node --version)${NC}"
     exit 1
 fi
 

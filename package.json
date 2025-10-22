@@ -13,18 +13,26 @@
     "dev": "pnpm -r --filter './packages/**' dev",
     "clean": "pnpm -r --filter './packages/**' exec rm -rf dist node_modules",
     "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md}\"",
-    "lint": "eslint \"packages/**/*.{ts,tsx,js,jsx}\""
+    "lint": "eslint \"packages/**/*.{ts,tsx,js,jsx}\"",
+    "test": "vitest",
+    "test:coverage": "vitest --coverage"
   },
   "devDependencies": {
+    "@eslint/js": "^9.37.0",
     "@types/node": "^24.7.2",
+    "eslint": "^9.37.0",
+    "eslint-plugin-import": "^2.31.0",
+    "eslint-plugin-perfectionist": "^3.3.0",
+    "globals": "^15.14.0",
     "prettier": "^3.4.2",
-    "typescript": "^5.8.3"
+    "prettier-plugin-tailwindcss": "^0.6.8",
+    "typescript": "^5.8.3",
+    "typescript-eslint": "^8.22.0",
+    "vitest": "^2.1.8"
   },
-  "packageManager": "pnpm@9.15.4",
+  "packageManager": "pnpm@10.19.0",
   "engines": {
     "node": ">=20.0.0",
-    "pnpm": ">=9.0.0"
+    "pnpm": ">=10.0.0"
   }
 }
-
-

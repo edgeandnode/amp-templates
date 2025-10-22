@@ -86,6 +86,7 @@ pnpm lint
 CLI tool to scaffold Amp-powered web applications with various technology stacks and examples.
 
 **Features:**
+
 - 🚀 Multiple Frameworks: Next.js or React (Vite)
 - 📊 Data Layer Options: Arrow Flight or Amp Sync
 - 🗄️ Database ORMs: ElectricSQL or Drizzle (when using Amp Sync)
@@ -110,6 +111,7 @@ Full-featured example applications demonstrating different Amp integration patte
 Demonstrates the usage of the `ampsync` crate to sync data to PostgreSQL, then using [Electric SQL](https://electric-sql.com/docs/intro) to reactively sync the amp dataset data and make it available in a Next.js UI.
 
 **Tech Stack:**
+
 - Docker (PostgreSQL, Anvil, Amp, Ampsync, Electric SQL)
 - Next.js app
 

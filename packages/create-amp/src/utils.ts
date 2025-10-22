@@ -2,21 +2,21 @@
  * Utility functions for the create-amp CLI
  */
 
-import * as fs from 'fs-extra';
-import * as fsPromises from 'node:fs/promises';
-import path from 'node:path';
-import type { TemplateData } from './types';
+import * as fs from "fs-extra"
+import * as fsPromises from "node:fs/promises"
+import path from "node:path"
+import type { TemplateData } from "./types"
 
 /**
  * Detect which package manager is being used
  */
-export function detectPackageManager(): 'pnpm' | 'npm' | 'yarn' | 'bun' {
-  const userAgent = process.env.npm_config_user_agent || '';
+export function detectPackageManager(): "pnpm" | "npm" | "yarn" | "bun" {
+  const userAgent = process.env.npm_config_user_agent || ""
 
-  if (userAgent.includes('pnpm')) return 'pnpm';
-  if (userAgent.includes('yarn')) return 'yarn';
-  if (userAgent.includes('bun')) return 'bun';
-  return 'npm';
+  if (userAgent.includes("pnpm")) return "pnpm"
+  if (userAgent.includes("yarn")) return "yarn"
+  if (userAgent.includes("bun")) return "bun"
+  return "npm"
 }
 
 /**
@@ -24,14 +24,14 @@ export function detectPackageManager(): 'pnpm' | 'npm' | 'yarn' | 'bun' {
  */
 export function getInstallCommand(packageManager: string): string {
   switch (packageManager) {
-    case 'pnpm':
-      return 'pnpm install';
-    case 'yarn':
-      return 'yarn';
-    case 'bun':
-      return 'bun install';
+    case "pnpm":
+      return "pnpm install"
+    case "yarn":
+      return "yarn"
+    case "bun":
+      return "bun install"
     default:
-      return 'npm install';
+      return "npm install"
   }
 }
 
@@ -40,10 +40,10 @@ export function getInstallCommand(packageManager: string): string {
  */
 export async function isDirectoryEmpty(dirPath: string): Promise<boolean> {
   try {
-    const files = await fs.readdir(dirPath);
-    return files.length === 0;
+    const files = await fs.readdir(dirPath)
+    return files.length === 0
   } catch {
-    return true; // Directory doesn't exist
+    return true // Directory doesn't exist
   }
 }
 
@@ -51,7 +51,7 @@ export async function isDirectoryEmpty(dirPath: string): Promise<boolean> {
  * Validate project name
  */
 export function isValidProjectName(name: string): boolean {
-  return /^[a-z0-9-_]+$/.test(name);
+  return /^[a-z0-9-_]+$/.test(name)
 }
 
 /**
@@ -63,10 +63,10 @@ export function processTemplate(template: string, data: TemplateData): string {
     .replace(/\{\{\s*packageManager\s*\}\}/g, data.packageManager)
     .replace(/\{\{\s*framework\s*\}\}/g, data.framework)
     .replace(/\{\{\s*dataLayer\s*\}\}/g, data.dataLayer)
-    .replace(/\{\{\s*orm\s*\}\}/g, data.orm || '')
+    .replace(/\{\{\s*orm\s*\}\}/g, data.orm || "")
     .replace(/\{\{\s*networkDisplayName\s*\}\}/g, data.networkDisplayName)
     .replace(/\{\{\s*rpcUrl\s*\}\}/g, data.rpcUrl)
-    .replace(/\{\{\s*chainId\s*\}\}/g, data.chainId);
+    .replace(/\{\{\s*chainId\s*\}\}/g, data.chainId)
 }
 
 /**
@@ -76,9 +76,9 @@ export async function copyTemplate(
   srcDir: string,
   destDir: string,
   data: TemplateData,
-  filter?: (file: string) => boolean
+  filter?: (file: string) => boolean,
 ): Promise<void> {
-  await copyDirRecursive(srcDir, destDir, data, filter);
+  await copyDirRecursive(srcDir, destDir, data, filter)
 }
 
 /**
@@ -88,31 +88,31 @@ async function copyDirRecursive(
   srcDir: string,
   destDir: string,
   data: TemplateData,
-  filter?: (file: string) => boolean
+  filter?: (file: string) => boolean,
 ): Promise<void> {
-  const entries = await fsPromises.readdir(srcDir, { withFileTypes: true });
+  const entries = await fsPromises.readdir(srcDir, { withFileTypes: true })
 
   for (const entry of entries) {
-    const srcPath = path.join(srcDir, entry.name);
-    const destPath = path.join(destDir, entry.name);
+    const srcPath = path.join(srcDir, entry.name)
+    const destPath = path.join(destDir, entry.name)
 
     if (entry.isDirectory()) {
-      await fs.ensureDir(destPath);
-      await copyDirRecursive(srcPath, destPath, data, filter);
+      await fs.ensureDir(destPath)
+      await copyDirRecursive(srcPath, destPath, data, filter)
     } else if (entry.isFile()) {
-      const relativePath = path.relative(path.dirname(srcDir), srcPath);
+      const relativePath = path.relative(path.dirname(srcDir), srcPath)
 
       // Apply filter if provided
-      if (filter && !filter(relativePath)) continue;
+      if (filter && !filter(relativePath)) continue
 
       // Read file content
-      let content = await fsPromises.readFile(srcPath, 'utf-8');
+      let content = await fsPromises.readFile(srcPath, "utf-8")
 
       // Process template variables
-      content = processTemplate(content, data);
+      content = processTemplate(content, data)
 
       // Write processed content
-      await fsPromises.writeFile(destPath, content);
+      await fsPromises.writeFile(destPath, content)
     }
   }
 }
@@ -132,7 +132,7 @@ export function formatSuccessMessage(projectName: string, projectPath: string): 
   3. cd frontend && pnpm dev     # Start development server
 
 📚 Documentation: https://github.com/edgeandnode/amp-private/tree/main/docs
-`;
+`
 }
 
 /**
@@ -194,7 +194,7 @@ contracts/lib/
 
 # Drizzle
 drizzle/
-`;
+`
 
-  await fsPromises.writeFile(path.join(destPath, '.gitignore'), gitignore);
+  await fsPromises.writeFile(path.join(destPath, ".gitignore"), gitignore)
 }

@@ -57,4 +57,3 @@ To learn more about the tools used in this project:
 - [Vite Documentation](https://vitejs.dev/) - learn about Vite features and API.
 - [React Documentation](https://react.dev/) - learn about React.
 - [Tailwind CSS Documentation](https://tailwindcss.com/docs) - learn about Tailwind CSS.
-

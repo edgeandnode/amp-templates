@@ -7,12 +7,9 @@ import { runtime } from "./runtime"
 /**
  * Generic query function that executes SQL and transforms results using Effect Schema
  */
-export const query = Effect.fn(function*<A, I, R>(
-  schema: Schema.Schema<A, I, R>, 
-  query: string
-) {
+export const query = Effect.fn(function* <A, I, R>(schema: Schema.Schema<A, I, R>, query: string) {
   const flight = yield* ArrowFlight.ArrowFlight
-  
+
   // Stream data from Amp and collect all batches
   const data = yield* Stream.runCollect(flight.stream(query)).pipe(
     Effect.map((batches) => Chunk.toArray(batches).map((batch) => batch.data)),
@@ -24,10 +21,8 @@ export const query = Effect.fn(function*<A, I, R>(
 
   // Convert Arrow batches to table and decode with schema
   const table = new Table(data)
-  const result = yield* Schema.encodeUnknown(
-    Schema.Array(Arrow.generateSchema(table.schema))
-  )([...table])
-  
+  const result = yield* Schema.encodeUnknown(Schema.Array(Arrow.generateSchema(table.schema)))([...table])
+
   return yield* Schema.decodeUnknown(Schema.Array(schema))(result)
 })
 
@@ -50,7 +45,4 @@ const blocksQuery = `
 export const queryBlocks = () => query(Block, blocksQuery)
 
 // Create a reactive atom for blocks
-export const blocksAtom = runtime.atom(queryBlocks()).pipe(
-  Atom.withReactivity(["blocks"])
-)
-
+export const blocksAtom = runtime.atom(queryBlocks()).pipe(Atom.withReactivity(["blocks"]))

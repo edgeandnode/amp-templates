@@ -1,12 +1,12 @@
 export default function Home() {
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center p-8">
-      <main className="max-w-2xl mx-auto text-center">
-        <h1 className="text-4xl font-bold mb-4">Welcome to Your App</h1>
-        <p className="text-lg text-gray-600 mb-8">
-          Get started by editing <code className="bg-gray-100 px-2 py-1 rounded">app/page.tsx</code>
+    <div className="flex min-h-screen flex-col items-center justify-center p-8">
+      <main className="mx-auto max-w-2xl text-center">
+        <h1 className="mb-4 text-4xl font-bold">Welcome to Your App</h1>
+        <p className="mb-8 text-lg text-gray-600">
+          Get started by editing <code className="rounded bg-gray-100 px-2 py-1">app/page.tsx</code>
         </p>
       </main>
     </div>
-  );
+  )
 }

@@ -4,9 +4,7 @@ import { Schema } from "effect";
 export const env = createEnv({
   server: {
     ELECTRIC_URL: Schema.standardSchemaV1(Schema.URL),
-    NODE_ENV: Schema.standardSchemaV1(
-      Schema.Literal("development", "test", "production")
-    ),
+    NODE_ENV: Schema.standardSchemaV1(Schema.Literal("development", "test", "production")),
   },
   runtimeEnv: {
     ELECTRIC_URL: process.env.ELECTRIC_URL || "http://localhost:3000",

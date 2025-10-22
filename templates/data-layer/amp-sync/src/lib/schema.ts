@@ -1,4 +1,4 @@
-import { bigint, pgTable, text, timestamp } from "drizzle-orm/pg-core";
+import { bigint, pgTable, text, timestamp } from "drizzle-orm/pg-core"
 
 /**
  * Drizzle schema for {{projectName}}
@@ -11,6 +11,6 @@ export const blocks = pgTable("blocks", {
   timestamp: timestamp("timestamp").notNull(),
   hash: text("hash").notNull(),
   parentHash: text("parent_hash"),
-});
+})
 
 // Add more tables as needed

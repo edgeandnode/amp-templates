@@ -29,22 +29,27 @@ npm create @edgeandnode/amp my-app
 ## Configuration Options
 
 ### Framework
+
 - **Next.js**: Server-side rendering, API routes, and full-stack capabilities
 - **React (Vite)**: Fast development with instant HMR
 
 ### Data Layer
+
 - **Arrow Flight**: High-performance binary protocol for direct Amp queries
 - **Amp Sync**: PostgreSQL synchronization for traditional database workflows
 
 ### Database/ORM (when using Amp Sync)
+
 - **ElectricSQL**: Real-time sync with offline-first capabilities
 - **Drizzle**: Type-safe SQL query builder
 
 ### Examples
+
 - **Wallet App**: ERC20 token wallet with balance tracking and transfers
 - **Blank**: Start from scratch with just the infrastructure
 
 ### Local Setup
+
 - **Anvil + Amp**: Complete local blockchain and Amp server setup
 - **Public Dataset**: Connect to public Amp datasets
 - **Both**: Local development with public dataset fallback
@@ -176,4 +181,3 @@ Visit `http://localhost:3000` (Next.js) or `http://localhost:5173` (Vite)
 ## License
 
 UNLICENSED
-

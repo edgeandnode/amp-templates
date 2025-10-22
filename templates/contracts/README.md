@@ -51,4 +51,3 @@ contracts/
 
 - [Foundry Book](https://book.getfoundry.sh/)
 - [Solidity Documentation](https://docs.soliditylang.org/)
-

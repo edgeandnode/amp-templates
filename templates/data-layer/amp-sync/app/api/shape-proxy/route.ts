@@ -2,9 +2,7 @@ import { ELECTRIC_PROTOCOL_QUERY_PARAMS } from "@electric-sql/client"
 import type { NextRequest } from "next/server"
 import { NextResponse } from "next/server"
 
-const electricSqlUrl = new URL(
-  process.env.ELECTRIC_URL || "http://localhost:3000/v1/shape",
-)
+const electricSqlUrl = new URL(process.env.ELECTRIC_URL || "http://localhost:3000/v1/shape")
 
 export async function GET(request: NextRequest) {
   const url = new URL(request.url)

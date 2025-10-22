@@ -1,4 +1,4 @@
-import { AnvilBlocksTable } from "@/Components/Blocks/Table";
+import { AnvilBlocksTable } from "../Components/Blocks/Table";
 
 export default function HomePage() {
   return (

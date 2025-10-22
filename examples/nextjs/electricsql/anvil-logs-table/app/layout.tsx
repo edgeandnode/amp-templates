@@ -2,7 +2,7 @@ import "./globals.css";
 
 import type { Metadata } from "next";
 
-import { Layout } from "@/Components/Layout";
+import { Layout } from "../Components/Layout";
 
 export const metadata: Metadata = {
   title: "Ampsync with Electric SQL",

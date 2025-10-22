@@ -37,8 +37,5 @@
     "incremental": true,
     "removeComments": false,
     "jsx": "react-jsx",
-    "paths": {
-      "@/*": ["./src/*"]
-    }
-  }
+  },
 }

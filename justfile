@@ -67,8 +67,8 @@ clean:
 
 # Test template generation
 test-template NAME="my-app":
-    cd packages/create-amp && pnpm dev "{{NAME}}" --framework nextjs --data-layer arrow-flight
+    cd packages/create-amp-ref && pnpm dev "{{NAME}}" --framework nextjs --data-layer arrow-flight
 
 # Generate example project
 generate-example NAME="example-app":
-    cd packages/create-amp && pnpm dev "{{NAME}}" --framework nextjs --data-layer arrow-flight --example wallet
+    cd packages/create-amp-ref && pnpm dev "{{NAME}}" --framework nextjs --data-layer arrow-flight --example wallet

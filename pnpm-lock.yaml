@@ -109,7 +109,7 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
 
-  packages/create-amp:
+  packages/create-amp-ref:
     dependencies:
       '@clack/prompts':
         specifier: ^0.11.0

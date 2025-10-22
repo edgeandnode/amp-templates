@@ -1,34 +1,4 @@
-declare module "*.json" {
-  const value: any
-  export default value
-}
-
-declare module "*.svg" {
-  const content: string
-  export default content
-}
-
-declare module "*.png" {
-  const content: string
-  export default content
-}
-
-declare module "*.jpg" {
-  const content: string
-  export default content
-}
-
-declare module "*.jpeg" {
-  const content: string
-  export default content
-}
-
-declare module "*.gif" {
-  const content: string
-  export default content
-}
-
-declare module "*.webp" {
-  const content: string
-  export default content
+declare module "eslint-plugin-import" {
+  const plugin: any
+  export default plugin
 }

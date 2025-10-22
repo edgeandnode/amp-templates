@@ -1,5 +1,5 @@
 {
-  "name": "nextjs-electricsql",
+  "name": "anvil-logs-table",
   "description": "Example nextjs app with an amp dataset, ampsync syncing engine and electric-sql for reactive queries",
   "version": "0.1.0",
   "private": true,

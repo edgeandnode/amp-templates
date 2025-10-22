@@ -1,0 +1,30 @@
+{
+  "name": "@edgeandnode/amp-templates",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "description": "Monorepo containing Amp example apps and Create Amp utility",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/edgeandnode/amp-templates"
+  },
+  "scripts": {
+    "build": "pnpm -r --filter './packages/**' build",
+    "dev": "pnpm -r --filter './packages/**' dev",
+    "clean": "pnpm -r --filter './packages/**' exec rm -rf dist node_modules",
+    "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md}\"",
+    "lint": "eslint \"packages/**/*.{ts,tsx,js,jsx}\""
+  },
+  "devDependencies": {
+    "@types/node": "^24.7.2",
+    "prettier": "^3.4.2",
+    "typescript": "^5.8.3"
+  },
+  "packageManager": "pnpm@9.15.4",
+  "engines": {
+    "node": ">=20.0.0",
+    "pnpm": ">=9.0.0"
+  }
+}
+
+

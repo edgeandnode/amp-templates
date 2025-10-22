@@ -1,0 +1,70 @@
+{
+  "name": "@edgeandnode/create-amp",
+  "version": "0.0.1",
+  "type": "module",
+  "license": "UNLICENSED",
+  "description": "CLI tool to scaffold Amp-powered web applications",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/edgeandnode/amp-templates",
+    "directory": "packages/create-amp"
+  },
+  "bin": {
+    "create-amp": "./dist/index.js"
+  },
+  "exports": {
+    ".": "./dist/index.js"
+  },
+  "files": [
+    "dist/**/*.js",
+    "dist/**/*.js.map",
+    "dist/**/*.d.ts",
+    "dist/**/*.d.ts.map"
+  ],
+  "scripts": {
+    "build": "tsc -b --force tsconfig.build.json",
+    "dev": "tsx src/index.ts",
+    "prepublish": "rm -rf dist && pnpm run build"
+  },
+  "publishConfig": {
+    "bin": {
+      "create-amp": "./dist/index.js"
+    }
+  },
+  "dependencies": {
+    "@clack/prompts": "^0.11.0",
+    "chalk": "^5.4.1",
+    "commander": "^13.0.0",
+    "execa": "^9.5.2",
+    "fs-extra": "^11.2.0",
+    "ora": "^8.2.0",
+    "picocolors": "^1.1.1"
+  },
+  "devDependencies": {
+    "@connectrpc/connect-web": "^2.1.0",
+    "@edgeandnode/amp": "^0.0.21",
+    "@effect-atom/atom": "^0.3.2",
+    "@effect-atom/atom-react": "^0.3.2",
+    "@effect/experimental": "^0.56.0",
+    "@effect/platform": "^0.92.1",
+    "@electric-sql/client": "^1.0.14",
+    "@electric-sql/react": "^1.0.14",
+    "@types/fs-extra": "^11.0.4",
+    "@types/node": "^24.7.2",
+    "@types/react": "^19.2.2",
+    "@types/react-dom": "^19.2.1",
+    "@vitejs/plugin-react": "^5.0.4",
+    "apache-arrow": "^21.1.0",
+    "drizzle-kit": "^0.30.0",
+    "drizzle-orm": "^0.38.3",
+    "effect": "^3.18.4",
+    "next": "15.5.4",
+    "postgres": "^3.4.5",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "tsx": "^4.19.2",
+    "typescript": "^5.8.3",
+    "viem": "^2.38.0",
+    "vite": "^7.1.9"
+  }
+}

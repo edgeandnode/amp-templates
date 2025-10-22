@@ -8,16 +8,9 @@ export function Layout({ children }: Readonly<{ children: React.ReactNode }>) {
           <div className="flex h-16 justify-between">
             <div className="flex">
               <div className="flex shrink-0 items-center size-16">
-                <AmpLogoIcon
-                  alt="Amp"
-                  size={10}
-                  aria-hidden="true"
-                  variant="branded"
-                />
+                <AmpLogoIcon alt="Amp" size={10} aria-hidden="true" variant="branded" />
               </div>
-              <h2 className="text-24 h-16 flex items-center">
-                Ampsync | Electric SQL
-              </h2>
+              <h2 className="text-24 h-16 flex items-center">Ampsync | Electric SQL</h2>
             </div>
           </div>
         </div>

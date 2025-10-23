@@ -1,6 +1,6 @@
 import { ELECTRIC_PROTOCOL_QUERY_PARAMS } from "@electric-sql/client";
 
-import { env } from "../../../env/server";
+import { env } from "@/env/server";
 
 const electricSqlUrl = new URL(`${env.ELECTRIC_URL}v1/shape`);
 

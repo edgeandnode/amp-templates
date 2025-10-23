@@ -29,16 +29,61 @@ Enter your personal access token as the password when prompted.
 pnpm install
 ```
 
-### 3. Start Infrastructure
+### 3.Quick Start
+
+#### 1. Start infrastructure services
 
 ```bash
-docker-compose up -d
+just up
 ```
 
-Wait for all services to be healthy:
+This will:
+
+- Start all services:
+  - PostgreSQL (ports 5432, 6434)
+  - Amp server (ports 1602, 1603, 1610)
+  - Anvil local blockchain (port 8545)
+  - Ampsync sync service
+  - ElectricSQL sync engine (port 3000)
+
+### 2. Start development server
 
 ```bash
-docker-compose ps
+just dev
+```
+
+This runs in parallel:
+
+- Next.js app (http://localhost:3001)
+- Amp dev watcher
+
+#### 3. View the app
+
+Open [http://localhost:3001](http://localhost:3001) to see real-time blockchain data.
+
+## Development Workflow
+
+### Modify the dataset configuration
+
+Edit [amp.config.ts](./amp.config.ts) to change what data is synced. Ampsync will automatically detect changes and reload.
+
+**Note** it is best when you make changes to the `amp.config.ts`, that you bump the version each time. This helps ampsync find the dataset schema and keeps each version <-> schema unique.
+
+### View logs
+
+```bash
+# All services
+just logs
+
+# Specific service
+just logs ampsync
+just logs electric
+```
+
+### Clean shutdown
+
+```bash
+just down
 ```
 
 ### 4. Deploy Smart Contracts

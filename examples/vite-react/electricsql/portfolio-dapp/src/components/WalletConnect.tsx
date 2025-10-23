@@ -5,6 +5,8 @@ export function WalletConnect() {
   const { connect, connectors } = useConnect()
   const { disconnect } = useDisconnect()
 
+  const MetaMaskConnector = connectors.find((connector) => connector.name.toLowerCase() === "metamask")!
+
   if (isConnected && address) {
     return (
       <div className="flex items-center gap-3">
@@ -17,7 +19,7 @@ export function WalletConnect() {
         </span>
         <button
           onClick={() => disconnect()}
-          className="rounded-md bg-red-600 px-3 py-1 text-sm font-medium text-white hover:bg-red-700 transition-colors"
+          className="rounded-md bg-red-600 px-3 py-1 text-sm font-medium text-white transition-colors hover:bg-red-700"
         >
           Disconnect
         </button>
@@ -27,15 +29,13 @@ export function WalletConnect() {
 
   return (
     <div className="flex gap-2">
-      {connectors.map((connector) => (
-        <button
-          key={connector.id}
-          onClick={() => connect({ connector })}
-          className="rounded-md bg-blue-600 px-4 py-2 font-medium text-white hover:bg-blue-700 transition-colors"
-        >
-          Connect {connector.name}
-        </button>
-      ))}
+      <button
+        key={MetaMaskConnector.id}
+        onClick={() => connect({ connector: MetaMaskConnector })}
+        className="rounded-md bg-blue-600 px-4 py-2 font-medium text-white transition-colors hover:bg-blue-700"
+      >
+        Connect {MetaMaskConnector?.name}
+      </button>
     </div>
   )
 }

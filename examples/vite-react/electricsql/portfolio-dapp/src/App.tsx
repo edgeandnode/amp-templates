@@ -57,7 +57,6 @@ function PortfolioContent() {
             <h1 className="text-4xl font-bold text-white">Portfolio DApp</h1>
             <p className="mt-2 text-gray-400">Track and manage your ERC20 tokens in real-time</p>
           </div>
-          <WalletConnect />
         </header>
 
         <main>

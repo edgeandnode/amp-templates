@@ -13,7 +13,8 @@
     "dev": "pnpm -r --filter './packages/**' dev",
     "clean": "pnpm -r --filter './packages/**' exec rm -rf dist node_modules",
     "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md}\"",
-    "lint": "eslint \"packages/**/*.{ts,tsx,js,jsx}\"",
+    "lint": "pnpm --recursive --parallel --filter \"./packages/*\" run lint",
+    "lint:fix": "pnpm --recursive --parallel --filter \"./packages/*\" run lint:fix",
     "test": "vitest",
     "test:coverage": "vitest --coverage"
   },

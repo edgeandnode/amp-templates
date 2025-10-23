@@ -4,10 +4,12 @@
  * CLI interface using @clack/prompts for interactive experience
  */
 
+import path from "node:path"
+
 import * as p from "@clack/prompts"
 import { Command } from "commander"
-import path from "node:path"
 import pc from "picocolors"
+
 import type { DataLayer, Example, Framework, LocalSetup, Network, NetworkEnv, ORM, ProjectConfig } from "./types"
 import { isValidProjectName } from "./utils"
 

@@ -2,12 +2,14 @@
  * Template generator - orchestrates project scaffolding
  */
 
-import { execa } from "execa"
-import * as fs from "fs-extra"
 import * as fsPromises from "node:fs/promises"
 import path from "node:path"
 import { fileURLToPath } from "node:url"
+
+import { execa } from "execa"
+import * as fs from "fs-extra"
 import ora from "ora"
+
 import type { ProjectConfig, TemplateData } from "./types"
 import { createGitignore, detectPackageManager, getInstallCommand } from "./utils"
 

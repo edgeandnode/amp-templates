@@ -7,7 +7,7 @@
     "dev": "next dev --turbopack --port 3001",
     "build": "next build --turbopack",
     "start": "next start --port 3001",
-    "lint": "eslint",
+    "lint": "eslint app/ Components/ hooks/ --ext .ts,.tsx,.js,.jsx",
     "lint:fix": "pnpm run lint --fix",
     "check": "tsc -b tsconfig.json",
     "amp": "amp"

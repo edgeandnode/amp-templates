@@ -13,7 +13,7 @@ const isVSCode = Boolean(process.env.VSCODE_PID);
 export default defineConfig(
   {
     files: ['**/*.{js,mjs,cjs,jsx,ts,tsx}'],
-    ignores: ['**/node_modules', '**/dist', '**/.next', '**/templates'],
+    ignores: ['**/node_modules', '**/dist', '**/.next', '**/templates', '**/examples'],
     languageOptions: { globals: { ...globals.browser, ...globals.node } },
   },
 

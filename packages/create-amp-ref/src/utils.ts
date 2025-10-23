@@ -2,9 +2,11 @@
  * Utility functions for the create-amp CLI
  */
 
-import * as fs from "fs-extra"
 import * as fsPromises from "node:fs/promises"
 import path from "node:path"
+
+import * as fs from "fs-extra"
+
 import type { TemplateData } from "./types"
 
 /**

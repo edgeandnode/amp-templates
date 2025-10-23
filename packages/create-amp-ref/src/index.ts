@@ -6,6 +6,7 @@
 
 import * as p from "@clack/prompts"
 import pc from "picocolors"
+
 import { runCLI } from "./cli"
 import { generateProject } from "./generator"
 import { formatSuccessMessage } from "./utils"

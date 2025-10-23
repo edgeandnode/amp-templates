@@ -1,6 +1,7 @@
 "use client";
 
 import { XCircleIcon } from "@graphprotocol/gds-react/icons";
+
 import { useAnvilBlockStream } from "@/hooks/useAnvilBlocksStream";
 
 export function AnvilBlocksTable() {

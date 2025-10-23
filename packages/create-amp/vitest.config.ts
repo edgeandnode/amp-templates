@@ -1,12 +1,11 @@
-import { defineConfig } from "vitest/config"
+import { defineConfig, mergeConfig } from "vitest/config"
 
-export default defineConfig({
+import shared from "../../vitest.shared"
+
+const config = defineConfig({
   test: {
-    include: ["./test/**/*.test.{js,mjs,cjs,ts,mts,cts,jsx,tsx}"],
-    exclude: [],
-    globals: true,
-    coverage: {
-      provider: "v8",
-    },
+    environment: "node",
   },
 })
+
+export default mergeConfig(shared, config)

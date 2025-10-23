@@ -1,97 +1,95 @@
-# Portfolio DApp - React + TypeScript + Vite
+# Portfolio DApp
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A real-time portfolio tracking application built with Vite, React, Electric SQL, and amp-sync. Track ERC20 token balances and transfer tokens with MetaMask wallet integration.
 
 ## Prerequisites
 
-- Node.js >= 22.0.0
-- pnpm >= 10.19.0
+- Node.js v22+
+- pnpm v10.19.0+
+- Docker & Docker Compose
+- MetaMask browser extension
+- Foundry (for smart contract deployment)
+- GitHub token with `read:packages` permission
 
 ## Getting Started
 
+### 1. Authenticate with GitHub Container Registry
+
+The `amp` and `ampsync` Docker images are hosted in GitHub's container registry. Create a personal access token (classic) with `read:packages` permission at <https://github.com/settings/tokens>, then login:
+
 ```bash
-# Install dependencies
+docker login ghcr.io --username <YOUR_GITHUB_USERNAME>
+```
+
+Enter your personal access token as the password when prompted.
+
+### 2. Install Dependencies
+
+```bash
 pnpm install
-
-# Start development server
-pnpm dev
-
-# Build for production
-pnpm build
-
-# Preview production build
-pnpm preview
-
-# Run linting
-pnpm lint
 ```
 
-Currently, two official plugins are available:
+### 3. Start Infrastructure
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
-
-## React Compiler
-
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+docker-compose up -d
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+Wait for all services to be healthy:
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+docker-compose ps
 ```
+
+### 4. Deploy Smart Contracts
+
+```bash
+cd contracts
+forge script script/InitializePortfolio.s.sol --rpc-url http://localhost:8545 --broadcast
+```
+
+### 5. Run Development Servers
+
+```bash
+pnpm dev:all
+```
+
+This starts:
+
+- Express proxy server on `http://localhost:3001`
+- Vite dev server on `http://localhost:5173`
+
+### 6. Connect MetaMask
+
+Add Anvil network to MetaMask:
+
+- Network Name: `Anvil Local`
+- RPC URL: `http://localhost:8545`
+- Chain ID: `31337`
+- Currency Symbol: `ETH`
+
+Import test account:
+
+- Account #1: `0x59c6995e998f97a5a0044966f0945389dc9e86dae88c7a8412f4603b6b78690d`
+- Account #2: `0x5de4111afa1a4b94908f83103eb1f1706367c2e68ca870fc3fb9a804cdab365a`
+
+Navigate to `http://localhost:5173` and connect your wallet.
+
+## Troubleshooting
+
+**Services not starting:**
+
+```bash
+docker-compose logs -f [service-name]
+```
+
+**No transfers showing:**
+
+- Verify contracts deployed
+- Check ampsync: `docker-compose logs ampsync`
+- Test Electric SQL: `curl http://localhost:3000/v1/shape?table=erc20_transfers`
+
+**MetaMask issues:**
+
+- Ensure Chain ID is 31337
+- Reset account if needed (Settings → Advanced → Reset Account)

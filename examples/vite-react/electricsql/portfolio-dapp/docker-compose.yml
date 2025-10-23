@@ -20,17 +20,17 @@ services:
       retries: 5
 
   amp:
-    image: ghcr.io/graphprotocol/amp:latest
+    image: ghcr.io/edgeandnode/amp:latest
     ports:
       - "1602:1602"  # Arrow Flight
       - "1603:1603"  # JSON Lines
       - "1610:1610"  # Admin API
     volumes:
-      - ./infra/amp/config.toml:/app/config.toml
-      - ./infra/amp/data:/app/data
-      - ./infra/amp/providers:/app/providers
-      - ./infra/amp/datasets:/app/datasets
-    command: ["serve", "-c", "/app/config.toml"]
+      - ./infra/amp/config.toml:/var/lib/amp/config.toml
+      - ./infra/amp/data:/var/lib/amp/data
+      - ./infra/amp/providers:/var/lib/amp/providers
+      - ./infra/amp/datasets:/var/lib/amp/datasets
+    command: ["--config", "/var/lib/amp/config.toml", "dev"]
     depends_on:
       db:
         condition: service_healthy
@@ -44,16 +44,13 @@ services:
     entrypoint: ["anvil", "--host", "0.0.0.0"]
 
   ampsync:
-    image: ghcr.io/graphprotocol/ampsync:latest
+    image: ghcr.io/edgeandnode/ampsync:latest
+    command: ["sync"]
     environment:
       AMP_DATASET_NAME: portfolio_dapp
       AMP_FLIGHT_ADDR: http://amp:1602
       AMP_ADMIN_API_ADDR: http://amp:1610
-      DATABASE_HOST: db
-      DATABASE_PORT: 5432
-      DATABASE_NAME: portfolio_dapp
-      DATABASE_USER: postgres
-      DATABASE_PASSWORD: postgres
+      DATABASE_URL: postgresql://postgres:postgres@db:5432/portfolio_dapp
       RUST_LOG: info,ampsync=debug
     depends_on:
       amp:
@@ -65,8 +62,8 @@ services:
   electric:
     image: electricsql/electric:latest
     environment:
-      ELECTRIC_URL: postgresql://postgres:postgres@db:5432/portfolio_dapp
-      ELECTRIC_INSECURE: true
+      DATABASE_URL: postgresql://postgres:postgres@db:5432/portfolio_dapp
+      ELECTRIC_INSECURE: "true"
     ports:
       - "3000:3000"
     depends_on:

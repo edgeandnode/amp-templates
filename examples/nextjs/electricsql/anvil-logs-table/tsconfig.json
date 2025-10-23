@@ -24,10 +24,7 @@
     ],
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./*"],
-      "@/env/*": ["./env/*"],
-      "@/Components/*": ["./Components/*"],
-      "@/hooks/*": ["./hooks/*"]
+      "@/*": ["./*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],

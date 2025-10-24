@@ -1,13 +1,19 @@
 import { defineDataset } from "@edgeandnode/amp"
-import { keccak256, toHex } from "viem"
 
-const eventSig = (sig: string) => keccak256(toHex(sig)).slice(2)
-const ERC20_TRANSFER = eventSig("Transfer(address,address,uint256)")
+const event = (event: string) => {
+  return `
+    SELECT block_hash, tx_hash, block_num, timestamp, address, evm_decode_log(topic1, topic2, topic3, data, '${event}') as event
+    FROM anvil.logs
+    WHERE topic0 = evm_topic('${event}')
+  `
+}
+
+const erc20_transfers = event("Transfer(address indexed from, address indexed to, uint256 value)")
 
 export default defineDataset(() => ({
   name: "portfolio_dapp",
   network: "anvil",
-  version: "0.1.0",
+  version: "0.3.0",
   dependencies: {
     anvil: {
       owner: "graphprotocol",
@@ -18,17 +24,8 @@ export default defineDataset(() => ({
   tables: {
     erc20_transfers: {
       sql: `
-        SELECT
-          logs.block_num,
-          logs.tx_hash,
-          logs.log_index,
-          logs.address as token_address,
-          logs.timestamp,
-          SUBSTRING(logs.topic1, 13, 20) as from_address,
-          SUBSTRING(logs.topic2, 13, 20) as to_address,
-          logs.data as amount_raw
-        FROM anvil.logs
-        WHERE logs.topic0 = x'${ERC20_TRANSFER}'
+        SELECT c.block_hash, c.tx_hash, c.address, c.block_num, c.timestamp, c.event['from'] as sender, c.event['to'] as recipient, c.event['value'] as amount_wei 
+        FROM (${erc20_transfers}) as c
       `,
     },
     blocks: {

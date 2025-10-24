@@ -13,7 +13,7 @@ const erc20_transfers = event("Transfer(address indexed from, address indexed to
 export default defineDataset(() => ({
   name: "portfolio_dapp",
   network: "anvil",
-  version: "0.3.0",
+  version: "0.1.0",
   dependencies: {
     anvil: {
       owner: "graphprotocol",
@@ -24,7 +24,7 @@ export default defineDataset(() => ({
   tables: {
     erc20_transfers: {
       sql: `
-        SELECT c.block_hash, c.tx_hash, c.address, c.block_num, c.timestamp, c.event['from'] as sender, c.event['to'] as recipient, c.event['value'] as amount_wei 
+        SELECT c.block_hash, c.tx_hash, c.address, c.block_num, c.timestamp, c.event['from'] as from_address, c.event['to'] as to_address, c.event['value'] as amount_raw 
         FROM (${erc20_transfers}) as c
       `,
     },

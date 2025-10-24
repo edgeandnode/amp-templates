@@ -45,7 +45,7 @@ dev: dev-app dev-amp
 # Run the app in development mode
 [private]
 dev-app:
-    pnpm dev
+    pnpm dev:all
 
 # Start the amp development server (watch config changes)
 [private]

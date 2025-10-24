@@ -38,3 +38,6 @@ contracts/.env
 
 # PostgreSQL data directory (runtime database files)
 infra/postgres/data/
+
+# Amp data
+infra/amp/data/

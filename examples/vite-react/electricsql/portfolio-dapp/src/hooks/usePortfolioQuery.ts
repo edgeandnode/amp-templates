@@ -4,7 +4,7 @@ import { erc20TransfersCollection } from "../lib/collections/erc20Transfers"
 
 export function usePortfolioQuery(userAddress?: string) {
   const transfersQuery = useLiveQuery((q) => {
-    if (!userAddress) return { transfers: [], isLoading: false, isError: false }
+    if (!userAddress) return null
 
     const normalizedAddress = userAddress.toLowerCase().replace("0x", "")
 
@@ -19,7 +19,7 @@ export function usePortfolioQuery(userAddress?: string) {
         toAddress: t.toAddress,
         amountRaw: t.amountRaw,
         blockNum: t.blockNum,
-        timestamp: t.timestamp,
+        txTimestamp: t.txTimestamp,
       }))
       .orderBy(({ t }) => t.blockNum, "desc")
   })

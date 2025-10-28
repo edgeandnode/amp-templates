@@ -7,9 +7,9 @@ import { Schema } from "effect"
 export const ERC20Transfer = Schema.Struct({
   blockNum: Schema.String.pipe(Schema.propertySignature, Schema.fromKey("block_num")),
   txHash: Schema.String.pipe(Schema.propertySignature, Schema.fromKey("tx_hash")),
-  logIndex: Schema.String.pipe(Schema.propertySignature, Schema.fromKey("log_index")),
-  tokenAddress: Schema.String.pipe(Schema.propertySignature, Schema.fromKey("token_address")),
-  timestamp: Schema.String,
+  logIndex: Schema.BigIntFromSelf.pipe(Schema.propertySignature, Schema.fromKey("log_index")),
+  txTimestamp: Schema.String.pipe(Schema.propertySignature, Schema.fromKey("tx_timestamp")),
+  tokenAddress: Schema.String.pipe(Schema.propertySignature, Schema.fromKey("contract_address")),
   fromAddress: Schema.String.pipe(Schema.propertySignature, Schema.fromKey("from_address")),
   toAddress: Schema.String.pipe(Schema.propertySignature, Schema.fromKey("to_address")),
   amountRaw: Schema.String.pipe(Schema.propertySignature, Schema.fromKey("amount_raw")),

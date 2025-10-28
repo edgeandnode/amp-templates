@@ -22,24 +22,13 @@ export function PortfolioTable({ balances, onTransfer }: PortfolioTableProps) {
     () => [
       {
         accessorKey: "tokenSymbol",
-        header: "Token",
-        cell: (info) => (
-          <div className="flex flex-col">
-            <span className="font-semibold text-white">{info.getValue() as string}</span>
-            <span className="text-sm text-gray-400">{info.row.original.tokenName}</span>
-          </div>
-        ),
+        header: "Symbol",
+        cell: (info) => <span className="font-semibold text-white">{info.getValue() as string}</span>,
       },
       {
-        accessorKey: "balanceFormatted",
-        header: "Balance",
-        cell: (info) => (
-          <span className="font-mono text-white">
-            {parseFloat(info.getValue() as string).toLocaleString(undefined, {
-              maximumFractionDigits: 8,
-            })}
-          </span>
-        ),
+        accessorKey: "tokenName",
+        header: "Token",
+        cell: (info) => <span className="text-gray-300">{info.getValue() as string}</span>,
       },
       {
         accessorKey: "chain",
@@ -61,6 +50,17 @@ export function PortfolioTable({ balances, onTransfer }: PortfolioTableProps) {
             </span>
           )
         },
+      },
+      {
+        accessorKey: "balanceFormatted",
+        header: "Balance",
+        cell: (info) => (
+          <span className="font-mono text-white">
+            {parseFloat(info.getValue() as string).toLocaleString(undefined, {
+              maximumFractionDigits: 8,
+            })}
+          </span>
+        ),
       },
       {
         id: "actions",

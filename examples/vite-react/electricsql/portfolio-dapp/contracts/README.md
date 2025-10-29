@@ -132,7 +132,7 @@ After initial distribution, the script executes transfers between users to demon
 
 ### 6. Verify Deployment
 
-After deployment and transfers, the script will output:
+After deployment, the script will output:
 
 ```
 ========================================
@@ -175,7 +175,43 @@ User2 Portfolio (after transfers):
   USDS: 95000 (100000 + 15000 - 20000)
 ```
 
-### 6. Interact with Deployed Tokens
+### 6. Running Test Transfers (DoTransfers Script)
+
+After deploying tokens, you can run test transactions between users at any time using the `DoTransfers` script. This script executes predefined transfers between User1 and User2 for all tokens.
+
+**Prerequisites:**
+- Anvil must be running
+- Tokens must be deployed (run `InitializePortfolio` first)
+- Token addresses must be set in `.env` file
+
+```bash
+# Run the DoTransfers script
+forge script script/DoTransfers.s.sol --rpc-url http://localhost:8545 --broadcast -vvvv
+
+# The script will:
+# 1. Load token addresses from environment variables
+# 2. Display balances before transfers
+# 3. Execute transfers between users
+# 4. Display balances after transfers
+```
+
+**Transfers executed by the script:**
+
+| Token | From → To | Amount |
+|-------|-----------|---------|
+| WBTC  | User1 → User2 | 10 WBTC |
+| WBTC  | User2 → User1 | 5 WBTC |
+| WETH  | User2 → User1 | 100 WETH |
+| WETH  | User1 → User2 | 200 WETH |
+| USDC  | User1 → User2 | 25,000 USDC |
+| USDT  | User2 → User1 | 30,000 USDT |
+| USDT  | User1 → User2 | 10,000 USDT |
+| USDS  | User1 → User2 | 15,000 USDS |
+| USDS  | User2 → User1 | 20,000 USDS |
+
+You can run this script multiple times to generate additional test transactions.
+
+### 7. Interact with Deployed Tokens
 
 Use cast commands to interact with the deployed tokens:
 

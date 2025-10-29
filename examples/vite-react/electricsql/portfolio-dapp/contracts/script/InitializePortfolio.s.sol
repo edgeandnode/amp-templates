@@ -174,60 +174,6 @@ contract InitializePortfolio is Script {
 
         vm.stopBroadcast();
 
-        // Perform inter-user transfers to demonstrate token functionality
-        // Note: These use actual private keys and are broadcasted to the chain
-        console.log("");
-        console.log("========================================");
-        console.log("Executing Inter-User Transfers");
-        console.log("========================================");
-        console.log("");
-
-        // WBTC: User1 sends 10 WBTC to User2, User2 sends 5 WBTC back to User1
-        console.log("WBTC Transfers:");
-        vm.broadcast(user1PrivateKey);
-        bitcoin.transfer(USER2, 10 * 1e8);
-        console.log("  User1 -> User2:", 10, "WBTC");
-
-        vm.broadcast(user2PrivateKey);
-        bitcoin.transfer(USER1, 5 * 1e8);
-        console.log("  User2 -> User1:", 5, "WBTC");
-
-        // WETH: User2 sends 100 WETH to User1, User1 sends 200 WETH back to User2
-        console.log("WETH Transfers:");
-        vm.broadcast(user2PrivateKey);
-        ethereum.transfer(USER1, 100 * 1e18);
-        console.log("  User2 -> User1:", 100, "WETH");
-
-        vm.broadcast(user1PrivateKey);
-        ethereum.transfer(USER2, 200 * 1e18);
-        console.log("  User1 -> User2:", 200, "WETH");
-
-        // USDC: User1 sends 25,000 USDC to User2
-        console.log("USDC Transfers:");
-        vm.broadcast(user1PrivateKey);
-        usdc.transfer(USER2, 25_000 * 1e6);
-        console.log("  User1 -> User2:", 25_000, "USDC");
-
-        // USDT: User2 sends 30,000 USDT to User1, User1 sends 10,000 USDT back to User2
-        console.log("USDT Transfers:");
-        vm.broadcast(user2PrivateKey);
-        tether.transfer(USER1, 30_000 * 1e6);
-        console.log("  User2 -> User1:", 30_000, "USDT");
-
-        vm.broadcast(user1PrivateKey);
-        tether.transfer(USER2, 10_000 * 1e6);
-        console.log("  User1 -> User2:", 10_000, "USDT");
-
-        // USDS: User1 sends 15,000 USDS to User2, User2 sends 20,000 USDS back to User1
-        console.log("USDS Transfers:");
-        vm.broadcast(user1PrivateKey);
-        usds.transfer(USER2, 15_000 * 1e6);
-        console.log("  User1 -> User2:", 15_000, "USDS");
-
-        vm.broadcast(user2PrivateKey);
-        usds.transfer(USER1, 20_000 * 1e6);
-        console.log("  User2 -> User1:", 20_000, "USDS");
-
         // Log final portfolio summary
         logPortfolioSummary();
     }

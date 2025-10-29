@@ -38,6 +38,16 @@ lint-ts *args:
 check-ts:
     pnpm check
 
+# Deploy smart contracts to anvil
+deploy-contracts:
+    cp .env.example .env
+    forge install
+    forge script contracts/script/InitializePortfolio.s.sol --broadcast --rpc-url http://localhost:8545
+
+# Seed ERC20 transfer transactions between Wallet #1 and Wallet #2
+seed-transfers:
+    forge script contracts/script/DoTransfers.s.sol --broadcast --rpc-url http://localhost:8545
+
 # Run all development services in parallel
 [parallel]
 dev: dev-app dev-amp

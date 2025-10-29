@@ -102,35 +102,7 @@ USER2_PRIVATE_KEY=0x5de4111afa1a4b94908f83103eb1f1706367c2e68ca870fc3fb9a804cdab
 forge script script/InitializePortfolio.s.sol --rpc-url http://localhost:8545 --broadcast
 ```
 
-### 5. Inter-User Transfers (Broadcasted)
-
-After initial distribution, the script executes transfers between users to demonstrate token functionality. These transfers use the private keys of User1 and User2 (loaded from environment variables) and are broadcasted to the chain.
-
-**WBTC Transfers:**
-- User1 → User2: 10 WBTC
-- User2 → User1: 5 WBTC
-- Net: User1 -5 WBTC, User2 +5 WBTC
-
-**WETH Transfers:**
-- User2 → User1: 100 WETH
-- User1 → User2: 200 WETH
-- Net: User1 -100 WETH, User2 +100 WETH
-
-**USDC Transfers:**
-- User1 → User2: 25,000 USDC
-- Net: User1 -25,000 USDC, User2 +25,000 USDC
-
-**USDT Transfers:**
-- User2 → User1: 30,000 USDT
-- User1 → User2: 10,000 USDT
-- Net: User1 +20,000 USDT, User2 -20,000 USDT
-
-**USDS Transfers:**
-- User1 → User2: 15,000 USDS
-- User2 → User1: 20,000 USDS
-- Net: User1 +5,000 USDS, User2 -5,000 USDS
-
-### 6. Verify Deployment
+### 5. Verify Deployment
 
 After deployment, the script will output:
 
@@ -149,9 +121,9 @@ Deployed WBTC at address: 0x...
 
 [Additional token deployments...]
 
-========================================
-Portfolio Deployment Complete
-========================================
+==========================================
+Portfolio ERC20 Tokens Deployment Complete
+==========================================
 
 Token Addresses:
   WBTC: 0x...
@@ -160,19 +132,20 @@ Token Addresses:
   USDT: 0x...
   USDS: 0x...
 
-User1 Portfolio (after transfers):
-  WBTC: 45 (50 - 10 + 5)
-  WETH: 900 (1000 + 100 - 200)
-  USDC: 75000 (100000 - 25000)
-  USDT: 95000 (75000 + 30000 - 10000)
-  USDS: 55000 (50000 - 15000 + 20000)
-
-User2 Portfolio (after transfers):
-  WBTC: 130 (125 + 10 - 5)
-  WETH: 600 (500 - 100 + 200)
-  USDC: 275000 (250000 + 25000)
-  USDT: 130000 (150000 - 30000 + 10000)
-  USDS: 95000 (100000 + 15000 - 20000)
+  User1 Portfolio ( 0x70997970C51812dc3A010C7d01b50e0d17dc79C8 ):
+    WBTC: 50
+    WETH: 1000
+    ...
+  
+  User2 Portfolio ( 0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC ):
+    WBTC: 125
+    ...
+  
+  Deployer Remaining Balances ( 0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266 ):
+    WBTC: 20999825
+    WETH: 119998500
+    USDC: 49999650000
+    ...
 ```
 
 ### 6. Running Test Transfers (DoTransfers Script)
@@ -182,11 +155,11 @@ After deploying tokens, you can run test transactions between users at any time 
 **Prerequisites:**
 - Anvil must be running
 - Tokens must be deployed (run `InitializePortfolio` first)
-- Token addresses must be set in `.env` file
+- Token addresses must be set in `.env` file in the portfolio-dapp root folder
 
 ```bash
 # Run the DoTransfers script
-forge script script/DoTransfers.s.sol --rpc-url http://localhost:8545 --broadcast -vvvv
+forge script contracts/script/DoTransfers.s.sol --rpc-url http://localhost:8545 --broadcast -vvvv
 
 # The script will:
 # 1. Load token addresses from environment variables

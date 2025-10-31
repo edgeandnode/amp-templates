@@ -90,6 +90,7 @@ just down
 
 ```bash
 cd contracts
+forge install
 forge script script/InitializePortfolio.s.sol --rpc-url http://localhost:8545 --broadcast
 ```
 

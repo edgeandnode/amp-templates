@@ -9,3 +9,4 @@ CHANGELOG.md
 .tsbuildinfo/
 *dist/
 **/target/
+**/contracts/lib/

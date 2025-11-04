@@ -1,0 +1,86 @@
+services:
+  db:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_DB_LIST: portfolio_dapp,amp
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+      - "6434:5432"
+    volumes:
+      - ./infra/postgres/init.sh:/docker-entrypoint-initdb.d/init.sh
+      - ./infra/postgres/postgres.conf:/etc/postgresql/postgresql.conf
+      - ./infra/postgres/data:/var/lib/postgresql/data
+    command: postgres -c config_file=/etc/postgresql/postgresql.conf
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  amp:
+    image: ghcr.io/edgeandnode/amp:v0.0.20
+    ports:
+      - "1602:1602"  # Arrow Flight
+      - "1603:1603"  # JSON Lines
+      - "1610:1610"  # Admin API
+    volumes:
+      - ./infra/amp/config.toml:/var/lib/amp/config.toml
+      - ./infra/amp/data:/var/lib/amp/data
+      - ./infra/amp/providers:/var/lib/amp/providers
+      - ./infra/amp/datasets:/var/lib/amp/datasets
+    command: ["--config", "/var/lib/amp/config.toml", "dev"]
+    depends_on:
+      db:
+        condition: service_healthy
+      reth:
+        condition: service_started
+
+  reth:
+    image: ghcr.io/paradigmxyz/reth:latest
+    ports:
+      - "8545:8545"
+    command:
+      - "node"
+      - "--dev"
+      - "--dev.block-time"
+      - "1s"
+      - "--http"
+      - "--http.addr"
+      - "0.0.0.0"
+      - "--http.port"
+      - "8545"
+      - "--http.api"
+      - "all"
+
+  ampsync:
+    image: ghcr.io/edgeandnode/ampsync:v0.0.20
+    command: ["sync"]
+    environment:
+      AMP_DATASET_NAME: portfolio_dapp
+      AMP_FLIGHT_ADDR: http://amp:1602
+      AMP_ADMIN_API_ADDR: http://amp:1610
+      DATABASE_URL: postgresql://postgres:postgres@db:5432/portfolio_dapp
+      RUST_LOG: info,ampsync=debug
+    depends_on:
+      amp:
+        condition: service_started
+      db:
+        condition: service_healthy
+      reth:
+        condition: service_started
+    restart: unless-stopped
+
+  electric:
+    image: electricsql/electric:latest
+    environment:
+      DATABASE_URL: postgresql://postgres:postgres@db:5432/portfolio_dapp
+      ELECTRIC_INSECURE: "true"
+    ports:
+      - "3000:3000"
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: unless-stopped
+

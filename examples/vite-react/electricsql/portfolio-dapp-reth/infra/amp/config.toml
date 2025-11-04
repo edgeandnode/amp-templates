@@ -1,0 +1,16 @@
+# Amp Server Configuration
+data_dir = "data"
+providers_dir = "providers"
+dataset_defs_dir = "datasets"
+
+# PostgreSQL connection for metadata
+metadata_db_url = "postgresql://postgres:postgres@db:5432/amp"
+
+# Server ports
+arrow_flight_port = 1602
+jsonl_port = 1603
+admin_api_port = 1610
+
+# Compression
+compression_codec = "zstd"
+compression_level = 1

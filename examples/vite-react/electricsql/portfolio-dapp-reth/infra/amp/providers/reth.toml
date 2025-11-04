@@ -1,0 +1,3 @@
+kind = "evm-rpc"
+url = "http://reth:8545"
+network = "reth"

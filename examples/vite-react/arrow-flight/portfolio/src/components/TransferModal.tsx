@@ -35,9 +35,9 @@ interface TransferModalProps {
 
 export function TransferModal({ isOpen, onClose, tokenAddress, tokenSymbol, decimals, onSuccess }: TransferModalProps) {
   const { address: userAddress } = useAccount()
-  const [recipient, setRecipient] = useState("")
+  const [recipient, setRecipient] = useState<Address>("0x")
   const [amount, setAmount] = useState("")
-  const [transferAmount, setTransferAmount] = useState<string>("")
+  const [transferAmount, setTransferAmount] = useState<bigint>(0n)
   const [toastId, setToastId] = useState<string | number | null>(null)
 
   const { writeContract, data: hash, isPending, error: writeError } = useWriteContract()
@@ -47,9 +47,9 @@ export function TransferModal({ isOpen, onClose, tokenAddress, tokenSymbol, deci
   useEffect(() => {
     if (isSuccess && hash && toastId) {
       toast.success(`Successfully transferred ${transferAmount} ${tokenSymbol}!`, { id: toastId })
-      setRecipient("")
+      setRecipient("0x")
       setAmount("")
-      setTransferAmount("")
+      setTransferAmount(0n)
       setToastId(null)
 
       // Trigger refresh callback if provided
@@ -86,7 +86,7 @@ export function TransferModal({ isOpen, onClose, tokenAddress, tokenSymbol, deci
 
     try {
       const parsedAmount = parseUnits(amount, decimals)
-      setTransferAmount(amount)
+      setTransferAmount(BigInt(amount))
 
       const toastId = toast.loading(`Transferring ${amount} ${tokenSymbol}...`)
       setToastId(toastId)

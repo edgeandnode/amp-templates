@@ -37,38 +37,74 @@ const ERC20_ABI = [
   },
 ] as const
 
+/**
+ * Hybrid hook that combines Effect Atom transfers with Wagmi blockchain queries.
+ *
+ * This hook uses a hybrid pattern because it orchestrates two different data sources:
+ * 1. Effect Atom (Arrow Flight SQL) - for transfer history
+ * 2. Wagmi (RPC) - for real-time token balances
+ *
+ * The hook uses transfers to determine which tokens to query, then fetches current
+ * balances from the blockchain. 
+ *
+ * @param userAddress - User wallet address
+ *
+ * @returns Object with:
+ *   - balances: Array of token balances with metadata
+ *   - isLoading: True if either transfers or balance queries are loading
+ *   - isError: True if either source failed
+ *   - refresh: Function to refresh both transfers and balances
+ *
+ * @example
+ * ```tsx
+ * function Portfolio({ address }: Props) {
+ *   const { balances, isLoading, isError, refresh } = usePortfolioBalances(address)
+ *
+ *   if (isLoading) return <LoadingSpinner />
+ *   if (isError) return <ErrorCard />
+ *   return <PortfolioTable balances={balances} />
+ * }
+ * ```
+ */
 export function usePortfolioBalances(userAddress?: Address) {
-  // Early return if no address - hooks must be called unconditionally
-  // so we handle this after all hook calls
-
-  // Get transfers from atoms to determine which tokens the user has interacted with
-  // Use a dummy address if none provided (we'll filter out results anyway)
+  // Use a dummy address if none provided to satisfy React hooks rules
   const effectiveAddress = userAddress || ("0x0000000000000000000000000000000000000000" as Address)
+
+  // Get transfers from atoms (Result type)
   const transfersResult = useAtomValue(userTransfersAtom(effectiveAddress))
 
-  // Extract unique token addresses from transfer history
+  // Extract unique token addresses from transfers, handling all Result states
   const uniqueTokenAddresses = useMemo(() => {
     if (!userAddress) return []
 
-    // Handle Result type from atom
-    const transfers = Result.match(transfersResult, {
-      onSuccess: (success) => success.value,
+    // Handle Result type - extract transfers from any state that has them
+    return Result.match(transfersResult, {
+      onSuccess: (success) => {
+        const tokenSet = new Set<string>()
+        success.value.forEach((transfer) => {
+          tokenSet.add(transfer.contractAddress.toLowerCase())
+        })
+        return Array.from(tokenSet)
+      },
+      onWaiting: (waiting) => {
+        // Use previous transfers during refresh
+        const transfers = waiting.value ?? []
+        const tokenSet = new Set<string>()
+        transfers.forEach((transfer) => {
+          tokenSet.add(transfer.contractAddress.toLowerCase())
+        })
+        return Array.from(tokenSet)
+      },
       onInitial: () => [],
-      onWaiting: (waiting) => waiting.value ?? [],
       onFailure: () => [],
     })
-
-    const tokenSet = new Set<string>()
-    transfers.forEach((transfer) => {
-      tokenSet.add(transfer.contractAddress.toLowerCase())
-    })
-    return Array.from(tokenSet)
   }, [transfersResult, userAddress])
 
-  // Read balances and metadata directly from contracts using WAGMI
+  // Read balances and metadata from blockchain using Wagmi
   const {
     data: contractData,
     isLoading: isLoadingContracts,
+    isError: isErrorContracts,
     refetch,
   } = useReadContracts({
     contracts: uniqueTokenAddresses.flatMap((address) => [
@@ -135,10 +171,20 @@ export function usePortfolioBalances(userAddress?: Address) {
     return portfolioBalances.sort((a, b) => a.tokenSymbol.localeCompare(b.tokenSymbol))
   }, [contractData, uniqueTokenAddresses, userAddress])
 
+  // Combine loading and error states from both sources
+  // Only show loading during initial load or when we have no data to display
+  // During refresh (Waiting state), don't show loading if we have previous data (prevents flicker)
+  const isLoading =
+    Result.isInitial(transfersResult) ||
+    (Result.isWaiting(transfersResult) && !transfersResult.value) ||
+    (isLoadingContracts && balances.length === 0)
+
+  const isError = Result.isFailure(transfersResult) || isErrorContracts
+
   return {
     balances,
-    isLoading: isLoadingContracts,
-    isError: false,
+    isLoading,
+    isError,
     refresh,
   }
 }

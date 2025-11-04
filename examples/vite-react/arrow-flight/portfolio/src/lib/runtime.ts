@@ -2,13 +2,16 @@ import { createConnectTransport } from "@connectrpc/connect-web"
 import { ArrowFlight } from "@edgeandnode/amp"
 import { Atom } from "@effect-atom/atom-react"
 
-// Arrow Flight uses gRPC, which requires HTTP/2
-// Browser makes requests to Vite dev server (same origin)
-// Vite proxies to Amp proxy (port 3001)
-// Amp proxy forwards to Amp server (port 1602)
-
+/**
+ * Transport configuration for Arrow Flight over gRPC-Web
+ *
+ * Connection flow:
+ * - Browser → Vite dev server (same origin, HTTP/1.1)
+ * - Vite proxy → Amp proxy (port 3001)
+ * - Amp proxy → Amp server (port 1602, HTTP/2)
+ */
 const transport = createConnectTransport({
-  baseUrl: window.location.origin, // Use same origin to leverage Vite proxy
+  baseUrl: window.location.origin,
   httpVersion: "1.1",
   interceptors: [
     (next) => async (req) => {
@@ -16,11 +19,13 @@ const transport = createConnectTransport({
         const response = await next(req)
         return response
       } catch (error) {
-        console.error("[Runtime] Request failed:", {
+        console.error("[Runtime] Transport error:", {
           service: req.service.typeName,
           method: req.method.name,
           error: error,
+          message: error instanceof Error ? error.message : String(error),
         })
+
         throw error
       }
     },

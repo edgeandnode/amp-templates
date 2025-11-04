@@ -1,3 +1,4 @@
+import { Result } from "@effect-atom/atom-react"
 import * as Tabs from "@radix-ui/react-tabs"
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import { useEffect, useMemo, useRef, useState } from "react"
@@ -5,8 +6,7 @@ import { toast, Toaster } from "sonner"
 import { formatUnits } from "viem"
 import { useAccount, useDisconnect, useReadContracts, WagmiProvider } from "wagmi"
 
-import { AtomErrorBoundary } from "./components/AtomErrorBoundary"
-import { PortfolioTable } from "./components/PortfolioTable"
+import { PortfolioSection } from "./components/PortfolioSection"
 import { TransactionHistory } from "./components/TransactionHistory"
 import { TransferModal } from "./components/TransferModal"
 import { WalletConnect } from "./components/WalletConnect"
@@ -38,14 +38,21 @@ const queryClient = new QueryClient()
 
 function PortfolioContent() {
   const { address, isConnected } = useAccount()
-  // const isConnected = true // for testing to simulate wallet connected on page load
-  // const address = "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC" // "0x70997970C51812dc3A010C7d01b50e0d17dc79C8" // for testing to simulate wallet connected on page load
 
   // Enable automatic polling for transfer data (must be after address is defined)
   useAutoRefresh(address, 2000)
   const { disconnect } = useDisconnect()
   const { balances, isLoading, isError, refresh: refreshBalances } = usePortfolioBalances(address)
-  const { transfers } = usePortfolioQuery(address)
+  const transfersResult = usePortfolioQuery(address)
+
+  // Extract transfers from Result for use in effects and memos
+  const transfers = Result.match(transfersResult, {
+    onSuccess: (success) => success.value,
+    onWaiting: (waiting) => waiting.value ?? [],
+    onInitial: () => [],
+    onFailure: () => [],
+  })
+
   const seenTransferIdsRef = useRef<Set<string>>(new Set())
   const isInitialLoadRef = useRef<boolean>(true)
 
@@ -219,67 +226,57 @@ function PortfolioContent() {
         </header>
 
         <main>
-          <AtomErrorBoundary>
-            {!isConnected && (
-              <div className="rounded-lg border border-gray-700 bg-gray-800/50 p-12 text-center">
-                <h2 className="mb-4 text-2xl font-semibold text-white">Connect Your Wallet</h2>
-                <p className="mb-6 text-gray-400">Connect your MetaMask wallet to view your portfolio</p>
-                <div className="flex justify-center">
-                  <WalletConnect />
-                </div>
+          {!isConnected && (
+            <div className="rounded-lg border border-gray-700 bg-gray-800/50 p-12 text-center">
+              <h2 className="mb-4 text-2xl font-semibold text-white">Connect Your Wallet</h2>
+              <p className="mb-6 text-gray-400">Connect your MetaMask wallet to view your portfolio</p>
+              <div className="flex justify-center">
+                <WalletConnect />
               </div>
-            )}
+            </div>
+          )}
 
-            {isConnected && (
-              <div className="space-y-6">
-                <div className="rounded-lg border border-gray-700 bg-gray-800/50 p-6">
-                  <h2 className="mb-2 text-xl font-semibold text-white">Your Portfolio</h2>
-                  <p className="text-sm text-gray-400">
-                    Address: <span className="font-mono">{address}</span>
-                  </p>
-                  <p className="mt-1 text-sm text-gray-400">Total Tokens: {balances.length}</p>
-                </div>
-
-                <Tabs.Root defaultValue="portfolio" className="space-y-4">
-                  <Tabs.List className="flex gap-2 border-b border-gray-700">
-                    <Tabs.Trigger
-                      value="portfolio"
-                      className="px-4 py-2 text-sm font-medium text-gray-400 transition-colors hover:text-gray-300 data-[state=active]:border-b-2 data-[state=active]:border-blue-500 data-[state=active]:text-blue-400"
-                    >
-                      Portfolio
-                    </Tabs.Trigger>
-                    <Tabs.Trigger
-                      value="history"
-                      className="px-4 py-2 text-sm font-medium text-gray-400 transition-colors hover:text-gray-300 data-[state=active]:border-b-2 data-[state=active]:border-blue-500 data-[state=active]:text-blue-400"
-                    >
-                      Transaction History
-                    </Tabs.Trigger>
-                  </Tabs.List>
-
-                  <Tabs.Content value="portfolio" className="mt-4">
-                    {isError && (
-                      <div className="rounded-lg border border-red-700 bg-red-900/20 p-4">
-                        <p className="text-sm text-red-400">Error loading portfolio data</p>
-                      </div>
-                    )}
-
-                    {isLoading && (
-                      <div className="rounded-lg border border-gray-700 bg-gray-800/50 p-8 text-center">
-                        <div className="mx-auto h-8 w-8 animate-spin rounded-full border-b-2 border-blue-500"></div>
-                        <p className="mt-4 text-gray-400">Loading portfolio data...</p>
-                      </div>
-                    )}
-
-                    {!isLoading && !isError && <PortfolioTable balances={balances} onTransfer={handleTransferClick} />}
-                  </Tabs.Content>
-
-                  <Tabs.Content value="history" className="mt-4">
-                    <TransactionHistory address={address} />
-                  </Tabs.Content>
-                </Tabs.Root>
+          {isConnected && (
+            <div className="space-y-6">
+              <div className="rounded-lg border border-gray-700 bg-gray-800/50 p-6">
+                <h2 className="mb-2 text-xl font-semibold text-white">Your Portfolio</h2>
+                <p className="text-sm text-gray-400">
+                  Address: <span className="font-mono">{address}</span>
+                </p>
+                <p className="mt-1 text-sm text-gray-400">Total Tokens: {balances.length}</p>
               </div>
-            )}
-          </AtomErrorBoundary>
+
+              <Tabs.Root defaultValue="portfolio" className="space-y-4">
+                <Tabs.List className="flex gap-2 border-b border-gray-700">
+                  <Tabs.Trigger
+                    value="portfolio"
+                    className="px-4 py-2 text-sm font-medium text-gray-400 transition-colors hover:text-gray-300 data-[state=active]:border-b-2 data-[state=active]:border-blue-500 data-[state=active]:text-blue-400"
+                  >
+                    Portfolio
+                  </Tabs.Trigger>
+                  <Tabs.Trigger
+                    value="history"
+                    className="px-4 py-2 text-sm font-medium text-gray-400 transition-colors hover:text-gray-300 data-[state=active]:border-b-2 data-[state=active]:border-blue-500 data-[state=active]:text-blue-400"
+                  >
+                    Transaction History
+                  </Tabs.Trigger>
+                </Tabs.List>
+
+                <Tabs.Content value="portfolio" className="mt-4">
+                  <PortfolioSection
+                    balances={balances}
+                    isLoading={isLoading}
+                    isError={isError}
+                    onTransfer={handleTransferClick}
+                  />
+                </Tabs.Content>
+
+                <Tabs.Content value="history" className="mt-4">
+                  <TransactionHistory address={address} />
+                </Tabs.Content>
+              </Tabs.Root>
+            </div>
+          )}
         </main>
 
         <footer className="mt-12 text-center text-sm text-gray-500">

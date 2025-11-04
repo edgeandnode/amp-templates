@@ -41,7 +41,9 @@ check-ts:
 # Deploy smart contracts to reth
 deploy-contracts:
     @if [ ! -f .env ]; then cp .env.example .env; fi
-    cd contracts && forge install
+    @if [ ! -d "contracts/lib/forge-std" ] || [ ! -d "contracts/lib/openzeppelin-contracts" ]; then \
+        cd contracts && forge install; \
+    fi
     forge script contracts/script/InitializePortfolio.s.sol --broadcast --rpc-url http://localhost:8545
 
 # Seed ERC20 transfer transactions between Wallet #1 and Wallet #2
@@ -60,4 +62,4 @@ dev-app:
 # Start the amp development server (watch config changes)
 [private]
 dev-amp:
-    pnpm amp dev
+    pnpm amp dev --admin-url http://localhost:1610 --rpc-url http://localhost:8545

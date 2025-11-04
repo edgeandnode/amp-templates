@@ -229,7 +229,7 @@ function PortfolioContent() {
           {!isConnected && (
             <div className="rounded-lg border border-gray-700 bg-gray-800/50 p-12 text-center">
               <h2 className="mb-4 text-2xl font-semibold text-white">Connect Your Wallet</h2>
-              <p className="mb-6 text-gray-400">Connect your MetaMask wallet to view your portfolio</p>
+              <p className="mb-6 text-gray-400">Connect your browser wallet extension to view your portfolio</p>
               <div className="flex justify-center">
                 <WalletConnect />
               </div>

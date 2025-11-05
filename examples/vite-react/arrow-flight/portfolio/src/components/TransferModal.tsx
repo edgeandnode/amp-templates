@@ -36,8 +36,7 @@ interface TransferModalProps {
 export function TransferModal({ isOpen, onClose, tokenAddress, tokenSymbol, decimals, onSuccess }: TransferModalProps) {
   const { address: userAddress } = useAccount()
   const [recipient, setRecipient] = useState<Address>("0x")
-  const [amount, setAmount] = useState("")
-  const [transferAmount, setTransferAmount] = useState<bigint>(0n)
+  const [amount, setAmount] = useState<bigint>()
   const [toastId, setToastId] = useState<string | number | null>(null)
 
   const { writeContract, data: hash, isPending, error: writeError } = useWriteContract()
@@ -46,10 +45,9 @@ export function TransferModal({ isOpen, onClose, tokenAddress, tokenSymbol, deci
   // Handle transaction success
   useEffect(() => {
     if (isSuccess && hash && toastId) {
-      toast.success(`Successfully transferred ${transferAmount} ${tokenSymbol}!`, { id: toastId })
+      toast.success(`Successfully transferred ${amount} ${tokenSymbol}!`, { id: toastId })
       setRecipient("0x")
-      setAmount("")
-      setTransferAmount(0n)
+      setAmount(0n)
       setToastId(null)
 
       // Trigger refresh callback if provided
@@ -59,7 +57,7 @@ export function TransferModal({ isOpen, onClose, tokenAddress, tokenSymbol, deci
 
       onClose()
     }
-  }, [isSuccess, hash, tokenSymbol, transferAmount, toastId, onClose, onSuccess])
+  }, [isSuccess, hash, tokenSymbol, amount, toastId, onClose, onSuccess])
 
   // Handle transaction errors
   useEffect(() => {
@@ -85,8 +83,7 @@ export function TransferModal({ isOpen, onClose, tokenAddress, tokenSymbol, deci
     }
 
     try {
-      const parsedAmount = parseUnits(amount, decimals)
-      setTransferAmount(BigInt(amount))
+      const parsedAmount = parseUnits(amount.toString(), decimals)
 
       const toastId = toast.loading(`Transferring ${amount} ${tokenSymbol}...`)
       setToastId(toastId)
@@ -150,7 +147,7 @@ export function TransferModal({ isOpen, onClose, tokenAddress, tokenSymbol, deci
                 id="amount"
                 type="number"
                 step="any"
-                value={amount}
+                value={amount?.toString()}
                 onChange={(e) => setAmount(e.target.value)}
                 placeholder="0.0"
                 className="w-full rounded-md border border-gray-700 bg-gray-800 px-3 py-2 text-white placeholder-gray-500 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"

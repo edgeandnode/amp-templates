@@ -1,6 +1,6 @@
 import { type Config, createConfig, createStorage, http } from "wagmi"
 import { anvil } from "wagmi/chains"
-import { porto } from "wagmi/connectors"
+import { injected, porto } from "wagmi/connectors"
 
 // Configure Reth chain
 export const rethChain = {
@@ -18,6 +18,7 @@ export const wagmiConfig: Config = createConfig({
   chains: [rethChain],
   connectors: [
     porto(),
+    injected(),
   ],
   storage: createStorage({ storage: localStorage }),
   transports: {

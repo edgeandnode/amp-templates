@@ -22,6 +22,7 @@ app.get("/api/shape-proxy/transfers", async (req, res) => {
 
   try {
     const response = await fetch(electricSqlUrl.toString())
+
     const headers: Record<string, string> = {}
 
     response.headers.forEach((value, key) => {
@@ -44,8 +45,11 @@ app.get("/api/shape-proxy/transfers", async (req, res) => {
 
     res.end()
   } catch (error) {
-    console.error("Proxy error:", error)
-    res.status(500).json({ error: "Failed to fetch from Electric SQL" })
+    console.error("[Shape Proxy] Proxy error:", error)
+    res.status(500).json({ 
+      error: "Failed to fetch from Electric SQL",
+      details: error instanceof Error ? error.message : String(error)
+    })
   }
 })
 

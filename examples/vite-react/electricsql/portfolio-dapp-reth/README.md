@@ -43,12 +43,14 @@ For a quick start, follow these steps:
 
 1. Authenticate with GitHub Container Registry: `docker login ghcr.io --username <YOUR_GITHUB_USERNAME>`
 2. Install dependencies: `pnpm install`
-3. Start infrastructure: `just up`
+3. Start infrastructure (without ElectricSQL): `just up`
 4. Compile datasets: `pnpm amp dev --admin-url http://localhost:1610 --rpc-url http://localhost:8545`
 5. Trigger base dataset sync: `pnpm amp dump reth`
 6. Deploy contracts: `just deploy-contracts`
 7. Seed transfers: `just seed-transfers`
-8. Start dev server: `just dev`
+8. Verify data synced: `docker compose exec db psql -U postgres -d portfolio_dapp -c "SELECT COUNT(*) FROM erc20_transfers;"`
+9. Start ElectricSQL (after data exists): `docker compose --profile electric up -d electric`
+10. Start dev server: `just dev`
 
 ### Step-by-Step Guide
 
@@ -68,9 +70,9 @@ Enter your personal access token as the password when prompted.
 pnpm install
 ```
 
-#### Step 3: Start Infrastructure Services
+#### Step 3: Start Infrastructure Services (Without ElectricSQL)
 
-Start all Docker services (PostgreSQL, Amp, Reth, Ampsync, ElectricSQL):
+Start Docker services (PostgreSQL, Amp, Reth, Ampsync). ElectricSQL will be started later after data is synced:
 
 ```bash
 just up
@@ -81,7 +83,8 @@ This will start:
 - **Amp server** (ports 1602, 1603, 1610) - Data indexing and querying
 - **Reth** (port 8545) - Local Ethereum node in dev mode with 1s block time
 - **Ampsync** - Syncs blockchain data from Amp to PostgreSQL
-- **ElectricSQL** (port 3000) - Real-time sync engine
+
+**Note:** ElectricSQL is not started automatically. It will be started in Step 11 after data is synced to ensure it creates shapes with existing data.
 
 Wait for all services to be healthy. You can check status with:
 
@@ -221,7 +224,24 @@ docker compose exec db psql -U postgres -d portfolio_dapp -c "SELECT COUNT(*) FR
 docker compose logs ampsync --tail 20
 ```
 
-#### Step 11: Start Development Servers
+#### Step 11: Start ElectricSQL
+
+**Important:** ElectricSQL uses PostgreSQL logical replication with snapshots. To ensure ElectricSQL creates shapes with existing data, start it only after ampsync has synced data:
+
+```bash
+# Verify data is synced (should show > 0 transfers)
+docker compose exec db psql -U postgres -d portfolio_dapp -c "SELECT COUNT(*) FROM erc20_transfers;"
+
+# Start ElectricSQL now that data exists
+docker compose --profile electric up -d electric
+
+# Wait for ElectricSQL to start and create shapes
+sleep 5
+```
+
+ElectricSQL will now create shapes with the existing data, so the frontend can query it immediately.
+
+#### Step 12: Start Development Servers
 
 Start both the frontend and Amp dev server:
 

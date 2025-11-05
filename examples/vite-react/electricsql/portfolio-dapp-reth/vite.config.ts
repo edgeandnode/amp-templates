@@ -6,13 +6,13 @@ export default defineConfig({
   plugins: [react()],
   server: {
     proxy: {
-      // Proxy Arrow Flight requests to the Amp proxy server
-      "/arrow.flight.protocol.FlightService": {
+      // Proxy ElectricSQL shape requests to the Express proxy server
+      "/api/shape-proxy": {
         target: "http://localhost:3001",
         changeOrigin: true,
         configure: (proxy, _options) => {
           proxy.on("error", (err, _req, _res) => {
-            console.error("[Vite Proxy] Proxy error:", err)
+            console.error("[Vite Proxy] Shape proxy error:", err)
           })
         },
       },

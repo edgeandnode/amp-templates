@@ -52,7 +52,7 @@ seed-transfers:
 
 # Run all development services in parallel
 [parallel]
-dev: dev-app dev-amp
+dev: dev-app
 
 # Run the app in development mode
 [private]

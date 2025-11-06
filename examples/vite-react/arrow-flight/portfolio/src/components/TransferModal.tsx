@@ -1,8 +1,11 @@
 import * as Dialog from "@radix-ui/react-dialog"
+import { useForm } from "@tanstack/react-form"
 import { useEffect, useState } from "react"
 import { toast } from "sonner"
 import { type Address, parseUnits } from "viem"
 import { useAccount, useWaitForTransactionReceipt, useWriteContract } from "wagmi"
+
+import { type FormValues, validateAmount, validateRecipient } from "../lib/validation"
 
 const ERC20_ABI = [
   {
@@ -35,19 +38,43 @@ interface TransferModalProps {
 
 export function TransferModal({ isOpen, onClose, tokenAddress, tokenSymbol, decimals, onSuccess }: TransferModalProps) {
   const { address: userAddress } = useAccount()
-  const [recipient, setRecipient] = useState<Address>("0x")
-  const [amount, setAmount] = useState<bigint>()
   const [toastId, setToastId] = useState<string | number | null>(null)
 
   const { writeContract, data: hash, isPending, error: writeError } = useWriteContract()
   const { isLoading: isConfirming, isSuccess, isError } = useWaitForTransactionReceipt({ hash })
 
+  // Initialize TanStack Form with field-specific validators
+  const form = useForm({
+    defaultValues: { recipient: "", amount: "" } satisfies FormValues,
+    onSubmit: async ({ value }) => {
+      const parsedAmount = parseUnits(value.amount, decimals)
+
+      const id = toast.loading(`Transferring ${value.amount} ${tokenSymbol}...`)
+      setToastId(id)
+
+      try {
+        writeContract({
+          address: tokenAddress as Address,
+          abi: ERC20_ABI,
+          functionName: "transfer",
+          args: [value.recipient as Address, parsedAmount],
+        })
+      } catch (err) {
+        toast.error("Transfer failed. Please try again.", { id })
+        setToastId(null)
+        throw err
+      }
+    },
+  })
+
+  const inputsDisabled = isPending || isConfirming || form.state.isSubmitting
+  const submitDisabled = inputsDisabled || !form.state.canSubmit
+
   // Handle transaction success
   useEffect(() => {
     if (isSuccess && hash && toastId) {
-      toast.success(`Successfully transferred ${amount} ${tokenSymbol}!`, { id: toastId })
-      setRecipient("0x")
-      setAmount(0n)
+      toast.success(`Successfully transferred ${form.getFieldValue("amount")} ${tokenSymbol}!`, { id: toastId })
+      form.reset()
       setToastId(null)
 
       // Trigger refresh callback if provided
@@ -57,7 +84,7 @@ export function TransferModal({ isOpen, onClose, tokenAddress, tokenSymbol, deci
 
       onClose()
     }
-  }, [isSuccess, hash, tokenSymbol, amount, toastId, onClose, onSuccess])
+  }, [isSuccess, hash, tokenSymbol, toastId, onClose, onSuccess, form])
 
   // Handle transaction errors
   useEffect(() => {
@@ -73,37 +100,6 @@ export function TransferModal({ isOpen, onClose, tokenAddress, tokenSymbol, deci
       setToastId(null)
     }
   }, [isError, toastId])
-
-  const handleTransfer = async (e: React.FormEvent) => {
-    e.preventDefault()
-
-    if (!recipient || !amount) {
-      toast.error("Please fill in all fields")
-      return
-    }
-
-    try {
-      const parsedAmount = parseUnits(amount.toString(), decimals)
-
-      const toastId = toast.loading(`Transferring ${amount} ${tokenSymbol}...`)
-      setToastId(toastId)
-
-      writeContract({
-        address: tokenAddress as Address,
-        abi: ERC20_ABI,
-        functionName: "transfer",
-        args: [recipient as Address, parsedAmount],
-      })
-    } catch (error) {
-      console.error("Transfer error:", error)
-      if (toastId) {
-        toast.error("Transfer failed. Please try again.", { id: toastId })
-        setToastId(null)
-      } else {
-        toast.error("Transfer failed. Please try again.")
-      }
-    }
-  }
 
   return (
     <Dialog.Root open={isOpen} onOpenChange={(open) => !open && !isPending && !isConfirming && onClose()}>
@@ -122,39 +118,69 @@ export function TransferModal({ isOpen, onClose, tokenAddress, tokenSymbol, deci
             </Dialog.Close>
           </div>
 
-          <form onSubmit={handleTransfer} className="space-y-4">
-            <div>
-              <label htmlFor="recipient" className="mb-1 block text-sm font-medium text-gray-300">
-                Recipient Address
-              </label>
-              <input
-                id="recipient"
-                type="text"
-                value={recipient}
-                onChange={(e) => setRecipient(e.target.value)}
-                placeholder="0x..."
-                className="w-full rounded-md border border-gray-700 bg-gray-800 px-3 py-2 text-white placeholder-gray-500 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
-                required
-                disabled={isPending || isConfirming}
-              />
-            </div>
+          <form
+            onSubmit={(e) => {
+              e.preventDefault()
+              form.handleSubmit()
+            }}
+            className="space-y-4"
+          >
+            <form.Field
+              name="recipient"
+              validators={{
+                onBlur: ({ value }) => validateRecipient(value),
+              }}
+            >
+              {(field) => (
+                <div>
+                  <label htmlFor="recipient" className="mb-1 block text-sm font-medium text-gray-300">
+                    Recipient Address
+                  </label>
+                  <input
+                    id="recipient"
+                    type="text"
+                    value={field.state.value}
+                    onChange={(e) => field.handleChange(e.target.value)}
+                    onBlur={field.handleBlur}
+                    placeholder="0x..."
+                    className="w-full rounded-md border border-gray-700 bg-gray-800 px-3 py-2 text-white placeholder-gray-500 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
+                    disabled={inputsDisabled}
+                  />
+                  {field.state.meta.errors && field.state.meta.errors.length > 0 && (
+                    <p className="mt-1 text-sm text-red-400">{field.state.meta.errors.join(", ")}</p>
+                  )}
+                </div>
+              )}
+            </form.Field>
 
-            <div>
-              <label htmlFor="amount" className="mb-1 block text-sm font-medium text-gray-300">
-                Amount
-              </label>
-              <input
-                id="amount"
-                type="number"
-                step="any"
-                value={amount?.toString()}
-                onChange={(e) => setAmount(e.target.value)}
-                placeholder="0.0"
-                className="w-full rounded-md border border-gray-700 bg-gray-800 px-3 py-2 text-white placeholder-gray-500 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
-                required
-                disabled={isPending || isConfirming}
-              />
-            </div>
+            <form.Field
+              name="amount"
+              validators={{
+                onBlur: ({ value }) => validateAmount(value, decimals),
+              }}
+            >
+              {(field) => (
+                <div>
+                  <label htmlFor="amount" className="mb-1 block text-sm font-medium text-gray-300">
+                    Amount
+                  </label>
+                  <input
+                    id="amount"
+                    type="number"
+                    inputMode="decimal"
+                    value={field.state.value}
+                    onChange={(e) => field.handleChange(e.target.value)}
+                    onBlur={field.handleBlur}
+                    placeholder="0.0"
+                    className="w-full rounded-md border border-gray-700 bg-gray-800 px-3 py-2 text-white placeholder-gray-500 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
+                    disabled={inputsDisabled}
+                  />
+                  {field.state.meta.errors && field.state.meta.errors.length > 0 && (
+                    <p className="mt-1 text-sm text-red-400">{field.state.meta.errors.join(", ")}</p>
+                  )}
+                </div>
+              )}
+            </form.Field>
 
             <div className="rounded-md bg-blue-500/10 p-3 text-sm text-blue-400">
               <p>
@@ -174,7 +200,7 @@ export function TransferModal({ isOpen, onClose, tokenAddress, tokenSymbol, deci
                 <button
                   type="button"
                   className="flex-1 rounded-md border border-gray-700 bg-gray-800 px-4 py-2 text-white transition-colors hover:bg-gray-700 disabled:cursor-not-allowed disabled:opacity-50"
-                  disabled={isPending || isConfirming}
+                  disabled={inputsDisabled}
                 >
                   Cancel
                 </button>
@@ -182,7 +208,7 @@ export function TransferModal({ isOpen, onClose, tokenAddress, tokenSymbol, deci
               <button
                 type="submit"
                 className="flex-1 rounded-md bg-blue-600 px-4 py-2 font-medium text-white transition-colors hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50"
-                disabled={isPending || isConfirming}
+                disabled={submitDisabled}
               >
                 {isPending || isConfirming ? "Transferring..." : "Transfer"}
               </button>

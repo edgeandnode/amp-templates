@@ -36,6 +36,9 @@ coverage/
 
 # Misc
 .turbo
+.ultra.cache.json
+tmp/
+.direnv/
 
 .history/
 

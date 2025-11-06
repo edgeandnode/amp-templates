@@ -150,22 +150,26 @@ The CLI (`packages/create-amp`) provides project scaffolding:
 #### Available Templates
 
 **Next.js Template** (`templates/nextjs/`):
+
 - Next.js 15 with App Router
 - TypeScript configuration
 - Tailwind CSS setup
 - Minimal dependencies
 
 **Vite Template** (`templates/vite/`):
+
 - Vite with React
 - TypeScript configuration
 - Tailwind CSS setup
 - Minimal dependencies
 
 **Data Layer Templates**:
+
 - `templates/data-layer/arrow-flight/` - Apache Arrow Flight integration
 - `templates/data-layer/amp-sync/` - Electric SQL with Drizzle ORM
 
 **Example Templates**:
+
 - `templates/examples/wallet/` - Complete wallet integration example
 
 ## Development Tips

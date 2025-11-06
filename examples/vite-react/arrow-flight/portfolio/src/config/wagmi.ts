@@ -1,4 +1,4 @@
-import { createConfig, http, type Config } from "wagmi"
+import { type Config, createConfig, http } from "wagmi"
 import { anvil } from "wagmi/chains"
 import { injected, metaMask } from "wagmi/connectors"
 
@@ -13,10 +13,7 @@ export const anvilChain = {
   },
 }
 
-const connectors = [
-  injected(),
-  metaMask(),
-]
+const connectors = [injected(), metaMask()]
 
 export const wagmiConfig: Config = createConfig({
   chains: [anvilChain],

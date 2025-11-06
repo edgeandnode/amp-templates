@@ -3,7 +3,9 @@ import { useConnect } from "wagmi"
 export function WalletConnect() {
   const { connect, connectors } = useConnect()
 
-  const MetaMaskOrInjectedConnector = connectors.find((connector) => connector.name.toLowerCase() === "metamask" || "injected")
+  const MetaMaskOrInjectedConnector = connectors.find(
+    (connector) => connector.name.toLowerCase() === "metamask" || "injected",
+  )
   if (!MetaMaskOrInjectedConnector) {
     return (
       <div className="rounded-md border border-yellow-700 bg-yellow-900/20 p-4">

@@ -45,7 +45,7 @@ const ERC20_ABI = [
  * 2. Wagmi (RPC) - for real-time token balances
  *
  * The hook uses transfers to determine which tokens to query, then fetches current
- * balances from the blockchain. 
+ * balances from the blockchain.
  *
  * @param userAddress - User wallet address
  *

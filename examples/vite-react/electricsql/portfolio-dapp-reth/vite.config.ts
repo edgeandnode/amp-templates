@@ -1,9 +1,13 @@
 import { defineConfig } from "vite"
 import react from "@vitejs/plugin-react"
+import mkcert from "vite-plugin-mkcert"
 
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [react()],
+  plugins: [
+    mkcert(), // Enable HTTPS for Porto Wallet (WebAuthn requires secure origins)
+    react(),
+  ],
   server: {
     proxy: {
       // Proxy ElectricSQL shape requests to the Express proxy server

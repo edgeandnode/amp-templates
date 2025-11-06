@@ -32,6 +32,7 @@ Porto is a next-generation self-custody wallet that:
 - Works seamlessly with wagmi and viem
 - Provides EIP-1193 compatibility
 - Supports EIP-6963 injection for broad compatibility
+- **Requires HTTPS** for WebAuthn features (automatically configured with `vite-plugin-mkcert`)
 
 For more information, see the [Porto SDK documentation](https://porto.sh/sdk) and [Porto Relay documentation](https://porto.sh/relay).
 
@@ -250,7 +251,7 @@ just dev
 ```
 
 This runs in parallel:
-- **Vite dev server** - Frontend app on `http://localhost:5173`
+- **Vite dev server** - Frontend app on `https://localhost:5173` (HTTPS required for Porto Wallet)
 - **Amp dev watcher** - Compiles and watches dataset changes
 
 Alternatively, you can run them separately:
@@ -268,7 +269,9 @@ tsx server.ts
 
 #### Step 12: Connect Your Wallet
 
-Open [http://localhost:5173](http://localhost:5173) in your browser.
+Open [https://localhost:5173](https://localhost:5173) in your browser.
+
+**Important:** The app runs on HTTPS (not HTTP) because Porto Wallet requires a secure origin for WebAuthn/Passkeys. Your browser may show a security warning about the self-signed certificate - this is normal for local development. Click "Advanced" → "Proceed to localhost" to continue.
 
 **Connect Porto Wallet:**
 
@@ -278,6 +281,8 @@ Porto wallet will be available automatically when you visit the app thanks to wa
 2. Follow the WebAuthn/Passkey prompts to create your wallet
 
 Porto wallets are self-custodial and use your device's secure enclave (no seed phrases needed). The Reth chain (chain ID 1337) will be automatically configured.
+
+**Note:** Porto requires HTTPS for WebAuthn to work properly. If you're using HTTP, Porto will fallback to a popup, but WebAuthn features may not work. See the [Porto SDK documentation](https://porto.sh/sdk) for more details.
 
 ## Development Workflow
 
@@ -310,7 +315,7 @@ Import test account:
 - Account #1 Private Key: `0x59c6995e998f97a5a0044966f0945389dc9e86dae88c7a8412f4603b6b78690d`
 - Account #2 Private Key: `0x5de4111afa1a4b94908f83103eb1f1706367c2e68ca870fc3fb9a804cdab365a`
 
-Navigate to `http://localhost:5173` and connect your wallet.
+Navigate to `https://localhost:5173` and connect your wallet.
 
 ### View Logs
 

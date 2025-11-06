@@ -12,8 +12,11 @@ import { WalletConnect } from "./components/WalletConnect"
 import { wagmiConfig } from "./config/wagmi"
 import { usePortfolioBalances } from "./hooks/usePortfolioBalances"
 import { usePortfolioQuery } from "./hooks/usePortfolioQuery"
+import { Porto } from 'porto'
 
 import "./App.css"
+
+Porto.create()
 
 const ERC20_METADATA_ABI = [
   {

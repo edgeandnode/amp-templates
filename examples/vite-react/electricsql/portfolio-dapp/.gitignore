@@ -22,3 +22,25 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Forge output folders
+contracts/cache/
+contracts/out/
+
+# Anvil development broadcast logs
+contracts/!/broadcast
+contracts/broadcast/*/31337/
+contracts/broadcast/**/dry-run/
+
+# Forge / Anvil Docs and Env file
+contracts/docs/
+contracts/.env
+
+# PostgreSQL data directory (runtime database files)
+infra/postgres/data/
+
+# Amp data
+infra/amp/data/
+
+infra/amp/datasets/*
+!infra/amp/datasets/anvil*

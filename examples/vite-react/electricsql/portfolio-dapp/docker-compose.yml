@@ -22,9 +22,9 @@ services:
   amp:
     image: ghcr.io/edgeandnode/amp:v0.0.20
     ports:
-      - "1602:1602"  # Arrow Flight
-      - "1603:1603"  # JSON Lines
-      - "1610:1610"  # Admin API
+      - "1602:1602" # Arrow Flight
+      - "1603:1603" # JSON Lines
+      - "1610:1610" # Admin API
     volumes:
       - ./infra/amp/config.toml:/var/lib/amp/config.toml
       - ./infra/amp/data:/var/lib/amp/data

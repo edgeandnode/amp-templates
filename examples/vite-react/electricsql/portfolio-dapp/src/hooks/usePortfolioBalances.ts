@@ -37,7 +37,7 @@ export function usePortfolioBalances(userAddress?: string) {
     if (!transfers) return []
     const addressSet = new Set<string>()
     transfers.forEach((transfer) => {
-      addressSet.add(`${transfer.tokenAddress}`)
+      addressSet.add(`${transfer.contractAddress}`)
     })
     return Array.from(addressSet)
   }, [transfers])
@@ -57,7 +57,7 @@ export function usePortfolioBalances(userAddress?: string) {
     const balanceMap = new Map<string, bigint>()
 
     transfers.forEach((transfer) => {
-      const tokenAddress = `${transfer.tokenAddress}`
+      const tokenAddress = `${transfer.contractAddress}`
       const amount = BigInt(transfer.amountRaw)
       const normalizedFrom = transfer.fromAddress.startsWith("0x")
         ? transfer.fromAddress.slice(2).toLowerCase()

@@ -1,6 +1,6 @@
 import { useLiveQuery } from "@tanstack/react-db"
 
-import { erc20TransfersCollection } from "../lib/collections/erc20Transfers"
+import { erc20TransfersCollection } from "../lib/collections"
 
 export function usePortfolioQuery(userAddress?: string) {
   const transfersQuery = useLiveQuery((q) => {
@@ -14,14 +14,13 @@ export function usePortfolioQuery(userAddress?: string) {
       .from({ t: erc20TransfersCollection })
       .fn.where((row) => {
         return (
-          row.t.fromAddress.toLowerCase() === normalizedAddress ||
-          row.t.toAddress.toLowerCase() === normalizedAddress
+          row.t.fromAddress.toLowerCase() === normalizedAddress || row.t.toAddress.toLowerCase() === normalizedAddress
         )
       })
       .select(({ t }) => ({
         txHash: t.txHash,
         logIndex: t.logIndex,
-        tokenAddress: t.tokenAddress,
+        contractAddress: t.contractAddress,
         fromAddress: t.fromAddress,
         toAddress: t.toAddress,
         amountRaw: t.amountRaw,

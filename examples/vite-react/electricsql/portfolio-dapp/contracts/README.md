@@ -23,15 +23,16 @@ This folder implements standard ERC20 token smart contract on a local Ethereum d
 
 The following tokens will be deployed to simulate a realistic crypto portfolio:
 
-| Token | Symbol | Decimals | Total Supply | User 1 Holdings | User 2 Holdings |
-|-------|--------|----------|--------------|-----------------|-----------------|
-| Wrapped Bitcoin | WBTC | 8 | 21M | 50 | 125 |
-| Wrapped Ether | WETH | 18 | 120M | 1,000 | 500 |
-| USD Coin | USDC | 6 | 50B | 100,000 | 250,000 |
-| Tether USD | USDT | 6 | 50B | 75,000 | 150,000 |
-| USDS Stablecoin | USDS | 6 | 10B | 50,000 | 100,000 |
+| Token           | Symbol | Decimals | Total Supply | User 1 Holdings | User 2 Holdings |
+| --------------- | ------ | -------- | ------------ | --------------- | --------------- |
+| Wrapped Bitcoin | WBTC   | 8        | 21M          | 50              | 125             |
+| Wrapped Ether   | WETH   | 18       | 120M         | 1,000           | 500             |
+| USD Coin        | USDC   | 6        | 50B          | 100,000         | 250,000         |
+| Tether USD      | USDT   | 6        | 50B          | 75,000          | 150,000         |
+| USDS Stablecoin | USDS   | 6        | 10B          | 50,000          | 100,000         |
 
 ### Token Contract Addresses on Anvil
+
 - **WBTC**: `0x5FbDB2315678afecb367f032d93F642f64180aa3`
 - **WETH**: `0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9`
 - **USDC**: `0x0165878A594ca255338adfa4d48449f69242Eb8F`
@@ -63,6 +64,7 @@ anvil
 ```
 
 Anvil will display 10 accounts with their private keys. Note the first three accounts:
+
 - Account #0: Deployer
 - Account #1: User 1
 - Account #2: User 2
@@ -76,6 +78,7 @@ forge build
 ```
 
 Expected output:
+
 ```
 [⠢] Compiling...
 [⠆] Compiling 3 files with 0.8.30
@@ -86,6 +89,7 @@ Compiler run successful
 ### 4. Deploy Token Portfolio
 
 The deployment script requires private keys for three accounts:
+
 - **Deployer** (Anvil Account #0): Deploys tokens and initial distribution
 - **User1** (Anvil Account #1): Participates in inter-user transfers
 - **User2** (Anvil Account #2): Participates in inter-user transfers
@@ -136,11 +140,11 @@ Token Addresses:
     WBTC: 50
     WETH: 1000
     ...
-  
+
   User2 Portfolio ( 0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC ):
     WBTC: 125
     ...
-  
+
   Deployer Remaining Balances ( 0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266 ):
     WBTC: 20999825
     WETH: 119998500
@@ -153,6 +157,7 @@ Token Addresses:
 After deploying tokens, you can run test transactions between users at any time using the `DoTransfers` script. This script executes predefined transfers between User1 and User2 for all tokens.
 
 **Prerequisites:**
+
 - Anvil must be running
 - Tokens must be deployed (run `InitializePortfolio` first)
 - Token addresses must be set in `.env` file in the portfolio-dapp root folder
@@ -170,12 +175,12 @@ forge script contracts/script/DoTransfers.s.sol --rpc-url http://localhost:8545 
 
 **Transfers executed by the script:**
 
-| Token | From → To | Amount |
-|-------|-----------|---------|
-| WBTC  | User1 → User2 | 10 WBTC |
-| WBTC  | User2 → User1 | 5 WBTC |
-| WETH  | User2 → User1 | 100 WETH |
-| WETH  | User1 → User2 | 200 WETH |
+| Token | From → To     | Amount      |
+| ----- | ------------- | ----------- |
+| WBTC  | User1 → User2 | 10 WBTC     |
+| WBTC  | User2 → User1 | 5 WBTC      |
+| WETH  | User2 → User1 | 100 WETH    |
+| WETH  | User1 → User2 | 200 WETH    |
 | USDC  | User1 → User2 | 25,000 USDC |
 | USDT  | User2 → User1 | 30,000 USDT |
 | USDT  | User1 → User2 | 10,000 USDT |
@@ -216,40 +221,45 @@ forge test -vv
 ```
 
 Expected test results:
+
 - All tests should pass
 - Gas usage should be optimized
 - Coverage should be near 100%
-
 
 ## Troubleshooting
 
 ### Common Issues and Solutions
 
 1. **Anvil Not Running**
+
    ```
    Error: Failed to connect to RPC
    Solution: Ensure Anvil is running with `anvil`
    ```
 
 2. **Compilation Errors**
+
    ```
    Error: Source file not found
    Solution: Ensure all imports are correct and run `forge build`
    ```
 
 3. **Insufficient Balance**
+
    ```
    Error: Insufficient funds for gas
    Solution: Anvil accounts have 10000 ETH by default; check you're using the correct account
    ```
 
 4. **Script Fails**
+
    ```
    Error: Script failed
    Solution: Add -vvvv flag for detailed output and check gas limits
    ```
 
 5. **Missing Private Keys**
+
    ```
    Error: Failed to parse private key
    Solution: Ensure DEPLOYER_PRIVATE_KEY, USER1_PRIVATE_KEY, and USER2_PRIVATE_KEY

@@ -5,7 +5,7 @@ import { toast, Toaster } from "sonner"
 import { formatUnits } from "viem"
 import { useAccount, useDisconnect, useReadContracts, WagmiProvider } from "wagmi"
 
-import { PortfolioTable } from "./components/PortfolioTable"
+import { PortfolioSection } from "./components/PortfolioSection"
 import { TransactionHistory } from "./components/TransactionHistory"
 import { TransferModal } from "./components/TransferModal"
 import { WalletConnect } from "./components/WalletConnect"
@@ -56,7 +56,7 @@ function PortfolioContent() {
 
   // Get unique token addresses for metadata lookup
   const uniqueTokenAddresses = useMemo(
-    () => Array.from(new Set(transfers?.map((t) => `${t.tokenAddress}`) || [])),
+    () => Array.from(new Set(transfers?.map((t) => `${t.contractAddress}`) || [])),
     [transfers],
   )
 
@@ -121,7 +121,7 @@ function PortfolioContent() {
       const isNewTransfer = !seenTransferIdsRef.current.has(transferId)
 
       if (isReceived && isNewTransfer) {
-        const tokenAddress = `${transfer.tokenAddress}`.toLowerCase()
+        const tokenAddress = `${transfer.contractAddress}`.toLowerCase()
         const metadata = tokenMetadataMap.get(tokenAddress)
 
         // Only show toast if we have metadata to ensure correct amounts
@@ -212,7 +212,7 @@ function PortfolioContent() {
           {!isConnected && (
             <div className="rounded-lg border border-gray-700 bg-gray-800/50 p-12 text-center">
               <h2 className="mb-4 text-2xl font-semibold text-white">Connect Your Wallet</h2>
-              <p className="mb-6 text-gray-400">Connect your MetaMask wallet to view your portfolio</p>
+              <p className="mb-6 text-gray-400">Connect your browser wallet extension to view your portfolio</p>
               <div className="flex justify-center">
                 <WalletConnect />
               </div>
@@ -246,24 +246,16 @@ function PortfolioContent() {
                 </Tabs.List>
 
                 <Tabs.Content value="portfolio" className="mt-4">
-                  {isError && (
-                    <div className="rounded-lg border border-red-700 bg-red-900/20 p-4">
-                      <p className="text-sm text-red-400">Error loading portfolio data</p>
-                    </div>
-                  )}
-
-                  {isLoading && (
-                    <div className="rounded-lg border border-gray-700 bg-gray-800/50 p-8 text-center">
-                      <div className="mx-auto h-8 w-8 animate-spin rounded-full border-b-2 border-blue-500"></div>
-                      <p className="mt-4 text-gray-400">Loading portfolio data...</p>
-                    </div>
-                  )}
-
-                  {!isLoading && !isError && <PortfolioTable balances={balances} onTransfer={handleTransferClick} />}
+                  <PortfolioSection
+                    balances={balances}
+                    isLoading={isLoading}
+                    isError={isError}
+                    onTransfer={handleTransferClick}
+                  />
                 </Tabs.Content>
 
                 <Tabs.Content value="history" className="mt-4">
-                  <TransactionHistory />
+                  <TransactionHistory address={address} />
                 </Tabs.Content>
               </Tabs.Root>
             </div>
@@ -271,7 +263,7 @@ function PortfolioContent() {
         </main>
 
         <footer className="mt-12 text-center text-sm text-gray-500">
-          <p>Built with Vite, React, Electric SQL, amp-sync, and TanStack Table</p>
+          <p>Built with Vite, React, Electricql, Amp Sync and TanStack Table</p>
           <p className="mt-1">Powered by Anvil local blockchain</p>
         </footer>
       </div>

@@ -1,0 +1,63 @@
+# Display available commands and their descriptions (default target)
+default:
+    @just --list
+
+# Install dependencies
+install:
+    pnpm install
+
+# Start service dependencies
+up *args:
+    @mkdir -p ./infra/postgres/data
+    @mkdir -p ./infra/amp/data
+    docker compose up -d --wait {{args}}
+
+# Tail logs for service dependencies
+logs *args:
+    docker compose logs -f --tail 100 {{args}}
+
+# Stop service dependencies
+stop *args:
+    docker compose stop {{args}}
+
+# Stop all services and remove volumes
+down:
+    docker compose down --volumes
+    @rm -rf ./infra/postgres/data
+    @rm -rf ./infra/amp/data
+
+# clean the docker images
+clean:
+    docker system prune --volumes
+
+# Lint typescript code
+lint-ts *args:
+    pnpm lint {{args}}
+
+# Check typescript code for type errors
+check-ts:
+    pnpm check
+
+# Deploy smart contracts to anvil
+deploy-contracts:
+    cp .env.example .env
+    forge install
+    forge script contracts/script/InitializePortfolio.s.sol --broadcast --rpc-url http://localhost:8545
+
+# Seed ERC20 transfer transactions between Wallet #1 and Wallet #2
+seed-transfers:
+    forge script contracts/script/DoTransfers.s.sol --broadcast --rpc-url http://localhost:8545
+
+# Run all development services in parallel
+[parallel]
+dev: dev-app dev-amp
+
+# Run the app in development mode
+[private]
+dev-app:
+    pnpm dev:all
+
+# Start the amp development server (watch config changes)
+[private]
+dev-amp:
+    pnpm amp dev

@@ -1,0 +1,30 @@
+{
+  // [Additions](ampsync-electricsql):name
+  "name": "create-amp-vite-react-ampsync-electricsql",
+  // [Additions]:end
+  "scripts": {
+    // [Additions](ampsync-electricsql):scripts
+    "dev": "concurrently \"pnpm dev:proxy\" \"pnpm dev\"",   
+    "dev:proxy": "tsx server.ts",
+    // [Additions]:end
+  },
+  "dependencies": {
+    // [Additions](ampsync-electricsql):deps
+    "@electric-sql/client": "^1.0.14",
+    "@electric-sql/react": "^1.0.14",
+    "@radix-ui/react-select": "^2.2.6",
+    "@radix-ui/react-toast": "^1.2.15",
+    "@tailwindcss/postcss": "^4.1.15",
+    "@tanstack/db": "^0.4.13",
+    "@tanstack/electric-db-collection": "^0.1.37",
+    "@tanstack/react-db": "^0.1.35",
+    "express": "^5.1.0",
+    // [Additions]:end
+  },
+  "devDependencies": {
+    // [Additions](ampsync-electricsql):dev-deps
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.3",
+    // [Additions]:end
+  }
+}

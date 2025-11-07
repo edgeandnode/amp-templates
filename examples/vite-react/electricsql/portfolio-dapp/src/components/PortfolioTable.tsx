@@ -68,7 +68,7 @@ export function PortfolioTable({ balances, onTransfer }: PortfolioTableProps) {
         cell: (info) => (
           <button
             onClick={() => onTransfer?.(info.row.original.tokenAddress, info.row.original.tokenSymbol)}
-            className="rounded bg-blue-600 px-3 py-1 text-sm font-medium text-white hover:bg-blue-700 transition-colors"
+            className="rounded bg-blue-600 px-3 py-1 text-sm font-medium text-white transition-colors hover:bg-blue-700"
           >
             Transfer
           </button>
@@ -106,7 +106,7 @@ export function PortfolioTable({ balances, onTransfer }: PortfolioTableProps) {
               {headerGroup.headers.map((header) => (
                 <th
                   key={header.id}
-                  className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-300"
+                  className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-300 uppercase"
                 >
                   {header.isPlaceholder ? null : (
                     <div
@@ -127,9 +127,9 @@ export function PortfolioTable({ balances, onTransfer }: PortfolioTableProps) {
         </thead>
         <tbody className="divide-y divide-gray-700">
           {table.getRowModel().rows.map((row) => (
-            <tr key={row.id} className="hover:bg-gray-700/30 transition-colors">
+            <tr key={row.id} className="transition-colors hover:bg-gray-700/30">
               {row.getVisibleCells().map((cell) => (
-                <td key={cell.id} className="whitespace-nowrap px-6 py-4">
+                <td key={cell.id} className="px-6 py-4 whitespace-nowrap">
                   {flexRender(cell.column.columnDef.cell, cell.getContext())}
                 </td>
               ))}

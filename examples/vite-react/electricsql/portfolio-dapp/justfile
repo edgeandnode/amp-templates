@@ -42,6 +42,7 @@ check-ts:
 deploy-contracts:
     cp .env.example .env
     forge install
+    forge install OpenZeppelin/openzeppelin-contracts --no-git
     forge script contracts/script/InitializePortfolio.s.sol --broadcast --rpc-url http://localhost:8545
 
 # Seed ERC20 transfer transactions between Wallet #1 and Wallet #2

@@ -10,3 +10,9 @@
 [submodule "examples/vite-react/arrow-flight/portfolio/contracts/lib/openzeppelin-contracts"]
 	path = examples/vite-react/arrow-flight/portfolio/contracts/lib/openzeppelin-contracts
 	url = https://github.com/OpenZeppelin/openzeppelin-contracts
+[submodule "examples/backend/fastify/contracts/lib/forge-std"]
+	path = examples/backend/fastify/contracts/lib/forge-std
+	url = https://github.com/foundry-rs/forge-std
+[submodule "examples/backend/fastify/contracts/lib/openzeppelin-contracts"]
+	path = examples/backend/fastify/contracts/lib/openzeppelin-contracts
+	url = https://github.com/openzeppelin/openzeppelin-contracts

@@ -1,5 +1,7 @@
 # {{projectName}}
 
+***Different README.md versions exist in each application varient subfolder***
+
 A modern Vite + React application powered by Amp for real-time data querying and blockchain interactions.
 
 ## Features
@@ -8,9 +10,7 @@ A modern Vite + React application powered by Amp for real-time data querying and
 - **TypeScript**: Full type safety throughout the application
 - **Tailwind CSS**: Modern utility-first CSS framework
 - **Wagmi + Viem**: Ethereum interactions and wallet connectivity
-- **TanStack Query**: Powerful data fetching and caching
-// [Additions](ampsync-electricsql):features
-// [Additions](flight-atom):features
+
 
 ## Getting Started
 
@@ -34,8 +34,6 @@ A modern Vite + React application powered by Amp for real-time data querying and
    - Local blockchain (Anvil)
    - Amp server
    - Vite development server
-// [Additions](ampsync-electricsql):setup
-// [Additions](flight-atom):setup
 
 3. Open [http://localhost:5173](http://localhost:5173) in your browser
 
@@ -78,8 +76,6 @@ This application demonstrates real-time portfolio tracking with:
 3. The React frontend queries Amp for live data updates
 4. UI updates automatically when new transactions occur
 
-// [Additions](ampsync-electricsql):architecture
-// [Additions](flight-atom):architecture
 
 ## Configuration
 

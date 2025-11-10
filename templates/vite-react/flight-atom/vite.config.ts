@@ -1,4 +1,9 @@
-// [Additions](flight-atom):server-proxy
+import { defineConfig } from "vite"
+import react from "@vitejs/plugin-react"
+
+// https://vite.dev/config/
+export default defineConfig({
+  plugins: [react()],
   server: {
     proxy: {
       // Proxy Arrow Flight requests to the Amp proxy server
@@ -13,4 +18,4 @@
       },
     },
   },
-// [Additions]:end
+})

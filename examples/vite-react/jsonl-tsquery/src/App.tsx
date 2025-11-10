@@ -36,9 +36,10 @@ const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
       staleTime: 15_000, // 15 seconds
-      refetchOnWindowFocus: true, // Refetch when window regains focus
+      refetchOnWindowFocus: false, // Disable as polling already handles freshness
       refetchOnReconnect: true, // Refetch on network reconnect
       retry: 2, // Retry failed requests twice
+      retryDelay: (attempt) => 1000 * 2 ** attempt
     },
   },
 })

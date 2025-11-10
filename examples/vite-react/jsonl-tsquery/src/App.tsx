@@ -39,7 +39,7 @@ const queryClient = new QueryClient({
       refetchOnWindowFocus: false, // Disable as polling already handles freshness
       refetchOnReconnect: true, // Refetch on network reconnect
       retry: 2, // Retry failed requests twice
-      retryDelay: (attempt) => 1000 * 2 ** attempt
+      retryDelay: (attempt) => 1000 * 2 ** attempt,
     },
   },
 })
@@ -278,7 +278,7 @@ function PortfolioContent() {
         </main>
 
         <footer className="mt-12 text-center text-sm text-gray-500">
-          <p>Built with Vite, React, Effect Atom and TanStack Table/Forms and Tailwind CSS</p>
+          <p>Built with Vite, React, Effect Atom and TanStack Query and Tailwind CSS</p>
           <p className="mt-1">Powered by Anvil local blockchain</p>
         </footer>
       </div>

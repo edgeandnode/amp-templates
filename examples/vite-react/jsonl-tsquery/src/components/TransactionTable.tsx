@@ -7,10 +7,10 @@ import {
   useReactTable,
 } from "@tanstack/react-table"
 import { useMemo, useState } from "react"
-import { formatUnits } from "viem"
+import { type Address, formatUnits } from "viem"
 import { useReadContracts } from "wagmi"
 
-import type { ERC20Transfer } from "../lib/collections"
+import type { ERC20Transfer } from "../lib/schemas"
 
 const ERC20_METADATA_ABI = [
   {
@@ -38,7 +38,7 @@ const ERC20_METADATA_ABI = [
 
 interface TransactionTableProps {
   transfers: ERC20Transfer[]
-  address?: string
+  address?: Address
   loading?: boolean
 }
 

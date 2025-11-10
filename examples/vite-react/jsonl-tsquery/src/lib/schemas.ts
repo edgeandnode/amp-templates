@@ -1,78 +1,89 @@
-import { Schema } from "effect"
-import { type Address, getAddress, type Hash } from "viem"
+import { type Address, getAddress, type Hash, isAddress } from "viem"
 
-const AddressFromSelf: Schema.Schema<Address> = Schema.String.pipe(
-  Schema.pattern(/^0x[0-9a-fA-F]{40}$/),
-  Schema.transform(Schema.String, {
-    decode: (address) => {
-      try {
-        return getAddress(address as Address)
-      } catch {
-        throw new Error(`Invalid Ethereum address: ${address}`)
-      }
-    },
-    encode: (address) => {
-      try {
-        return getAddress(address as Address)
-      } catch {
-        throw new Error(`Invalid Ethereum address: ${address}`)
-      }
-    },
-    strict: true,
-  }),
-).pipe(Schema.asSchema) as Schema.Schema<Address>
+export interface ERC20Transfer {
+  txHash: Hash
+  logIndex: number
+  blockNum: number
+  txTimestamp: number
+  contractAddress: Address
+  fromAddress: Address
+  toAddress: Address
+  amountRaw: bigint
+}
 
-const AddressFromString = Schema.String.pipe(
-  Schema.transform(AddressFromSelf, {
-    decode: (address) => {
-      try {
-        const normalized = address.startsWith("0x") ? address : `0x${address}`
-        return getAddress(normalized as Address)
-      } catch {
-        throw new Error(`Invalid Ethereum address format: ${address}`)
-      }
-    },
-    encode: (address) => {
-      try {
-        const normalized = address.startsWith("0x") ? address : `0x${address}`
-        return getAddress(normalized as Address)
-      } catch {
-        throw new Error(`Invalid Ethereum address format: ${address}`)
-      }
-    },
-    strict: true,
-  }),
-).pipe(Schema.asSchema)
+// Validation helper functions
 
-const HashFromString = Schema.String.pipe(
-  Schema.transform(Schema.String, {
-    decode: (hash) => (hash.startsWith("0x") ? hash : (`0x${hash}` as Hash)),
-    encode: (hash) => (hash.startsWith("0x") ? hash : (`0x${hash}` as Hash)),
-    strict: true,
-  }),
-)
+function validateAddress(value: unknown, field: string): Address {
+  if (typeof value !== "string") {
+    throw new Error(`${field} must be a string`)
+  }
 
-const TimestampFromISOString = Schema.String.pipe(
-  Schema.transform(Schema.Number, {
-    decode: (isoString) => {
-      const timestamp = new Date(isoString).getTime() / 1000
-      if (isNaN(timestamp)) {
-        throw new Error(`Invalid ISO timestamp: ${isoString}`)
-      }
-      return timestamp
-    },
-    encode: (timestamp) => new Date(timestamp * 1000).toISOString(),
-    strict: true,
-  }),
-)
+  const normalized = value.startsWith("0x") ? value : `0x${value}`
 
-export class ERC20Transfer extends Schema.Class<ERC20Transfer>("ERC20Transfer")({
-  txHash: HashFromString.pipe(Schema.propertySignature, Schema.fromKey("tx_hash")),
-  logIndex: Schema.Number.pipe(Schema.propertySignature, Schema.fromKey("log_index")),
-  blockNum: Schema.Number.pipe(Schema.propertySignature, Schema.fromKey("block_num")),
-  txTimestamp: TimestampFromISOString.pipe(Schema.propertySignature, Schema.fromKey("tx_timestamp")),
-  contractAddress: AddressFromString.pipe(Schema.propertySignature, Schema.fromKey("contract_address")),
-  fromAddress: AddressFromString.pipe(Schema.propertySignature, Schema.fromKey("from_address")),
-  toAddress: AddressFromString.pipe(Schema.propertySignature, Schema.fromKey("to_address")),
-  amountRaw: Schema.BigInt.pipe(Schema.propertySignature, Schema.fromKey("amount_raw")),
-}) {}
+  if (!isAddress(normalized)) {
+    throw new Error(`${field} is not a valid address: ${value}`)
+  }
+
+  return getAddress(normalized)
+}
+
+function validateHash(value: unknown, field: string): Hash {
+  if (typeof value !== "string") {
+    throw new Error(`${field} must be a string`)
+  }
+
+  const normalized = value.startsWith("0x") ? value : `0x${value}`
+  return normalized as Hash
+}
+
+function validateNumber(value: unknown, field: string): number {
+  if (typeof value !== "number" || isNaN(value)) {
+    throw new Error(`${field} must be a valid number`)
+  }
+  return value
+}
+
+function validateTimestamp(value: unknown, field: string): number {
+  if (typeof value !== "string") {
+    throw new Error(`${field} must be an ISO string`)
+  }
+
+  const timestamp = new Date(value).getTime() / 1000
+  if (isNaN(timestamp)) {
+    throw new Error(`${field} is not a valid ISO timestamp: ${value}`)
+  }
+  return timestamp
+}
+
+function validateBigInt(value: unknown, field: string): bigint {
+  if (typeof value === "bigint") return value
+  if (typeof value === "string" || typeof value === "number") {
+    try {
+      return BigInt(value)
+    } catch {
+      throw new Error(`${field} is not a valid bigint: ${value}`)
+    }
+  }
+  throw new Error(`${field} must be a bigint, string, or number`)
+}
+
+// Main parser function
+
+export function parseERC20Transfer(data: unknown): ERC20Transfer {
+  if (!data || typeof data !== "object") {
+    throw new Error("Invalid transfer data: expected object")
+  }
+
+  const raw = data as Record<string, unknown>
+
+  return {
+    txHash: validateHash(raw.tx_hash, "tx_hash"),
+    logIndex: validateNumber(raw.log_index, "log_index"),
+    blockNum: validateNumber(raw.block_num, "block_num"),
+    txTimestamp: validateTimestamp(raw.tx_timestamp, "tx_timestamp"),
+    contractAddress: validateAddress(raw.contract_address, "contract_address"),
+    fromAddress: validateAddress(raw.from_address, "from_address"),
+    toAddress: validateAddress(raw.to_address, "to_address"),
+    amountRaw: validateBigInt(raw.amount_raw, "amount_raw"),
+  }
+}

@@ -138,7 +138,7 @@ export function usePortfolioBalances(userAddress?: Address) {
         decimalsResult?.status === "success" &&
         balanceResult?.status === "success"
       ) {
-        const balance = balanceResult.result as bigint
+        const balance = BigInt(balanceResult.result)
         if (balance > 0n) {
           portfolioBalances.push({
             tokenAddress: tokenAddress.startsWith("0x") ? tokenAddress : `0x${tokenAddress}`,

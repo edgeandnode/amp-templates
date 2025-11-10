@@ -1,7 +1,6 @@
-import { Schema } from "effect"
 import type { Address } from "viem"
 
-import { ERC20Transfer } from "./schemas"
+import { parseERC20Transfer, type ERC20Transfer } from "./schemas"
 
 // Configuration
 const JSONL_URL = import.meta.env.VITE_AMP_JSONL_URL || "http://localhost:1603"
@@ -25,9 +24,9 @@ export class ApiError extends Error {
 export class ValidationError extends Error {
   constructor(
     public line: string,
-    public issues: unknown,
+    public issues: string,
   ) {
-    super(`Schema validation failed: ${JSON.stringify(issues)}`)
+    super(`Schema validation failed: ${issues}`)
     this.name = "ValidationError"
   }
 }
@@ -54,23 +53,19 @@ function parseJsonLines(text: string): string[] {
     .filter((line) => line.length > 0)
 }
 
-// Schema validator using Schema.decodeUnknownSync
-function validateLine<A, I, R>(line: string, schema: Schema.Schema<A, I, R>): A {
+// Validator using parseERC20Transfer
+function validateLine(line: string): ERC20Transfer {
   try {
     const parsed = JSON.parse(line)
-    const decoded = Schema.decodeUnknownSync(schema)(parsed)
-    return decoded
+    return parseERC20Transfer(parsed)
   } catch (error) {
-    throw new ValidationError(line, error)
+    const message = error instanceof Error ? error.message : String(error)
+    throw new ValidationError(line, message)
   }
 }
 
 // Generic fetch function for JSON Lines
-async function fetchJSONL<A, I, R>(
-  query: string,
-  schema: Schema.Schema<A, I, R>,
-  signal?: AbortSignal,
-): Promise<A[]> {
+async function fetchJSONL(query: string, signal?: AbortSignal): Promise<ERC20Transfer[]> {
   const response = await fetch(`${JSONL_URL}`, {
     method: "POST",
     headers: buildHeaders(),
@@ -92,9 +87,9 @@ async function fetchJSONL<A, I, R>(
   const text = await response.text()
   const lines = parseJsonLines(text)
 
-  const results: A[] = []
+  const results: ERC20Transfer[] = []
   for (const line of lines) {
-    const validated = validateLine(line, schema)
+    const validated = validateLine(line)
     results.push(validated)
   }
 
@@ -107,7 +102,7 @@ export async function getAllTransfers(signal?: AbortSignal): Promise<ERC20Transf
     SELECT * FROM portfolio_dapp.erc20_transfers
     ORDER BY block_num DESC
   `
-  return fetchJSONL(query, ERC20Transfer, signal)
+  return fetchJSONL(query, signal)
 }
 
 export async function getUserTransfers(address: Address, signal?: AbortSignal): Promise<ERC20Transfer[]> {
@@ -120,5 +115,5 @@ export async function getUserTransfers(address: Address, signal?: AbortSignal): 
     ORDER BY block_num DESC
   `
 
-  return fetchJSONL(query, ERC20Transfer, signal)
+  return fetchJSONL(query, signal)
 }

@@ -41,7 +41,7 @@ check-ts:
 # Deploy smart contracts to anvil
 deploy-contracts:
     cp .env.example .env
-    forge install
+    forge install foundry-rs/forge-std OpenZeppelin/openzeppelin-contracts
     forge script contracts/script/InitializePortfolio.s.sol --broadcast --rpc-url http://localhost:8545
 
 # Seed ERC20 transfer transactions between Wallet #1 and Wallet #2
@@ -55,7 +55,7 @@ dev: dev-app dev-amp
 # Run the app in development mode
 [private]
 dev-app:
-    pnpm dev:all
+    pnpm dev
 
 # Start the amp development server (watch config changes)
 [private]

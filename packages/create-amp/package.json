@@ -46,15 +46,14 @@
     "coverage": "vitest run --coverage",
     "copy-package-json": "tsx scripts/copy-package-json.ts"
   },
+  "dependencies": {
+    "@clack/prompts": "^0.8.2"
+  },
   "devDependencies": {
-    "@effect/cli": "^0.71.0",
-    "@effect/language-service": "latest",
-    "@effect/platform": "^0.92.1",
-    "@effect/platform-node": "^0.98.4",
-    "@effect/vitest": "^0.26.0",
-    "effect": "^3.18.4",
+    "@types/node": "^24.9.1",
     "tsdown": "^0.15.9",
-    "tsx": "^4.20.6"
+    "tsx": "^4.20.6",
+    "typescript": "^5.9.3"
   },
   "engines": {
     "node": ">=22"

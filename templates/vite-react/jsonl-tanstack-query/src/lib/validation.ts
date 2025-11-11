@@ -1,20 +1,55 @@
 /**
- * Form validation functions using native TypeScript with clear error messages
+ * Form validation functions using Zod
  *
  * This module provides validation for the TransferModal form, including:
  * - Ethereum address validation for recipient field
  * - Decimal number validation and bigint conversion for amount field
  */
 
+import { z } from "zod"
 import { isAddress, parseUnits } from "viem"
+
+// Reusable address validator
+export const addressSchema = z
+  .string()
+  .trim()
+  .min(1, "Recipient is required")
+  .refine((val) => isAddress(val, { strict: false }), {
+    message: "Invalid address",
+  })
+
+// Amount validator factory (parameterized by decimals)
+export const createAmountSchema = (decimals: number) =>
+  z
+    .string()
+    .trim()
+    .min(1, "Amount is required")
+    .regex(/^\d+\.?\d*$/, "Amount must be a valid positive decimal number")
+    .refine(
+      (val) => {
+        try {
+          const parsed = parseUnits(val, decimals)
+          return parsed > 0n
+        } catch {
+          return false
+        }
+      },
+      {
+        message: "Amount must be a positive number",
+      },
+    )
+
+// Form schema factory
+export const createTransferFormSchema = (decimals: number) =>
+  z.object({
+    recipient: addressSchema,
+    amount: createAmountSchema(decimals),
+  })
 
 /**
  * Form values type for the transfer form
  */
-export type FormValues = {
-  recipient: string
-  amount: string
-}
+export type FormValues = z.infer<ReturnType<typeof createTransferFormSchema>>
 
 /**
  * Validates the recipient address field
@@ -23,17 +58,8 @@ export type FormValues = {
  * @returns Error message string if validation fails, undefined if valid
  */
 export function validateRecipient(value: string): string | undefined {
-  const trimmed = value.trim()
-
-  if (trimmed.length === 0) {
-    return "Recipient is required"
-  }
-
-  if (!isAddress(trimmed, { strict: false })) {
-    return "Invalid address"
-  }
-
-  return undefined
+  const result = addressSchema.safeParse(value)
+  return result.success ? undefined : result.error.issues[0]?.message ?? "Invalid recipient"
 }
 
 /**
@@ -44,24 +70,6 @@ export function validateRecipient(value: string): string | undefined {
  * @returns Error message string if validation fails, undefined if valid
  */
 export function validateAmount(value: string, decimals: number): string | undefined {
-  const trimmed = value.trim()
-
-  if (trimmed.length === 0) {
-    return "Amount is required"
-  }
-
-  if (!/^\d+\.?\d*$/.test(trimmed)) {
-    return "Amount must be a valid positive decimal number"
-  }
-
-  try {
-    const parsed = parseUnits(trimmed, decimals)
-    if (parsed <= 0n) {
-      return "Amount must be a positive number"
-    }
-  } catch {
-    return "Amount must be a positive number"
-  }
-
-  return undefined
+  const result = createAmountSchema(decimals).safeParse(value)
+  return result.success ? undefined : result.error.issues[0]?.message ?? "Invalid amount"
 }

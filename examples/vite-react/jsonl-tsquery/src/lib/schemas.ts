@@ -1,89 +1,62 @@
 import { type Address, getAddress, type Hash, isAddress } from "viem"
+import { z } from "zod"
 
-export interface ERC20Transfer {
-  txHash: Hash
-  logIndex: number
-  blockNum: number
-  txTimestamp: number
-  contractAddress: Address
-  fromAddress: Address
-  toAddress: Address
-  amountRaw: bigint
-}
-
-// Validation helper functions
-
-function validateAddress(value: unknown, field: string): Address {
-  if (typeof value !== "string") {
-    throw new Error(`${field} must be a string`)
-  }
-
-  const normalized = value.startsWith("0x") ? value : `0x${value}`
-
+// Custom Zod validators for viem types
+const addressSchema = z.string().transform((val, ctx) => {
+  const normalized = val.startsWith("0x") ? val : `0x${val}`
   if (!isAddress(normalized)) {
-    throw new Error(`${field} is not a valid address: ${value}`)
+    ctx.addIssue({
+      code: "custom",
+      message: `Invalid Ethereum address: ${val}`,
+    })
+    return z.NEVER
   }
+  return getAddress(normalized) as Address
+})
 
-  return getAddress(normalized)
-}
+const hashSchema = z.string().transform((val) => {
+  return (val.startsWith("0x") ? val : `0x${val}`) as Hash
+})
 
-function validateHash(value: unknown, field: string): Hash {
-  if (typeof value !== "string") {
-    throw new Error(`${field} must be a string`)
-  }
-
-  const normalized = value.startsWith("0x") ? value : `0x${value}`
-  return normalized as Hash
-}
-
-function validateNumber(value: unknown, field: string): number {
-  if (typeof value !== "number" || isNaN(value)) {
-    throw new Error(`${field} must be a valid number`)
-  }
-  return value
-}
-
-function validateTimestamp(value: unknown, field: string): number {
-  if (typeof value !== "string") {
-    throw new Error(`${field} must be an ISO string`)
-  }
-
-  const timestamp = new Date(value).getTime() / 1000
+const timestampSchema = z.string().transform((val, ctx) => {
+  const timestamp = new Date(val).getTime() / 1000
   if (isNaN(timestamp)) {
-    throw new Error(`${field} is not a valid ISO timestamp: ${value}`)
+    ctx.addIssue({
+      code: "custom",
+      message: `Invalid ISO timestamp: ${val}`,
+    })
+    return z.NEVER
   }
   return timestamp
-}
+})
 
-function validateBigInt(value: unknown, field: string): bigint {
-  if (typeof value === "bigint") return value
-  if (typeof value === "string" || typeof value === "number") {
-    try {
-      return BigInt(value)
-    } catch {
-      throw new Error(`${field} is not a valid bigint: ${value}`)
-    }
-  }
-  throw new Error(`${field} must be a bigint, string, or number`)
-}
+// Main schema with snake_case → camelCase transformation
+export const erc20TransferSchema = z
+  .object({
+    tx_hash: hashSchema,
+    log_index: z.number(),
+    block_num: z.number(),
+    tx_timestamp: timestampSchema,
+    contract_address: addressSchema,
+    from_address: addressSchema,
+    to_address: addressSchema,
+    amount_raw: z.union([z.bigint(), z.string().transform(BigInt), z.number().transform(BigInt)]),
+  })
+  .transform((data) => ({
+    txHash: data.tx_hash,
+    logIndex: data.log_index,
+    blockNum: data.block_num,
+    txTimestamp: data.tx_timestamp,
+    contractAddress: data.contract_address,
+    fromAddress: data.from_address,
+    toAddress: data.to_address,
+    amountRaw: data.amount_raw,
+  }))
+
+// Inferred type (replaces manual interface)
+export type ERC20Transfer = z.infer<typeof erc20TransferSchema>
 
 // Main parser function
-
 export function parseERC20Transfer(data: unknown): ERC20Transfer {
-  if (!data || typeof data !== "object") {
-    throw new Error("Invalid transfer data: expected object")
-  }
-
-  const raw = data as Record<string, unknown>
-
-  return {
-    txHash: validateHash(raw.tx_hash, "tx_hash"),
-    logIndex: validateNumber(raw.log_index, "log_index"),
-    blockNum: validateNumber(raw.block_num, "block_num"),
-    txTimestamp: validateTimestamp(raw.tx_timestamp, "tx_timestamp"),
-    contractAddress: validateAddress(raw.contract_address, "contract_address"),
-    fromAddress: validateAddress(raw.from_address, "from_address"),
-    toAddress: validateAddress(raw.to_address, "to_address"),
-    amountRaw: validateBigInt(raw.amount_raw, "amount_raw"),
-  }
+  return erc20TransferSchema.parse(data)
 }

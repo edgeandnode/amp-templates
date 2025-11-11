@@ -4,9 +4,9 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev:vite": "vite",
     "dev:proxy": "tsx server.ts",
-    "dev:all": "concurrently \"pnpm dev:proxy\" \"pnpm dev\"",
+    "dev": "concurrently \"pnpm dev:proxy\" \"pnpm dev:vite\"",
     "build": "tsc -b && vite build",
     "lint": "eslint src/ --ext .ts,.tsx,.js,.jsx",
     "prettier": "prettier . --write --list-different",

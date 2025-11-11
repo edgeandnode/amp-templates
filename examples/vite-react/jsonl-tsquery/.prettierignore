@@ -1,0 +1,28 @@
+# Dependencies
+node_modules
+pnpm-lock.yaml
+
+# Build outputs
+dist
+build
+.next
+out
+contracts/out
+contracts/cache
+
+# External libraries
+contracts/lib
+
+# Generated files
+*.min.js
+*.bundle.js
+
+# Environment
+.env
+.env.*
+
+# Git
+.git
+
+# Infrastructure
+infra/

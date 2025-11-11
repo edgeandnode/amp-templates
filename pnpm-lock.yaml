@@ -357,11 +357,20 @@ importers:
         specifier: ^7.1.7
         version: 7.1.11(@types/node@24.9.1)(jiti@2.6.1)(lightningcss@1.30.2)(tsx@4.20.6)(yaml@2.8.1)
 
-  examples/vite-react/jsonl-tsquery:
+  examples/vite-react/jsonl-atom:
     dependencies:
       '@edgeandnode/amp':
         specifier: ^0.0.21
-        version: 0.0.21(54d81b28f950f8f50dab79fd2d9aa480)
+        version: 0.0.21(7e0a4a50c762efd51fd1a1ce9df77c4e)
+      '@effect-atom/atom-react':
+        specifier: ^0.3.4
+        version: 0.3.4(@effect/experimental@0.56.0(@effect/platform@0.92.1(effect@3.18.4))(effect@3.18.4))(@effect/platform@0.92.1(effect@3.18.4))(@effect/rpc@0.71.1(@effect/platform@0.92.1(effect@3.18.4))(effect@3.18.4))(effect@3.18.4)(react@19.2.0)(scheduler@0.27.0)
+      '@effect/platform':
+        specifier: ^0.92.1
+        version: 0.92.1(effect@3.18.4)
+      '@effect/platform-node':
+        specifier: ^0.98.4
+        version: 0.98.4(@effect/cluster@0.50.6(@effect/platform@0.92.1(effect@3.18.4))(@effect/rpc@0.71.1(@effect/platform@0.92.1(effect@3.18.4))(effect@3.18.4))(@effect/sql@0.46.0(@effect/experimental@0.56.0(@effect/platform@0.92.1(effect@3.18.4))(effect@3.18.4))(@effect/platform@0.92.1(effect@3.18.4))(effect@3.18.4))(@effect/workflow@0.11.5(@effect/platform@0.92.1(effect@3.18.4))(@effect/rpc@0.71.1(@effect/platform@0.92.1(effect@3.18.4))(effect@3.18.4))(effect@3.18.4))(effect@3.18.4))(@effect/platform@0.92.1(effect@3.18.4))(@effect/rpc@0.71.1(@effect/platform@0.92.1(effect@3.18.4))(effect@3.18.4))(@effect/sql@0.46.0(@effect/experimental@0.56.0(@effect/platform@0.92.1(effect@3.18.4))(effect@3.18.4))(@effect/platform@0.92.1(effect@3.18.4))(effect@3.18.4))(bufferutil@4.0.9)(effect@3.18.4)(utf-8-validate@5.0.10)
       '@radix-ui/react-dialog':
         specifier: ^1.1.15
         version: 1.1.15(@types/react-dom@19.2.2(@types/react@19.2.2))(@types/react@19.2.2)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)

@@ -1,7 +1,0 @@
-# Anvil Provider Configuration
-
-kind = "evm-rpc"
-url = "http://anvil:8545"
-max_connections = 5
-requests_per_second = 10
-

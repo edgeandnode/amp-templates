@@ -33,10 +33,10 @@ const timestampSchema = z.string().transform((val, ctx) => {
 // Anvil block schema
 // Note: Fields match the actual Amp JSONLines API response format
 export const anvilBlockSchema = z.object({
-  block_num: z.number(),  // Block number as integer
-  timestamp: z.string(),  // ISO 8601 timestamp string from database
-  hash: z.string(),       // Hex-encoded hash
-  nonce: z.number(),      // Nonce as integer
+  block_num: z.number(), // Block number as integer
+  timestamp: z.string(), // ISO 8601 timestamp string from database
+  hash: z.string(), // Hex-encoded hash
+  nonce: z.number(), // Nonce as integer
 })
 
 // Inferred type
@@ -49,6 +49,7 @@ export function parseAnvilBlock(data: unknown): AnvilBlock {
 
 // ERC20 Token Transfer schema with snake_case → camelCase transformation
 // Note: Fields match the actual Amp JSONLines API response format for ERC20 transfers
+// Note: amount field is optional because evm_decode_log may fail for malformed events
 export const erc20TransferSchema = z
   .object({
     block_num: z.number(),
@@ -57,7 +58,10 @@ export const erc20TransferSchema = z
     tx_hash: hashSchema,
     sender: addressSchema,
     recipient: addressSchema,
-    amount: z.union([z.bigint(), z.string().transform(BigInt), z.number().transform(BigInt)]),
+    amount: z
+      .union([z.bigint(), z.string().transform(BigInt), z.number().transform(BigInt)])
+      .optional()
+      .default(0n),
   })
   .transform((data) => ({
     blockNum: data.block_num,

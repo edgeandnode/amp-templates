@@ -1,7 +1,7 @@
 import { parseERC20Transfer, type ERC20Transfer } from "./schemas"
 
 // Configuration
-const JSONL_URL = import.meta.env.VITE_AMP_JSONL_URL || "http://localhost:1603"
+const JSONL_URL = import.meta.env.VITE_AMP_GATEWAY_URL || "http://localhost:1603"
 const ACCESS_TOKEN = import.meta.env.VITE_AMP_ACCESS_TOKEN
 const TIMEOUT_MS = Number(import.meta.env.VITE_REQUEST_TIMEOUT) || 30000 // 30 seconds default
 
@@ -86,20 +86,14 @@ function combineAbortSignals(signals: AbortSignal[]): AbortSignal {
 }
 
 // Generic fetch function for JSON Lines with timeout support
-async function fetchJSONL<T>(
-  query: string,
-  validator: (line: string) => T,
-  signal?: AbortSignal
-): Promise<T[]> {
+async function fetchJSONL<T>(query: string, validator: (line: string) => T, signal?: AbortSignal): Promise<T[]> {
   const timeoutController = new AbortController()
   const timeoutId = setTimeout(() => {
     timeoutController.abort()
   }, TIMEOUT_MS)
 
   // Combine timeout signal with user-provided signal
-  const combinedSignal = signal
-    ? combineAbortSignals([signal, timeoutController.signal])
-    : timeoutController.signal
+  const combinedSignal = signal ? combineAbortSignals([signal, timeoutController.signal]) : timeoutController.signal
 
   try {
     const response = await fetch(`${JSONL_URL}`, {
@@ -141,24 +135,26 @@ async function fetchJSONL<T>(
   }
 }
 
-// Domain-specific API function for ERC20 token transfers
+// Domain-specific API function for token transfers
 export async function getERC20Transfers(signal?: AbortSignal): Promise<ERC20Transfer[]> {
-  const raw_dataset_FQN = "edgeandnode/arbitrum_one@0.0.1"
-  const token_contract_address = "54f27abab2d30d6732edc45dff9b411c8dac2d41"
+  const dataset_ref = "edgeandnode/arbitrum_one@0.0.1" // Replace with Amp dataset name
+  const dataset_table = "logs" // Replace with Amp table name
   const transfer_event = "Transfer(address indexed from, address indexed to, uint256 value)"
-  const starting_block = 5
-  const result_limit = 8
+  const starting_block = 2000000
+  const result_limit = 100
 
+  // Define token_addres value and add this to inner SQL query to filter by specific contract address:
+  // AND address = decode('${token_contract_address}', 'hex')
   const usdc_transfers_query = `
     SELECT t.block_num, t.timestamp, t.address as token_address, t.tx_hash, t.event['from'] as sender, t.event['to'] as recipient, t.event['value'] as amount
     FROM (
         SELECT block_hash, tx_hash, block_num, timestamp, address, evm_decode_log(topic1, topic2, topic3, data, '${transfer_event}') as event
-        FROM "${raw_dataset_FQN}"."logs"
+        FROM "${dataset_ref}"."${dataset_table}"
         WHERE topic0 = evm_topic('${transfer_event}')
-        AND address = decode('${token_contract_address}', 'hex')
         AND block_num > ${starting_block}
+        ORDER BY block_num DESC
+        LIMIT ${result_limit}
     ) as t
-    LIMIT ${result_limit}
   `
 
   return fetchJSONL(usdc_transfers_query, validateERC20TransferLine, signal)

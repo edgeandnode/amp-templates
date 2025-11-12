@@ -7,7 +7,7 @@ A high-performance backend example built with Fastify that queries blockchain da
 - **Fastify Backend**: High-performance Node.js web framework
 - **AMP Integration**: Advanced blockchain data indexing and querying via Arrow Flight
 - **Real-time Data**: Live blockchain data from local Anvil testnet
-- **REST API**: Clean endpoints for blocks and transfers  
+- **REST API**: Clean endpoints for blocks and transfers
 - **Smart Contracts**: ERC20 token for generating test transfer data
 - **Apache Arrow**: Columnar data format for ultra-fast analytics
 - **TypeScript**: Full type safety with Effect-TS for functional programming
@@ -36,13 +36,13 @@ just test-api                # Test all endpoints
 
 ## API Endpoints
 
-| Endpoint | Method | Description |
-|----------|--------|-------------|
-| `/health` | GET | Health check |
-| `/` | GET | API documentation |
-| `/api/blocks` | GET | Get blockchain blocks |
-| `/api/transfers` | GET | Get ERC20 transfers |
-| `/api/queries/execute` | POST | Execute custom SQL queries |
+| Endpoint               | Method | Description                |
+| ---------------------- | ------ | -------------------------- |
+| `/health`              | GET    | Health check               |
+| `/`                    | GET    | API documentation          |
+| `/api/blocks`          | GET    | Get blockchain blocks      |
+| `/api/transfers`       | GET    | Get ERC20 transfers        |
+| `/api/queries/execute` | POST   | Execute custom SQL queries |
 
 ### Example Requests
 
@@ -50,7 +50,7 @@ just test-api                # Test all endpoints
 # Health check
 curl "http://localhost:3001/health"
 
-# API documentation  
+# API documentation
 curl "http://localhost:3001/"
 
 # Get recent blocks
@@ -73,9 +73,10 @@ Smart Contracts → Anvil → AMP Indexer → Arrow Flight → Backend → REST 
 ```
 
 Modern data architecture:
+
 1. **Anvil**: Local Ethereum testnet with deployed test contracts
 2. **AMP**: Advanced blockchain indexing and data processing
-3. **Arrow Flight**: High-performance columnar data transfer protocol  
+3. **Arrow Flight**: High-performance columnar data transfer protocol
 4. **Fastify Backend**: REST API server with Arrow Flight client
 5. **TestToken Contract**: ERC20 token for generating transfer events
 
@@ -85,7 +86,7 @@ Modern data architecture:
 
 - Docker (for Anvil, AMP, and PostgreSQL)
 - Node.js 22+ (for backend)
-- pnpm 10.19.0+ (for package management)  
+- pnpm 10.19.0+ (for package management)
 - Foundry (for contract deployment)
 - just (task runner, optional but recommended)
 
@@ -120,7 +121,7 @@ just generate-activity
 # 3. Register datasets with AMP
 just start-amp-dev
 
-# 4. Start backend server  
+# 4. Start backend server
 just start-backend
 
 # 5. Test the API
@@ -132,7 +133,7 @@ just test-api
 ```bash
 just --list               # Show all tasks
 just start                # Start all Docker services
-just stop                 # Stop services  
+just stop                 # Stop services
 just status               # Check service status
 just logs [service]       # View logs
 just generate-activity    # Deploy contracts & generate test transactions
@@ -148,19 +149,19 @@ just clean               # Clean up everything
 
 ### Environment Variables
 
-| Variable | Default | Description |
-|----------|---------|-------------|
-| `PORT` | 3001 | Backend server port |
+| Variable         | Default               | Description                 |
+| ---------------- | --------------------- | --------------------------- |
+| `PORT`           | 3001                  | Backend server port         |
 | `AMP_FLIGHT_URL` | http://localhost:3002 | Arrow Flight proxy endpoint |
 
 ### Docker Services
 
-| Service | Port | Description |
-|---------|------|-------------|
-| `anvil` | 8545 | Local Ethereum testnet |
-| `amp` | 1602-1603, 1610 | AMP indexer and query engine |
-| `amp-proxy` | 3002 | Arrow Flight proxy for web clients |
-| `db` | 5432 | PostgreSQL database for AMP |
+| Service     | Port            | Description                        |
+| ----------- | --------------- | ---------------------------------- |
+| `anvil`     | 8545            | Local Ethereum testnet             |
+| `amp`       | 1602-1603, 1610 | AMP indexer and query engine       |
+| `amp-proxy` | 3002            | Arrow Flight proxy for web clients |
+| `db`        | 5432            | PostgreSQL database for AMP        |
 
 ## Project Structure
 
@@ -185,12 +186,12 @@ just clean               # Clean up everything
 // amp.config.ts
 export default defineDataset(() => ({
   name: "fastify_backend",
-  network: "anvil", 
+  network: "anvil",
   version: "1.0.0",
   dependencies: {
     anvil: {
       owner: "graphprotocol",
-      name: "anvil", 
+      name: "anvil",
       version: "0.1.0",
     },
   },
@@ -208,7 +209,7 @@ export default defineDataset(() => ({
 ### Arrow Flight Integration
 
 1. Smart contracts deployed to Anvil generate Transfer events
-2. AMP indexes blockchain data into columnar format  
+2. AMP indexes blockchain data into columnar format
 3. Backend queries via Arrow Flight for ultra-fast analytics
 4. Data is streamed as Apache Arrow batches for efficiency
 5. REST API serves structured JSON responses
@@ -218,6 +219,7 @@ High-performance pipeline optimized for analytical workloads!
 ## API Response Format
 
 ### Blocks Response
+
 ```json
 {
   "data": [
@@ -234,6 +236,7 @@ High-performance pipeline optimized for analytical workloads!
 ```
 
 ### Transfers Response
+
 ```json
 {
   "data": [
@@ -242,11 +245,11 @@ High-performance pipeline optimized for analytical workloads!
       "tx_hash": "0x39947b9326c5ce33c9146f7566cea768b3ca7af0461a67d192c8fcd1b0963a2b",
       "log_index": 0,
       "contract_address": "0x5fbdb2315678afecb367f032d93f642f64180aa3",
-      "block_num": "6", 
+      "block_num": "6",
       "tx_timestamp": 1762578711000,
       "decoded_event": {
         "from": "0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266",
-        "to": "0x90f79bf6eb2c4f870365e785982e1f101e93b906", 
+        "to": "0x90f79bf6eb2c4f870365e785982e1f101e93b906",
         "value": "8000000000000000000000"
       }
     }
@@ -277,6 +280,7 @@ just test-api
 ### Common Issues
 
 **"Failed to get flight info" errors:**
+
 ```bash
 # Check if AMP services are running
 docker-compose ps
@@ -284,11 +288,12 @@ docker-compose ps
 # Restart AMP dev mode
 just start-amp-dev
 
-# Check dataset registration  
+# Check dataset registration
 just datasets
 ```
 
 **No transfer data:**
+
 ```bash
 # Generate blockchain activity
 just generate-activity
@@ -301,6 +306,7 @@ just start-amp-dev
 ```
 
 **Backend server issues:**
+
 ```bash
 # Check backend logs
 just logs fastify-backend
@@ -320,8 +326,9 @@ just start-backend
 ## Data Examples
 
 After running `just setup`, you'll have:
+
 - **7 blocks** (genesis + 6 transaction blocks) indexed by AMP
-- **6 ERC20 transfers** (token mint + 5 user transfers) decoded automatically  
+- **6 ERC20 transfers** (token mint + 5 user transfers) decoded automatically
 - **Ultra-fast queries** via Arrow Flight columnar data format
 - **Real transaction data** with proper addresses, amounts, and timestamps
 
@@ -340,6 +347,7 @@ For production use:
 ## Performance Benefits
 
 **AMP + Arrow Flight advantages:**
+
 - **Sub-second queries** on large datasets
 - **Columnar storage** optimized for analytics
 - **Automatic indexing** of blockchain events
@@ -350,6 +358,7 @@ For production use:
 ## Examples & Extensions
 
 Build on this example:
+
 - Add more complex analytical queries
 - Implement WebSocket subscriptions via AMP streams
 - Build React/Next.js frontend with Arrow Flight

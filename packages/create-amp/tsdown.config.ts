@@ -11,6 +11,6 @@ export default defineConfig({
   clean: true,
   external: ["@parcel/watcher"],
   env: {
-    NODE_ENV: "production",
-  },
+    NODE_ENV: "production"
+  }
 })

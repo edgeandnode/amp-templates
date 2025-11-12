@@ -6,5 +6,5 @@ const command = Command.make("create-amp")
 
 export const run = Command.run(command, {
   name: "create-amp",
-  version: `v${pkg.version}`,
+  version: `v${pkg.version}`
 })

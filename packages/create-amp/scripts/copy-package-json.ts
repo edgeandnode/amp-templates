@@ -12,7 +12,7 @@ const read = pipe(
     version: json.version,
     description: json.description,
     bin: {
-      "create-amp": "bin.js",
+      "create-amp": "bin.js"
     },
     type: json.type,
     engines: json.engines,
@@ -22,22 +22,22 @@ const read = pipe(
     homepage: json.homepage,
     tags: json.tags,
     keywords: json.keywords,
-    dependencies: json.dependencies,
-  })),
+    dependencies: json.dependencies
+  }))
 )
 
 const pathTo = path.join("dist", "package.json")
 
 const write = (pkg: object) =>
   FileSystem.FileSystem.pipe(
-    Effect.flatMap((fileSystem) => fileSystem.writeFileString(pathTo, JSON.stringify(pkg, null, 2))),
+    Effect.flatMap((fileSystem) => fileSystem.writeFileString(pathTo, JSON.stringify(pkg, null, 2)))
   )
 
 const program = pipe(
   Effect.log(`Copying package.json to ${pathTo}...`),
   Effect.zipRight(read),
   Effect.flatMap(write),
-  Effect.provide(NodeFileSystem.layer),
+  Effect.provide(NodeFileSystem.layer)
 )
 
 Effect.runPromise(program)

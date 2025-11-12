@@ -1,3 +1,3 @@
 #!/usr/bin/env bun
 
-import "./bin.js"
+import "./bin.ts"

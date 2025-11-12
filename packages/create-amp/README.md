@@ -1,44 +1,31 @@
-# @edgeandnode/create-amp
+# Effect CLI Application Template
 
-Command-line interface tool to scaffold applications utilizing amp, built off predefined templates.
+This template provides a solid foundation for building scalable and maintainable command-line applications with Effect.
 
-## Getting Started
+## Running Code
 
-There are two main ways to use `@edgeandnode/create-amp`:
+This template leverages [tsx](https://tsx.is) to allow execution of TypeScript files via NodeJS as if they were written in plain JavaScript.
 
-### Interactive
+To execute a file with `tsx`:
 
-The easiest way is to go through the interactive flow, that breaks down the options step-by-step, using your preferred package manager:
-
-`npm`
-
-```bash
-npx @edgeandnode/create-amp [project name]
+```sh
+pnpm tsx ./path/to/the/file.ts
 ```
 
-`pnpm`
+## Operations
 
-```bash
-pnpm create @edgeandnode/amp [project name]
+**Building**
+
+To build the package:
+
+```sh
+pnpm build
 ```
 
-`yarn`
+**Testing**
 
-```bash
-yarn create @edgeandnode/amp [project name]
+To test the package:
+
+```sh
+pnpm test
 ```
-
-`bun`
-
-```bash
-bunx @edgeandnode/create-amp [project name]
-```
-
-The CLI will then prompt you to selext the template you would like to create (`nextjs` or `vite+react` for example) then will provide you with additional customization options.
-(See the full [usage](#usage) documentation below).
-
-### Non-Interactive
-
-The `@edgeandnode/create-amp` cli can also be invoked non-interactively by providing all args/options.
-
-#### Usage

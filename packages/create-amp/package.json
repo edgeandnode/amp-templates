@@ -3,10 +3,26 @@
   "version": "0.0.1",
   "type": "module",
   "license": "MIT",
-  "description": "Command-line interface tool to scaffold applications utilizing amp, built off predefined templates.",
+  "description": "CLI tool to scaffold an Amp enabled application from a set of templates",
+  "keywords": [
+    "Web3",
+    "Edge & Node",
+    "The Graph",
+    "Amp",
+    "dapp",
+    "blockchain"
+  ],
+  "bin": {
+    "create-amp": "./dist/bin.js"
+  },
+  "files": [
+    "dist",
+    "llms.txt",
+    "CHANGELOG.md"
+  ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/edgeandnode/amp-templates",
+    "url": "git+https://github.com/edgeandnode/amp-templates.git",
     "directory": "packages/create-amp"
   },
   "publishConfig": {
@@ -14,48 +30,42 @@
     "directory": "dist",
     "linkDirectory": false
   },
-  "bin": {
-    "create-amp": "./dist/bun.js",
-    "ca": "./dist/bun.js"
-  },
-  "files": [
-    "dist",
-    "llms.txt",
-    "CHANGELOG.md",
-    "README.md"
-  ],
-  "keywords": [
-    "Amp",
-    "The Graph",
-    "Web3",
-    "Blockchain"
-  ],
   "scripts": {
-    "dev": "NODE_ENV=development pnpx tsx ./src/bin.ts",
-    "build": "tsdown && pnpm run copy-all",
-    "copy-packagejson": "tsx scripts/copy-package-json.ts",
-    "copy-readme": "cp README.md dist/README.md",
-    "copy-changelog": "cp CHANGELOG.md dist/CHANGELOG.md",
-    "copy-llms": "cp llms.txt dist/llms.txt",
-    "copy-all": "pnpm run copy-packagejson && pnpm run copy-readme && pnpm run copy-changelog && pnpm run copy-llms",
+    "build": "tsdown && pnpm copy-package-json",
+    "build:ts": "tsdown",
+    "dev": "tsx ./src/bun.ts",
     "clean": "rimraf dist/*",
     "check": "tsc -b tsconfig.json",
     "lint": "eslint \"**/{src,test,examples,scripts,dtslint}/**/*.{ts,mjs}\"",
-    "lint:fix": "pnpm lint --fix",
+    "lint-fix": "pnpm lint --fix",
+    "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md}\"",
     "test": "vitest run",
     "coverage": "vitest run --coverage",
     "copy-package-json": "tsx scripts/copy-package-json.ts"
   },
-  "dependencies": {
-    "@clack/prompts": "^0.8.2"
-  },
   "devDependencies": {
-    "@types/node": "^24.9.1",
-    "tsdown": "^0.15.9",
+    "@effect/cli": "^0.72.1",
+    "@effect/cluster": "^0.52.9",
+    "@effect/eslint-plugin": "^0.3.2",
+    "@effect/language-service": "^0.55.3",
+    "@effect/platform": "^0.93.1",
+    "@effect/platform-node": "^0.100.0",
+    "@effect/vitest": "^0.27.0",
+    "@eslint/compat": "1.4.1",
+    "@eslint/eslintrc": "3.3.1",
+    "@typescript-eslint/eslint-plugin": "^8.46.4",
+    "@typescript-eslint/parser": "^8.46.4",
+    "effect": "^3.19.3",
+    "eslint-import-resolver-typescript": "^4.4.4",
+    "eslint-plugin-codegen": "0.34.1",
+    "eslint-plugin-import": "^2.32.0",
+    "eslint-plugin-simple-import-sort": "^12.1.1",
+    "eslint-plugin-sort-destructure-keys": "^2.0.0",
+    "tsdown": "^0.16.4",
     "tsx": "^4.20.6",
-    "typescript": "^5.9.3"
+    "vitest": "^4.0.8"
   },
-  "engines": {
-    "node": ">=22"
+  "pnpm": {
+    "patchedDependencies": {}
   }
 }

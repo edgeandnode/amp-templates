@@ -13,14 +13,14 @@
     "amp": "amp"
   },
   "dependencies": {
-    "@edgeandnode/amp": "^0.0.18",
+    "@edgeandnode/amp": "^0.0.33",
     "@electric-sql/client": "^1.0.14",
     "@electric-sql/react": "^1.0.14",
     "@graphprotocol/gds-react": "https://pkg.pr.new/graphprotocol/gds/@graphprotocol/gds-react@31e7393",
     "@t3-oss/env-nextjs": "^0.13.8",
     "dotenv": "^17.2.3",
-    "effect": "^3.18.4",
-    "next": "15.5.4",
+    "effect": "^3.19.3",
+    "next": "16.0.2",
     "react": "19.2.0",
     "react-dom": "19.2.0",
     "viem": "^2.38.0",
@@ -28,16 +28,16 @@
   },
   "devDependencies": {
     "typescript": "^5.9.3",
-    "@types/node": "^24.7.2",
-    "@types/react": "^19.2.2",
-    "@types/react-dom": "^19.2.1",
-    "@tailwindcss/postcss": "^4.1.14",
-    "tailwindcss": "^4.1.14",
+    "@types/node": "^24.10.1",
+    "@types/react": "^19.2.4",
+    "@types/react-dom": "^19.2.3",
+    "@tailwindcss/postcss": "^4.1.17",
+    "tailwindcss": "^4.1.17",
     "eslint": "^9.37.0",
-    "eslint-config-next": "15.5.4",
+    "eslint-config-next": "16.0.2",
     "@eslint/eslintrc": "^3.3.1"
   },
-  "packageManager": "pnpm@10.19.0",
+  "packageManager": "pnpm@10.21.0+sha512.da3337267e400fdd3d479a6c68079ac6db01d8ca4f67572083e722775a796788a7a9956613749e000fac20d424b594f7a791a5f4e2e13581c5ef947f26968a40",
   "engines": {
     "node": ">=22"
   }

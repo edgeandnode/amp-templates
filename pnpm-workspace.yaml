@@ -1,13 +1,16 @@
 packages:
-  - 'packages/*'
-  - 'examples/*'
-  - 'examples/*/*'
-  - 'examples/*/*/*'
+  - packages/*
+  - examples/*
+  - examples/*/*
+  - examples/*/*/*
 
 onlyBuiltDependencies:
   - '@parcel/watcher'
+  - bufferutil
   - core-js-pure
   - esbuild
+  - keccak
   - msgpackr-extract
   - sharp
   - unrs-resolver
+  - utf-8-validate

@@ -1,0 +1,70 @@
+{
+  "name": "@edgeandnode/create-amp",
+  "version": "0.0.1",
+  "type": "module",
+  "license": "MIT",
+  "description": "CLI tool to scaffold an Amp enabled application from a set of templates",
+  "keywords": [
+    "Web3",
+    "Edge & Node",
+    "The Graph",
+    "Amp",
+    "dapp",
+    "blockchain"
+  ],
+  "bin": {
+    "create-amp": "./dist/bin.js"
+  },
+  "files": [
+    "dist",
+    "llms.txt",
+    "CHANGELOG.md"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/edgeandnode/amp-templates.git",
+    "directory": "packages/create-amp"
+  },
+  "publishConfig": {
+    "access": "public",
+    "directory": "dist",
+    "linkDirectory": false
+  },
+  "scripts": {
+    "build": "tsdown && pnpm copy-package-json",
+    "build:ts": "tsdown",
+    "dev": "tsx ./src/bun.ts",
+    "clean": "rimraf dist/*",
+    "check": "tsc -b tsconfig.json",
+    "lint": "eslint \"**/{src,test,examples,scripts,dtslint}/**/*.{ts,mjs}\"",
+    "lint-fix": "pnpm lint --fix",
+    "test": "vitest run",
+    "coverage": "vitest run --coverage",
+    "copy-package-json": "tsx scripts/copy-package-json.ts"
+  },
+  "devDependencies": {
+    "@effect/cli": "^0.72.1",
+    "@effect/cluster": "^0.52.9",
+    "@effect/eslint-plugin": "^0.3.2",
+    "@effect/language-service": "^0.55.3",
+    "@effect/platform": "^0.93.1",
+    "@effect/platform-node": "^0.100.0",
+    "@effect/vitest": "^0.27.0",
+    "@eslint/compat": "1.4.1",
+    "@eslint/eslintrc": "3.3.1",
+    "@typescript-eslint/eslint-plugin": "^8.46.4",
+    "@typescript-eslint/parser": "^8.46.4",
+    "effect": "^3.19.3",
+    "eslint-import-resolver-typescript": "^4.4.4",
+    "eslint-plugin-codegen": "0.34.1",
+    "eslint-plugin-import": "^2.32.0",
+    "eslint-plugin-simple-import-sort": "^12.1.1",
+    "eslint-plugin-sort-destructure-keys": "^2.0.0",
+    "tsdown": "^0.16.4",
+    "tsx": "^4.20.6",
+    "vitest": "^4.0.8"
+  },
+  "pnpm": {
+    "patchedDependencies": {}
+  }
+}

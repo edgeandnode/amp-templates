@@ -1,6 +1,6 @@
 # {{projectName}}
 
-***Different README.md versions exist in each application varient subfolder***
+**_Different README.md versions exist in each application varient subfolder_**
 
 A modern Vite + React application powered by Amp for real-time data querying and blockchain interactions.
 
@@ -10,7 +10,6 @@ A modern Vite + React application powered by Amp for real-time data querying and
 - **TypeScript**: Full type safety throughout the application
 - **Tailwind CSS**: Modern utility-first CSS framework
 - **Wagmi + Viem**: Ethereum interactions and wallet connectivity
-
 
 ## Getting Started
 
@@ -22,14 +21,17 @@ A modern Vite + React application powered by Amp for real-time data querying and
 ### Installation
 
 1. Install dependencies:
+
    ```bash
    pnpm install
    ```
 
 2. Start the development environment:
+
    ```bash
    pnpm dev
    ```
+
    This will start:
    - Local blockchain (Anvil)
    - Amp server
@@ -75,7 +77,6 @@ This application demonstrates real-time portfolio tracking with:
 2. Amp captures and processes these events in real-time
 3. The React frontend queries Amp for live data updates
 4. UI updates automatically when new transactions occur
-
 
 ## Configuration
 

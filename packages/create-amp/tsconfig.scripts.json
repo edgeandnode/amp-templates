@@ -1,0 +1,9 @@
+{
+  "extends": "../../tsconfig.base.jsonc",
+  "include": ["scripts", "eslint.config.mjs", "tsup.config.ts", "vitest.config.ts"],
+  "compilerOptions": {
+    "types": ["node"],
+    "tsBuildInfoFile": ".tsbuildinfo/scripts.tsbuildinfo",
+    "rootDir": "."
+  }
+}

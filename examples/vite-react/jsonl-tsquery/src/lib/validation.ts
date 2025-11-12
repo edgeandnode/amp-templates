@@ -59,7 +59,7 @@ export type FormValues = z.infer<ReturnType<typeof createTransferFormSchema>>
  */
 export function validateRecipient(value: string): string | undefined {
   const result = addressSchema.safeParse(value)
-  return result.success ? undefined : result.error.issues[0]?.message ?? "Invalid recipient"
+  return result.success ? undefined : (result.error.issues[0]?.message ?? "Invalid recipient")
 }
 
 /**
@@ -71,5 +71,5 @@ export function validateRecipient(value: string): string | undefined {
  */
 export function validateAmount(value: string, decimals: number): string | undefined {
   const result = createAmountSchema(decimals).safeParse(value)
-  return result.success ? undefined : result.error.issues[0]?.message ?? "Invalid amount"
+  return result.success ? undefined : (result.error.issues[0]?.message ?? "Invalid amount")
 }

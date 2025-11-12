@@ -35,13 +35,13 @@ just test-api               # Test all endpoints
 
 ## API Endpoints
 
-| Endpoint | Method | Description |
-|----------|--------|-------------|
-| `/health` | GET | Health check |
-| `/` | GET | API documentation |
-| `/api/blocks` | GET | Get blockchain blocks |
-| `/api/transfers` | GET | Get ERC20 transfers |
-| `/api/rpc/info` | GET | Available RPC methods |
+| Endpoint         | Method | Description           |
+| ---------------- | ------ | --------------------- |
+| `/health`        | GET    | Health check          |
+| `/`              | GET    | API documentation     |
+| `/api/blocks`    | GET    | Get blockchain blocks |
+| `/api/transfers` | GET    | Get ERC20 transfers   |
+| `/api/rpc/info`  | GET    | Available RPC methods |
 
 ### Example Requests
 
@@ -49,7 +49,7 @@ just test-api               # Test all endpoints
 # Health check
 curl "http://localhost:3001/health"
 
-# API documentation  
+# API documentation
 curl "http://localhost:3001/"
 
 # Get recent blocks
@@ -70,6 +70,7 @@ Smart Contracts → Anvil → Direct RPC → Backend → REST API
 ```
 
 Simple architecture:
+
 1. **Anvil**: Local Ethereum testnet with deployed test contracts
 2. **Fastify Backend**: REST API server querying Anvil directly via RPC
 3. **TestToken Contract**: ERC20 token for generating transfer events
@@ -80,7 +81,7 @@ Simple architecture:
 
 - Docker (for Anvil blockchain)
 - Node.js 22+ (for backend)
-- pnpm 10.19.0+ (for package management)  
+- pnpm 10.19.0+ (for package management)
 - Foundry (for contract deployment)
 - just (task runner, optional but recommended)
 
@@ -123,7 +124,7 @@ just test-api
 ```bash
 just --list               # Show all tasks
 just start                # Start Anvil blockchain
-just stop                 # Stop services  
+just stop                 # Stop services
 just status               # Check service status
 just logs                 # View logs
 just generate-activity    # Deploy contracts & generate test transactions
@@ -136,18 +137,18 @@ just clean               # Clean up everything
 
 ### Environment Variables
 
-| Variable | Default | Description |
-|----------|---------|-------------|
-| `PORT` | 3001 | Backend server port |
-| `ANVIL_RPC_URL` | http://localhost:8545 | Anvil RPC endpoint |
+| Variable        | Default               | Description         |
+| --------------- | --------------------- | ------------------- |
+| `PORT`          | 3001                  | Backend server port |
+| `ANVIL_RPC_URL` | http://localhost:8545 | Anvil RPC endpoint  |
 
 ### Docker Services
 
-| Service | Port | Description |
-|---------|------|-------------|
+| Service | Port | Description            |
+| ------- | ---- | ---------------------- |
 | `anvil` | 8545 | Local Ethereum testnet |
 
-*Note: Other services (amp, db, proxy) from docker-compose.yml are optional and not used by the simplified backend.*
+_Note: Other services (amp, db, proxy) from docker-compose.yml are optional and not used by the simplified backend._
 
 ## Project Structure
 
@@ -183,6 +184,7 @@ No external indexing or data processing services required!
 ## API Response Format
 
 ### Blocks Response
+
 ```json
 {
   "data": [
@@ -205,6 +207,7 @@ No external indexing or data processing services required!
 ```
 
 ### Transfers Response
+
 ```json
 {
   "data": [
@@ -229,6 +232,7 @@ No external indexing or data processing services required!
 ```
 
 ### Error Response
+
 ```json
 {
   "error": "Failed to fetch blocks",
@@ -254,12 +258,14 @@ just test-api
 ### Common Issues
 
 **"Connection refused" errors:**
+
 ```bash
 # Check if Anvil is running
 curl -X POST http://localhost:8545 -H "Content-Type: application/json" -d '{"jsonrpc":"2.0","method":"eth_blockNumber","params":[],"id":1}'
 ```
 
 **No transfer data:**
+
 ```bash
 # Generate blockchain activity
 just generate-activity
@@ -269,6 +275,7 @@ curl -X POST http://localhost:8545 -H "Content-Type: application/json" -d '{"jso
 ```
 
 **Backend server issues:**
+
 ```bash
 # Check backend logs
 just logs
@@ -288,6 +295,7 @@ just dev
 ## Data Examples
 
 After running `just setup`, you'll have:
+
 - **7 blocks** (genesis + 6 transaction blocks)
 - **6 ERC20 transfers** (token mint + 5 user transfers)
 - **Real transaction data** with proper addresses, amounts, and timestamps
@@ -306,6 +314,7 @@ For production use:
 ## Examples & Extensions
 
 Build on this example:
+
 - Add more complex contract interactions
 - Implement WebSocket subscriptions for real-time updates
 - Add caching layer with Redis
@@ -317,19 +326,20 @@ Build on this example:
 
 ## ✅ Current Status
 
-**Everything is working!** 
+**Everything is working!**
 
 - **Blocks API**: ✅ Returns blocks with real blockchain data
 - **Transfers API**: ✅ Returns ERC20 transfers with decoded events
-- **Health Check**: ✅ Server responds with healthy status  
+- **Health Check**: ✅ Server responds with healthy status
 - **RPC Info**: ✅ Shows available RPC methods
 - **Smart Contracts**: ✅ ERC20 token deployed and generating activity
 - **Direct RPC**: ✅ Fast, reliable blockchain queries
 
 **Verified Working Commands:**
+
 ```bash
 curl "http://localhost:3001/health"                    # ✅ Health check
-curl "http://localhost:3001/api/blocks?limit=5"        # ✅ Real blocks  
+curl "http://localhost:3001/api/blocks?limit=5"        # ✅ Real blocks
 curl "http://localhost:3001/api/transfers?limit=5"     # ✅ Real transfers
 curl "http://localhost:3001/"                          # ✅ API documentation
 ```

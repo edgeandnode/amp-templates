@@ -6,7 +6,7 @@ export default defineConfig({
     exclude: [],
     globals: true,
     coverage: {
-      provider: "v8",
-    },
-  },
+      provider: "v8"
+    }
+  }
 })

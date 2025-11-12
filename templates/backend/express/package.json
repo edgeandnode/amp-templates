@@ -21,11 +21,11 @@
     "apache-arrow": "^21.1.0",
     "cors": "^2.8.5",
     "effect": "^3.19.3",
-    "express": "^4.21.1"
+    "express": "^5.1.0"
   },
   "devDependencies": {
     "@types/cors": "^2.8.19",
-    "@types/express": "^5.0.0",
+    "@types/express": "^5.0.5",
     "@types/node": "^24.10.1",
     "@typescript-eslint/eslint-plugin": "^8.46.4",
     "@typescript-eslint/parser": "^8.46.4",

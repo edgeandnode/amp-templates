@@ -15,7 +15,10 @@ export const AvailableTemplSchema = Schema.Struct({
   key: AvailableTemplFrameworkKey,
   name: Schema.NonEmptyTrimmedString,
   description: Schema.String,
-  directory: Schema.NonEmptyTrimmedString.pipe(Schema.pattern(/^\/(?:[a-zA-Z0-9_-]+\/)*[a-zA-Z0-9_-]+$/)),
+  directory: Schema.NonEmptyTrimmedString.pipe(
+    Schema.pattern(/^\/(?:[a-zA-Z0-9_-]+\/)*[a-zA-Z0-9_-]+$/),
+    Schema.filter((dir) => dir.startsWith("/"))
+  ),
   skip: Schema.Set(Schema.String)
 })
 export type AvailableTemplSchema = typeof AvailableTemplSchema.Type

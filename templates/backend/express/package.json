@@ -1,5 +1,5 @@
 {
-  "name": "{{projectName}}",
+  "name": "amp-templ-backend-express",
   "version": "0.1.0",
   "type": "module",
   "private": true,
@@ -16,25 +16,25 @@
   "dependencies": {
     "@connectrpc/connect-node": "^2.1.0",
     "@connectrpc/connect-web": "^2.1.0",
-    "@edgeandnode/amp": "^0.0.21",
+    "@edgeandnode/amp": "^0.0.33",
     "@electric-sql/client": "^1.0.14",
     "apache-arrow": "^21.1.0",
     "cors": "^2.8.5",
-    "effect": "^3.18.4",
+    "effect": "^3.19.3",
     "express": "^4.21.1"
   },
   "devDependencies": {
     "@types/cors": "^2.8.19",
     "@types/express": "^5.0.0",
-    "@types/node": "^24.9.1",
+    "@types/node": "^24.10.1",
     "@typescript-eslint/eslint-plugin": "^8.46.2",
     "@typescript-eslint/parser": "^8.46.2",
-    "eslint": "^9.38.0",
+    "eslint": "^9.39.1",
     "ts-node": "^10.9.2",
     "tsx": "^4.20.6",
     "typescript": "^5.9.3"
   },
-  "packageManager": "pnpm@10.19.0",
+  "packageManager": "pnpm@10.21.0+sha512.da3337267e400fdd3d479a6c68079ac6db01d8ca4f67572083e722775a796788a7a9956613749e000fac20d424b594f7a791a5f4e2e13581c5ef947f26968a40",
   "engines": {
     "node": ">=22.0.0",
     "pnpm": ">=10.19.0"

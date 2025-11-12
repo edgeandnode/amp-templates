@@ -1,6 +1,6 @@
 {
   "extends": "../../tsconfig.base.jsonc",
-  "include": ["scripts", "eslint.config.mjs", "tsup.config.ts", "vitest.config.ts"],
+  "include": ["scripts", "eslint.config.mjs", "tsdown.config.ts", "vitest.config.ts"],
   "compilerOptions": {
     "types": ["node"],
     "tsBuildInfoFile": ".tsbuildinfo/scripts.tsbuildinfo",

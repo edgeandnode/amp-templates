@@ -6,7 +6,12 @@ import { defineConfig } from "eslint/config"
 import pluginImport from "eslint-plugin-import"
 import pluginPerfectionist from "eslint-plugin-perfectionist"
 import globals from "globals"
+import { fileURLToPath } from "node:url"
+import { dirname, resolve } from "node:path"
 import tseslint from "typescript-eslint"
+
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = dirname(__filename)
 
 const isVSCode = Boolean(process.env.VSCODE_PID)
 
@@ -14,7 +19,13 @@ export default defineConfig(
   {
     files: ["packages/**/*.{js,mjs,cjs,jsx,ts,tsx}"],
     ignores: ["**/node_modules", "**/dist", "**/.next", "**/templates", "**/examples"],
-    languageOptions: { globals: { ...globals.browser, ...globals.node } },
+    languageOptions: {
+      globals: { ...globals.browser, ...globals.node },
+      parserOptions: {
+        tsconfigRootDir: resolve(__dirname),
+        projectService: true
+      }
+    },
   },
 
   eslint.configs.recommended,

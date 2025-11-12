@@ -2,7 +2,7 @@ export interface CliOptions {
   projectName: string
   projectType: "frontend" | "backend"
   framework?: "nextjs" | "vite" // Only for frontend projects
-  backend?: "fastify" | "express" // Only for backend projects
+  backend?: "fastify" | "express" | "apollo-graphql" // Only for backend projects
   dataLayer: "arrow-flight" | "amp-sync"
   orm?: "electric" | "drizzle"
   example?: "wallet" | "blank"
@@ -38,7 +38,7 @@ export interface ProjectVariables {
 
 export const PROJECT_TYPES = ["frontend", "backend"] as const
 export const FRAMEWORKS = ["nextjs", "vite"] as const
-export const BACKENDS = ["fastify", "express"] as const
+export const BACKENDS = ["fastify", "express", "apollo-graphql"] as const
 export const DATA_LAYERS = ["arrow-flight", "amp-sync"] as const
 export const ORMS = ["electric", "drizzle"] as const
 export const EXAMPLES = ["wallet", "blank"] as const

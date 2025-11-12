@@ -10,7 +10,7 @@ import { validateProjectName } from "./utils.js"
  */
 function parseArgs(args: string[]): Partial<CliOptions> {
   const options: Partial<CliOptions> = {}
-  
+   
   for (let i = 0; i < args.length; i++) {
     const arg = args[i]
     const nextArg = args[i + 1]
@@ -130,6 +130,7 @@ async function promptForOptions(initialOptions: Partial<CliOptions>): Promise<Cl
       options: [
         { value: "fastify", label: "Fastify", hint: "High-performance web server" },
         { value: "express", label: "Express", hint: "Popular, flexible Node.js framework" },
+        { value: "apollo-graphql", label: "Apollo GraphQL", hint: "GraphQL API server for blockchain data" },
       ],
     })
     

@@ -139,7 +139,7 @@ export function usePortfolioBalances(userAddress?: Address) {
 
     const portfolioBalances: PortfolioBalance[] = []
 
-    uniqueTokenAddresses.forEach((tokenAddress, index) => {
+    uniqueTokenAddresses.forEach((tokenAddress, index: number) => {
       const dataIndex = index * 4
       const symbolResult = contractData[dataIndex]
       const nameResult = contractData[dataIndex + 1]
@@ -176,7 +176,7 @@ export function usePortfolioBalances(userAddress?: Address) {
   // During refresh (Waiting state), don't show loading if we have previous data (prevents flicker)
   const isLoading =
     Result.isInitial(transfersResult) ||
-    (Result.isWaiting(transfersResult) && !transfersResult.value) ||
+    (Result.isWaiting(transfersResult) && !(transfersResult as { value?: readonly ERC20Transfer[] }).value) ||
     (isLoadingContracts && balances.length === 0)
 
   const isError = Result.isFailure(transfersResult) || isErrorContracts

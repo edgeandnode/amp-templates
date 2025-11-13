@@ -276,7 +276,7 @@ React App (real-time UI updates)
 ## Learn More
 
 - [Amp](https://github.com/edgeandnode/amp)
-- [TanStack Query](https://tanstack.com/query/latest)
+- [Effect Atom Documentation](https://github.com/effect-ts/atom)
 - [Foundry Book](https://book.getfoundry.sh)
 - [Just Command Runner](https://just.systems/)
 - [Wagmi Documentation](https://wagmi.sh)

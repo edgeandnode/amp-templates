@@ -2,5 +2,42 @@
   "$schema": "http://json.schemastore.org/tsconfig",
   "extends": "./tsconfig.base.jsonc",
   "include": [],
-  "references": [{ "path": "packages/create-amp-ref" }, { "path": "packages/create-amp" }]
+  "references": [
+    {
+      "path": "packages/create-amp"
+    },
+    {
+      "path": "examples/backend/apollo-graphql"
+    },
+    {
+      "path": "examples/backend/apollo-graphql-gateway"
+    },
+    {
+      "path": "examples/backend/express-gateway"
+    },
+    {
+      "path": "examples/backend/fastify"
+    },
+    {
+      "path": "examples/backend/fastify-gateway"
+    },
+    {
+      "path": "examples/nextjs/electricsql/anvil-logs-table"
+    },
+    {
+      "path": "examples/vite-react/arrow-flight/portfolio"
+    },
+    {
+      "path": "examples/vite-react/electricsql/portfolio-dapp"
+    },
+    {
+      "path": "examples/vite-react/jsonl-atom"
+    },
+    {
+      "path": "examples/vite-react/jsonl-transfers"
+    },
+    {
+      "path": "examples/vite-react/jsonl-tsquery"
+    }
+  ]
 }

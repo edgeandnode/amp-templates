@@ -1,6 +1,7 @@
 {
   "extends": "../../../../tsconfig.base.jsonc",
   "compilerOptions": {
+    "composite": true,
     "target": "esnext",
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,

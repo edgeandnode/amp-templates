@@ -1,6 +1,6 @@
 /**
  * Fastify backend server for Amp Arrow Flight integration
- * 
+ *
  * This server provides:
  * - Arrow Flight integration for querying blockchain data via Amp
  * - REST API endpoints for blocks and transfers
@@ -58,35 +58,35 @@ async function executeQuery(query: string): Promise<unknown[]> {
     // Convert table to array of objects
     const result: unknown[] = []
     const columnNames = table.schema.fields.map((field) => field.name)
-    
+
     for (let i = 0; i < table.numRows; i++) {
       const obj: Record<string, unknown> = {}
       for (let j = 0; j < table.numCols; j++) {
         const columnName = columnNames[j]
         let value = table.getChildAt(j)?.get(i)
-        
+
         // Convert BigInt to string for JSON serialization
-        if (typeof value === 'bigint') {
+        if (typeof value === "bigint") {
           value = value.toString()
         }
-        
+
         // Convert FixedSizeBinary to hex string for hashes
-        if (value && typeof value === 'object' && 'constructor' in value && 
-            value.constructor.name === 'Uint8Array') {
+        if (value && typeof value === "object" && "constructor" in value && value.constructor.name === "Uint8Array") {
           const bytes = value as Uint8Array
-          value = '0x' + Array.from(bytes).map(b => b.toString(16).padStart(2, '0')).join('')
+          value =
+            "0x" +
+            Array.from(bytes)
+              .map((b) => b.toString(16).padStart(2, "0"))
+              .join("")
         }
-        
+
         obj[columnName] = value
       }
       result.push(obj)
     }
 
     return result
-  }).pipe(
-    Effect.provide(ArrowFlightLive),
-    Effect.runPromise,
-  )
+  }).pipe(Effect.provide(ArrowFlightLive), Effect.runPromise)
 }
 
 // Health check endpoint
@@ -98,7 +98,7 @@ fastify.get("/health", async () => {
 fastify.get("/", async () => {
   return {
     message: "Amp Fastify Backend - Anvil Blocks",
-    version: "0.1.0", 
+    version: "0.1.0",
     endpoints: {
       health: "/health",
       getBlocks: "GET /api/blocks",

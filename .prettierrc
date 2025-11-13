@@ -4,5 +4,6 @@
   "semi": false,
   "plugins": ["prettier-plugin-tailwindcss"],
   "tailwindPreserveWhitespace": true,
-  "tailwindFunctions": ["classNames"]
+  "tailwindFunctions": ["classNames"],
+  "trailingComma": "none"
 }

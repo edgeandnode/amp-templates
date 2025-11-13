@@ -9,9 +9,7 @@ const alias = (dir: string, name = `@edgeandnode/${dir}`) => ({
 
 const config: ViteUserConfig = {
   test: {
-    alias: {
-      ...alias("create-amp-ref"),
-    },
+    alias: {},
     watch: false,
     globals: true,
     environment: "node",

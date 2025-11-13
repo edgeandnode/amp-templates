@@ -6,6 +6,7 @@ A backend server that provides real-time data access and API endpoints for Amp-p
 
 // [Additions](fastify):features
 // [Additions](express):features
+
 - **Arrow Flight**: Real-time data streaming from Amp
 - **ElectricSQL Proxy**: Proxies requests to ElectricSQL for real-time sync
 - **CORS Support**: Cross-origin resource sharing for frontend integration
@@ -23,6 +24,7 @@ A backend server that provides real-time data access and API endpoints for Amp-p
 ### Installation
 
 1. Install dependencies:
+
    ```bash
    pnpm install
    ```
@@ -37,18 +39,23 @@ The server will start on http://localhost:3001
 ## API Endpoints
 
 ### Health Check
+
 ```
 GET /health
 ```
+
 Returns server health status.
 
 ### ElectricSQL Shape Proxy
+
 ```
 GET /api/shape-proxy
 ```
+
 Proxies shape requests to ElectricSQL for real-time data synchronization.
 
 ### Execute Query
+
 ```
 POST /api/queries/execute
 Content-Type: application/json
@@ -57,6 +64,7 @@ Content-Type: application/json
   "query": "SELECT * FROM dataset_name.table_name LIMIT 10"
 }
 ```
+
 Executes custom SQL queries against Amp via Arrow Flight.
 
 ## Configuration
@@ -66,7 +74,7 @@ Environment variables:
 - `PORT`: Server port (default: 3001)
 - `AMP_FLIGHT_URL`: Amp Flight server URL (default: http://localhost:1602)
 - `ELECTRIC_URL`: ElectricSQL server URL (default: http://localhost:3000)
-- `DATASET_NAME`: Dataset name for queries (default: {{projectName}}_data)
+- `DATASET_NAME`: Dataset name for queries (default: {{projectName}}\_data)
 
 ## Development
 
@@ -99,11 +107,13 @@ The backend serves as a bridge between:
 For production deployment:
 
 1. Build the application:
+
    ```bash
    pnpm build
    ```
 
 2. Start the production server:
+
    ```bash
    pnpm start
    ```

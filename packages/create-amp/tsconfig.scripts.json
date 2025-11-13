@@ -1,10 +1,10 @@
 {
-  "$schema": "http://json.schemastore.org/tsconfig",
   "extends": "../../tsconfig.base.jsonc",
   "include": ["scripts", "eslint.config.mjs", "tsdown.config.ts", "vitest.config.ts"],
   "compilerOptions": {
     "types": ["node"],
     "tsBuildInfoFile": ".tsbuildinfo/scripts.tsbuildinfo",
-    "rootDir": "."
+    "rootDir": ".",
+    "emitDeclarationOnly": true
   }
 }

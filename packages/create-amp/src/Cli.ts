@@ -1,3 +1,10 @@
-import { main } from "./cli.js"
+import * as Command from "@effect/cli/Command"
 
-export const run = main
+import * as pkg from "../package.json" with { type: "json" }
+
+const command = Command.make("create-amp")
+
+export const run = Command.run(command, {
+  name: "create-amp",
+  version: `v${pkg.version}`
+})

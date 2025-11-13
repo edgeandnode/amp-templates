@@ -19,21 +19,21 @@
     "test:coverage": "vitest --coverage"
   },
   "devDependencies": {
-    "@eslint/js": "^9.38.0",
-    "@types/node": "^24.9.1",
-    "eslint": "^9.38.0",
+    "@eslint/js": "^9.39.1",
+    "@types/node": "^24.10.1",
+    "eslint": "^9.39.1",
     "eslint-plugin-import": "^2.32.0",
     "eslint-plugin-perfectionist": "^4.15.1",
-    "globals": "^16.4.0",
+    "globals": "^16.5.0",
     "prettier": "^3.6.2",
     "prettier-plugin-tailwindcss": "^0.7.1",
     "typescript": "^5.9.3",
-    "typescript-eslint": "^8.46.2",
-    "vitest": "^4.0.1"
+    "typescript-eslint": "^8.46.4",
+    "vitest": "^4.0.8"
   },
-  "packageManager": "pnpm@10.19.0",
+  "packageManager": "pnpm@10.21.0+sha512.da3337267e400fdd3d479a6c68079ac6db01d8ca4f67572083e722775a796788a7a9956613749e000fac20d424b594f7a791a5f4e2e13581c5ef947f26968a40",
   "engines": {
     "node": ">=22.0.0",
-    "pnpm": ">=10.19.0"
+    "pnpm": ">=10.21.0"
   }
 }

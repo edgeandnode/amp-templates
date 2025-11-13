@@ -2,7 +2,7 @@ import { defineConfig } from "tsdown"
 
 export default defineConfig({
   entry: ["src/bin.ts"],
-  target: "node22",
+  target: "node20",
   minify: true,
   tsconfig: "tsconfig.build.json",
   platform: "node",
@@ -11,6 +11,6 @@ export default defineConfig({
   clean: true,
   external: ["@parcel/watcher"],
   env: {
-    NODE_ENV: "production",
-  },
+    NODE_ENV: "production"
+  }
 })

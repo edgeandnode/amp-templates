@@ -7,7 +7,8 @@ export const AvailableTemplFrameworkKey = Schema.Literal(
   "react-ampsync-electricsql",
   "react-arrowflight-effect-atom",
   "react-jsonlines-effect-atom",
-  "react-jsonlines-react-query"
+  "react-jsonlines-react-query",
+  "react-jsonlines-transfers"
 )
 export type AvailableTemplFrameworkKey = typeof AvailableTemplFrameworkKey.Type
 
@@ -19,6 +20,7 @@ export const AvailableTemplSchema = Schema.Struct({
     Schema.pattern(/^\/(?:[a-zA-Z0-9_-]+\/)*[a-zA-Z0-9_-]+$/),
     Schema.filter((dir) => dir.startsWith("/"))
   ),
-  skip: Schema.Set(Schema.String)
+  skip: Schema.Set(Schema.String),
+  type: Schema.Literal("build-dataset", "existing-dataset")
 })
 export type AvailableTemplSchema = typeof AvailableTemplSchema.Type

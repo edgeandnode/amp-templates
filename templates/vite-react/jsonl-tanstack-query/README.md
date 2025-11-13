@@ -46,10 +46,20 @@ This will start:
   - Amp server (ports 1603 JSON Lines API, 1610 Admin)
   - Anvil local blockchain (port 8545)
 - Register and deploy `anvil` chain raw dataset with Amp server
-- Amp development watch process for dataset config in `amp.config.ts`
 
 
-### 4. Deploy Smart Contracts
+### 4. Start Amp Dev Server and React App
+
+```bash
+just dev
+```
+
+This will run:
+- Amp dev server with hot reloading
+  - Any saved changes to `amp.config.ts` will be deployed to the local Amp engine automatically while indexing on anvil is running
+- Vite dev server for the React app [http://localhost:5173](http://localhost:5173). See [application notes](#application-notes)
+
+### 5. Deploy Smart Contracts
 
 ```bash
 just deploy-contracts
@@ -60,26 +70,25 @@ This will run:
 - Forge smart contract dependencies installation
 - Deploying of test ERC20 tokens and distributing initial balances on local anvil chain
 
-
-### 5. Seed Transfer Transactions
+### 6. Seed Transfer Transactions
 
 ```bash
 just seed-transfers
 ```
 
-This creates sample transfer transactions of deployed tokens for testing
+- This creates sample transfer transactions of deployed tokens for testing
+- Token holdings and transactions will now be visible in the app
 
-
-### 6. Start App Server
+### 7. Run Amp Local Dev Studio
 
 ```bash
-just dev
+pnpm amp studio
 ```
 
-This runs the Vite dev server. 
-Open [http://localhost:5173](http://localhost:5173) and refer to [application notes](#application-notes) below
+- Opens the amp dataset studio visualization tool that can be used to test dataset queries
 
-### 7. View Logs
+
+### 8. View Logs
 
 ```bash
 # All services
@@ -91,7 +100,7 @@ just logs db
 just logs anvil
 ```
 
-### 8. Stop Infrastructure Services
+### 9. Stop Infrastructure Services
 
 ```bash
 just down
@@ -99,13 +108,11 @@ just down
 
 This stops all running services and remove volumes
 
-### 9. Cleanup Services
+### 10. Cleanup Services
 
 ```bash
 just clean
 ```
-
-Cleans docker images
 
 ## Application Notes
 

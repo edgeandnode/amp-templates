@@ -2,7 +2,6 @@
 
 A real-time portfolio tracking application built with Vite, React, TanStack Query, and Amp. Track ERC20 token balances and transfer tokens with MetaMask wallet integration, powered by the Amp data platform.
 
-
 ## Prerequisites
 
 - Node.js v22+
@@ -32,7 +31,6 @@ This will install:
 - `ampd` and `ampctl` required for working with amp core engine
 - Npmjs packge dependencies
 
-
 ### 3. Setup and Start Infrastructure Services
 
 ```bash
@@ -46,10 +44,20 @@ This will start:
   - Amp server (ports 1603 JSON Lines API, 1610 Admin)
   - Anvil local blockchain (port 8545)
 - Register and deploy `anvil` chain raw dataset with Amp server
-- Amp development watch process for dataset config in `amp.config.ts`
 
 
-### 4. Deploy Smart Contracts
+### 4. Start Amp Dev Server and React App
+
+```bash
+just dev
+```
+
+This will run:
+- Amp dev server with hot reloading
+  - Any saved changes to `amp.config.ts` will be deployed to the local Amp engine automatically while indexing on anvil is running
+- Vite dev server for the React app [http://localhost:5173](http://localhost:5173). See [application notes](#application-notes)
+
+### 5. Deploy Smart Contracts
 
 ```bash
 just deploy-contracts
@@ -61,25 +69,25 @@ This will run:
 - Deploying of test ERC20 tokens and distributing initial balances on local anvil chain
 
 
-### 5. Seed Transfer Transactions
+### 6. Seed Transfer Transactions
 
 ```bash
 just seed-transfers
 ```
 
-This creates sample transfer transactions of deployed tokens for testing
+- This creates sample transfer transactions of deployed tokens for testing
+- Token holdings and transactions will now be visible in the app
 
-
-### 6. Start App Server
+### 7. Run Amp Local Dev Studio
 
 ```bash
-just dev
+pnpm amp studio
 ```
 
-This runs the Vite dev server. 
-Open [http://localhost:5173](http://localhost:5173) and refer to [application notes](#application-notes) below
+- Opens the amp dataset studio visualization tool that can be used to test dataset queries
 
-### 7. View Logs
+
+### 8. View Logs
 
 ```bash
 # All services
@@ -91,7 +99,7 @@ just logs db
 just logs anvil
 ```
 
-### 8. Stop Infrastructure Services
+### 9. Stop Infrastructure Services
 
 ```bash
 just down
@@ -99,7 +107,7 @@ just down
 
 This stops all running services and remove volumes
 
-### 9. Cleanup Services
+### 10. Cleanup Services
 
 ```bash
 just clean
@@ -123,7 +131,7 @@ Step through the features in the application by following the steps below:
 #### 2. Import test account (Anvil default wallet #1 & #2 private keys):
 
 - **Wallet #1 address:** `0x70997970c51812dc3a010c7d01b50e0d17dc79c8`
-  - **Private key:** `0x59c6995e998f97a5a0044966f0945389dc9e86dae88c7a8412f4603b6b78690d` 
+  - **Private key:** `0x59c6995e998f97a5a0044966f0945389dc9e86dae88c7a8412f4603b6b78690d`
 - **Wallet #2 address:** `0x3c44cdddb6a900fa2b585dd299e03d12fa4293bc`
   - **Private key:** `0x5de4111afa1a4b94908f83103eb1f1706367c2e68ca870fc3fb9a804cdab365a`
 
@@ -227,7 +235,6 @@ portfolio-dapp/
 └── justfile                        # Command runner tasks
 ```
 
-
 ## Architecture
 
 This application demonstrates a React web app built on the Amp blockchain data indexing architecture:
@@ -267,7 +274,6 @@ React App (real-time UI updates)
 - DataFusion SQL engine with support for complex queries
 - Schema validation via custom TypeScript validators for type-safe data parsing
 - Provides data transfer over HTTP in Newline-delimited JSON (NDJSON) for efficient streaming
-
 
 ## Learn More
 

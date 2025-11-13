@@ -3,10 +3,10 @@
  */
 
 import { AmpClient, convertBigIntsToStrings } from "./amp-client.js"
-import type { 
+import type {
   BlockData,
-  ConnectionResult, 
-  LogData, 
+  ConnectionResult,
+  LogData,
   TransactionData
 } from "./types/amp-data.js"
 
@@ -20,7 +20,7 @@ export const resolvers = {
       const health = await context.ampClient.getHealth()
       return {
         status: health.status,
-        service: "{{projectName}}-apollo-graphql",
+        service: "amp-apollo-graphql-gateway-backend",
         timestamp: health.timestamp,
         gateway: process.env.AMP_GATEWAY_URL || "https://gateway.amp.staging.edgeandnode.com",
       }
@@ -171,7 +171,7 @@ export const resolvers = {
     executeQuery: async (_parent: any, args: { query: string }, context: Context) => {
       // Add safety checks for the query
       const queryLower = args.query.toLowerCase().trim()
-      
+
       // Only allow SELECT statements
       if (!queryLower.startsWith("select")) {
         throw new Error("Only SELECT statements are allowed")
@@ -186,7 +186,7 @@ export const resolvers = {
       }
 
       const result = await context.ampClient.executeQuery(args.query)
-      
+
       return {
         data: result.data.map(convertBigIntsToStrings),
         rowCount: result.rowCount,

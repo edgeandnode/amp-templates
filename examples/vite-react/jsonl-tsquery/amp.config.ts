@@ -15,11 +15,7 @@ export default defineDataset(() => ({
   network: "anvil",
   version: "0.0.1",
   dependencies: {
-    anvil: {
-      owner: "graphprotocol",
-      name: "anvil",
-      version: "0.1.0",
-    },
+    anvil: "_/anvil@0.0.1",
   },
   tables: {
     erc20_transfers: {
@@ -27,15 +23,6 @@ export default defineDataset(() => ({
         SELECT c.block_hash, c.tx_hash, c.log_index, c.address as contract_address, c.block_num, c.timestamp as tx_timestamp, c.event['from'] as from_address, c.event['to'] as to_address, c.event['value'] as amount_raw
         FROM (${erc20_transfers}) as c
       `,
-    },
-    blocks: {
-      sql: `
-        SELECT
-          block_num,
-          timestamp,
-          hash
-        FROM anvil.blocks
-      `,
-    },
+    }
   },
 }))

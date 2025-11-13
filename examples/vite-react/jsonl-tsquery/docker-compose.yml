@@ -19,7 +19,7 @@ services:
       retries: 5
 
   amp:
-    image: ghcr.io/edgeandnode/amp:v0.0.20
+    image: ghcr.io/edgeandnode/amp:latest
     ports:
       - "1602:1602" # Arrow Flight
       - "1603:1603" # JSON Lines

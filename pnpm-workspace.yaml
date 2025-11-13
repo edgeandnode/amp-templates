@@ -5,6 +5,7 @@ packages:
   - examples/*/*/*
 
 onlyBuiltDependencies:
+  - '@apollo/protobufjs'
   - '@parcel/watcher'
   - bufferutil
   - core-js-pure

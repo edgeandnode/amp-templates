@@ -94,7 +94,7 @@ app.get("/health", (req, res) => {
 // Root endpoint
 app.get("/", (req, res) => {
   res.json({
-    message: "{{projectName}} Express Backend",
+    message: "Amp - Express Backend",
     version: "0.1.0",
     endpoints: {
       health: "/health",

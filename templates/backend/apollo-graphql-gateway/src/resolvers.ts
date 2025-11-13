@@ -1,12 +1,8 @@
 /**
- * GraphQL resolvers for querying blockchain data via Arrow Flight
+ * GraphQL resolvers for querying Arbitrum One blockchain data via AMP Gateway
  */
 
-import { createConnectTransport } from "@connectrpc/connect-web"
-import { ArrowFlight } from "@edgeandnode/amp"
-import { Effect } from "effect"
-import { Table } from "apache-arrow"
-import { Chunk, Stream } from "effect"
+import { AmpClient, convertBigIntsToStrings } from "./amp-client.js"
 import type { 
   BlockData,
   ConnectionResult, 
@@ -15,92 +11,18 @@ import type {
 } from "./types/amp-data.js"
 
 export interface Context {
-  executeQuery: (query: string) => Promise<unknown[]>
-}
-
-const AMP_FLIGHT_URL = process.env.AMP_FLIGHT_URL || "http://localhost:3002"
-const DATASET_NAME = process.env.DATASET_NAME || "anvil"
-
-// Create Connect transport for Arrow Flight
-const transport = createConnectTransport({
-  baseUrl: AMP_FLIGHT_URL,
-})
-
-// Create Arrow Flight layer
-const ArrowFlightLive = ArrowFlight.layer(transport)
-
-/**
- * Generic query function that executes SQL via Arrow Flight and returns results
- */
-async function executeQuery(query: string): Promise<unknown[]> {
-  return Effect.gen(function* () {
-    const flight = yield* ArrowFlight.ArrowFlight
-
-    // Stream data from Amp and collect all batches
-    const data = yield* Stream.runCollect(flight.stream(query)).pipe(
-      Effect.map((batches) => Chunk.toArray(batches).map((batch) => batch.data)),
-    )
-
-    if (data.length === 0) {
-      return []
-    }
-
-    // Convert Arrow batches to table
-    const table = new Table(data)
-
-    // Convert table to array of objects
-    const result: unknown[] = []
-    const columnNames = table.schema.fields.map((field) => field.name)
-
-    for (let i = 0; i < table.numRows; i++) {
-      const obj: Record<string, unknown> = {}
-      for (let j = 0; j < table.numCols; j++) {
-        const columnName = columnNames[j]
-        let value = table.getChildAt(j)?.get(i)
-
-        // Convert BigInt to string for JSON serialization
-        if (typeof value === "bigint") {
-          value = value.toString()
-        }
-
-        // Convert FixedSizeBinary to hex string for hashes
-        if (value && typeof value === "object" && "constructor" in value && value.constructor.name === "Uint8Array") {
-          const bytes = value as Uint8Array
-          value =
-            "0x" +
-            Array.from(bytes)
-              .map((b) => b.toString(16).padStart(2, "0"))
-              .join("")
-        }
-
-        obj[columnName] = value
-      }
-      result.push(obj)
-    }
-
-    return result
-  }).pipe(Effect.provide(ArrowFlightLive), Effect.runPromise)
+  ampClient: AmpClient
 }
 
 export const resolvers = {
   Query: {
-    health: async () => {
-      try {
-        // Try a simple query to test connectivity
-        await executeQuery(`SELECT 1 as health_check FROM ${DATASET_NAME}.blocks LIMIT 1`)
-        return {
-          status: "healthy",
-          service: "amp-apollo-graphql-flight-backend",
-          timestamp: new Date().toISOString(),
-          flightUrl: AMP_FLIGHT_URL,
-        }
-      } catch (_error) {
-        return {
-          status: "unhealthy",
-          service: "amp-apollo-graphql-flight-backend",
-          timestamp: new Date().toISOString(),
-          flightUrl: AMP_FLIGHT_URL,
-        }
+    health: async (_parent: any, _args: any, context: Context) => {
+      const health = await context.ampClient.getHealth()
+      return {
+        status: health.status,
+        service: "{{projectName}}-apollo-graphql",
+        timestamp: health.timestamp,
+        gateway: process.env.AMP_GATEWAY_URL || "https://gateway.amp.staging.edgeandnode.com",
       }
     },
 
@@ -132,17 +54,18 @@ export const resolvers = {
           blob_gas_used,
           excess_blob_gas,
           parent_beacon_root
-        FROM ${DATASET_NAME}.blocks
+        FROM "edgeandnode/arbitrum_one@0.0.1".blocks
         ORDER BY block_num DESC
         LIMIT ${limit} OFFSET ${offset}
       `
 
-      const data = await context.executeQuery(query) as BlockData[]
+      const result = await context.ampClient.executeQuery(query)
+      const data = result.data.map(convertBigIntsToStrings) as BlockData[]
 
       return {
         data,
-        totalCount: data.length,
-        hasNextPage: data.length === limit,
+        totalCount: result.rowCount,
+        hasNextPage: result.rowCount === limit,
         hasPreviousPage: offset > 0,
       }
     },
@@ -174,20 +97,22 @@ export const resolvers = {
           max_fee_per_blob_gas,
           "from",
           status
-        FROM ${DATASET_NAME}.transactions
+        FROM "edgeandnode/arbitrum_one@0.0.1".transactions
         ORDER BY block_num DESC, tx_index ASC
         LIMIT ${limit} OFFSET ${offset}
       `
 
-      const data = await context.executeQuery(query) as TransactionData[]
+      const result = await context.ampClient.executeQuery(query)
+      const data = result.data.map(convertBigIntsToStrings) as TransactionData[]
 
       return {
         data,
-        totalCount: data.length,
-        hasNextPage: data.length === limit,
+        totalCount: result.rowCount,
+        hasNextPage: result.rowCount === limit,
         hasPreviousPage: offset > 0,
       }
     },
+
 
     logs: async (_parent: any, args: { limit?: number; offset?: number; contractAddress?: string; topics?: string[] }, context: Context) => {
       const limit = Math.min(args.limit || 10, 100)
@@ -226,18 +151,19 @@ export const resolvers = {
           topic2,
           topic3,
           data
-        FROM ${DATASET_NAME}.logs
+        FROM "edgeandnode/arbitrum_one@0.0.1".logs
         ${whereClause}
         ORDER BY block_num DESC, log_index ASC
         LIMIT ${limit} OFFSET ${offset}
       `
 
-      const data = await context.executeQuery(query) as LogData[]
+      const result = await context.ampClient.executeQuery(query)
+      const data = result.data.map(convertBigIntsToStrings) as LogData[]
 
       return {
         data,
-        totalCount: data.length,
-        hasNextPage: data.length === limit,
+        totalCount: result.rowCount,
+        hasNextPage: result.rowCount === limit,
         hasPreviousPage: offset > 0,
       }
     },
@@ -259,26 +185,20 @@ export const resolvers = {
         }
       }
 
-      const startTime = Date.now()
-      const data = await context.executeQuery(args.query)
-      const executionTime = Date.now() - startTime
+      const result = await context.ampClient.executeQuery(args.query)
       
       return {
-        data,
-        rowCount: data.length,
-        executionTime,
+        data: result.data.map(convertBigIntsToStrings),
+        rowCount: result.rowCount,
+        executionTime: result.executionTime,
       }
     },
   },
 
   // Custom scalar resolver for QueryResultRow
   QueryResultRow: {
-    __serialize: (value: any) => value,
+    __serialize: (value: any) => convertBigIntsToStrings(value),
     __parseValue: (value: any) => value,
     __parseLiteral: (ast: any) => ast.value,
   },
 }
-
-// Export executeQuery for use in server.ts
-export { executeQuery }
-

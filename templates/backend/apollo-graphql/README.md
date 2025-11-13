@@ -1,16 +1,16 @@
-# {{projectName}} - Apollo GraphQL Server
+# Amp - Apollo GraphQL Server
 
-A GraphQL API server for querying Arbitrum One blockchain data using Apollo Server and AMP Gateway.
+A GraphQL API server for querying Arbitrum One blockchain data using Apollo Server and Arrow Flight.
 
 ## Overview
 
-This backend provides a GraphQL API that queries the `edgeandnode/arbitrum_one@0.0.1` dataset via the remote AMP Gateway. No local AMP setup or dataset is required.
+This backend provides a GraphQL API that queries the `edgeandnode/arbitrum_one@0.0.1` dataset via the remote Arrow Flight. No local AMP setup or dataset is required.
 
 ## Features
 
 - **Apollo Server 4** with latest GraphQL features
 - **Fastify** for high-performance HTTP server
-- **Remote AMP Gateway** integration (no local setup needed)
+- **Remote Arrow Flight** integration (no local setup needed)
 - **Authentication** via AMP CLI token
 - **Arbitrum One Data** (blocks, transactions, logs)
 - **GraphQL Playground** for development
@@ -23,11 +23,11 @@ This backend provides a GraphQL API that queries the `edgeandnode/arbitrum_one@0
 
 - Node.js v22+
 - pnpm v10.19.0+
-- AMP CLI auth token
+- AMP CLI flight URL
 
 ### 1. Get AMP Auth Token
 
-First, authenticate with AMP CLI to get your auth token:
+First, authenticate with AMP CLI to get your flight URL:
 
 ```bash
 # Install AMP CLI if not already installed
@@ -37,7 +37,7 @@ pnpm install -g @edgeandnode/amp
 amp auth login
 
 # Get your token (copy this value)
-amp auth token
+amp flight URL
 ```
 
 ### 2. Environment Setup
@@ -45,11 +45,11 @@ amp auth token
 Create a `.env` file in the project root:
 
 ```env
-# Required: AMP Gateway URL
+# Required: Arrow Flight URL
 AMP_GATEWAY_URL=https://gateway.amp.staging.edgeandnode.com
 
 # Required: Your AMP authentication token
-AMP_AUTH_TOKEN=your_token_here
+AMP_FLIGHT_URL=your_token_here
 
 # Optional: Server configuration
 PORT=4000
@@ -230,7 +230,7 @@ Ensure these are set in production:
 
 ```env
 AMP_GATEWAY_URL=https://gateway.amp.staging.edgeandnode.com
-AMP_AUTH_TOKEN=your_production_token
+AMP_FLIGHT_URL=your_production_token
 PORT=4000
 NODE_ENV=production
 ```
@@ -259,13 +259,13 @@ pnpm start
 
 If you get authentication errors:
 
-1. Verify your AMP token: `amp auth token`
-2. Check token in environment: `echo $AMP_AUTH_TOKEN`
+1. Verify your AMP token: `amp flight URL`
+2. Check token in environment: `echo $AMP_FLIGHT_URL`
 3. Re-authenticate: `amp auth login`
 
 ### Connection Issues
 
-If you can't connect to the AMP Gateway:
+If you can't connect to the Arrow Flight:
 
 1. Check the gateway URL is correct
 2. Verify network connectivity

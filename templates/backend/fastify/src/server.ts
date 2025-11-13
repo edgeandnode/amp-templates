@@ -97,7 +97,7 @@ fastify.get("/health", async () => {
 // Root endpoint
 fastify.get("/", async () => {
   return {
-    message: "{{projectName}} Fastify Backend",
+    message: "Amp - Fastify Backend",
     version: "0.1.0",
     endpoints: {
       health: "/health",

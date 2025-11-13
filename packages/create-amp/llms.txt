@@ -1,0 +1,509 @@
+# create-amp
+
+A command-line tool for scaffolding Amp-enabled applications.
+
+## What is Amp?
+
+Amp is the first blockchain-native database built by Edge & Node. It is the tool for building and managing blockchain datasets, enabling developers to run queries directly against blockchain data with the performance and developer experience of a traditional database.
+
+Key features:
+- **Direct Blockchain Queries**: Query blockchain data using familiar database patterns (SQL-like, GraphQL, REST)
+- **High Performance**: Optimized for fast queries against blockchain state and history
+- **Dataset Management**: Build and manage custom blockchain datasets with `ampd`
+- **Multiple Query Protocols**: Arrow Flight for streaming queries, JSON Lines for HTTP queries, Gateway for remote datasets
+- **Real-time Sync**: Use AmSync to sync blockchain data to PostgreSQL with real-time updates
+- **Local Development**: Run Amp locally with Docker Compose alongside Anvil (local Ethereum node)
+- **Production Ready**: Query existing Amp datasets via the Amp Gateway
+
+## When to Use Amp
+
+Use Amp when building applications that need to:
+- **Query Blockchain Data Efficiently**: Access on-chain data with database-level performance
+- **Build Data-Driven dApps**: Create dashboards, analytics tools, or explorers
+- **Index Custom Smart Contracts**: Build datasets from your own smart contracts for fast querying
+- **Real-time Blockchain Applications**: Stream blockchain data changes to your frontend
+- **Backend APIs for Web3**: Build REST or GraphQL APIs over blockchain data
+- **Portfolio Trackers**: Query user balances, transactions, and DeFi positions
+- **Analytics Platforms**: Aggregate and analyze blockchain data at scale
+- **Block Explorers**: Browse and search blockchain history efficiently
+
+Amp is ideal when you need:
+- Fast queries over blockchain data without running your own node
+- SQL-like or GraphQL access to blockchain state
+- Real-time updates when blockchain data changes
+- To avoid complex blockchain indexing infrastructure
+- Database-style access patterns for on-chain data
+
+## Exploring Existing Datasets
+
+Before building your own dataset, you can explore existing Amp datasets at:
+
+**https://playground.amp.edgeandnode.com**
+
+The playground allows you to:
+- Browse available public datasets
+- Run queries against existing data
+- See example queries and schemas
+- Test Amp's query performance
+- Find datasets to use in your application
+
+This is helpful for:
+- Getting started quickly without local infrastructure
+- Understanding Amp's query capabilities
+- Finding public datasets for your use case
+- Prototyping before building custom datasets
+
+## Installation and Usage
+
+This tool is published to npm as `create-amp` and can be run using:
+
+```bash
+pnpm create amp@latest
+# or
+npm create amp@latest
+# or
+npx create-amp@latest
+# or
+yarn create amp@latest
+# or
+bun create amp@latest
+```
+
+**No prerequisites required!** You can start scaffolding immediately:
+- **Using existing datasets**: No Amp installation needed - just run create-amp
+- **Building your own dataset**: Install `ampd` via `ampup` (see below) or use the included Docker Compose setup
+
+## Purpose
+
+create-amp is a CLI tool that scaffolds new Amp-enabled applications with pre-configured templates. It streamlines the process of setting up projects that query blockchain data using Amp, with support for various frameworks (React, Next.js, Express, Fastify, Apollo GraphQL) and query protocols (Arrow Flight, JSON Lines, AmSync).
+
+## Command-Line Options
+
+### Positional Arguments
+
+- `app-name` (optional): The name of your application. This will also be the folder name where your app is scaffolded. If not provided, the tool will prompt for it interactively.
+
+### Options
+
+- `--template` (optional): Template to scaffold
+  - If not provided, you'll be prompted to choose between:
+    - **Build my own Amp Dataset**: Includes Docker Compose setup with Anvil and Ampd for local development
+    - **Use an existing Amp Dataset**: Lighter setup that connects to remote Amp Gateway
+  - Available template keys:
+    - `backend-express` - Express REST API with Arrow Flight (local dataset)
+    - `backend-fastify` - Fastify REST API with Arrow Flight (local dataset)
+    - `backend-apollo-graphql` - Apollo GraphQL server with Arrow Flight (local dataset)
+    - `backend-express-gateway` - Express REST API with Amp Gateway (remote dataset)
+    - `backend-fastify-gateway` - Fastify REST API with Amp Gateway (remote dataset)
+    - `backend-apollo-graphql-gateway` - Apollo GraphQL server with Amp Gateway (remote dataset)
+    - `nextjs` - Next.js fullstack application with Arrow Flight (local dataset)
+    - `react-ampsync-electricsql` - React + Vite with AmSync and Electric SQL (real-time PostgreSQL sync)
+    - `react-arrowflight-effect-atom` - React + Vite with Arrow Flight and effect-atom state management
+    - `react-jsonlines-effect-atom` - React + Vite with JSON Lines and effect-atom state management
+    - `react-jsonlines-react-query` - React + Vite with JSON Lines and TanStack Query
+    - `react-jsonlines-transfers` - React + Vite querying existing Arbitrum One RPC transfers dataset
+
+- `--package-manager, -p` (optional): The package manager to use for installing dependencies
+  - Available values: `pnpm`, `bun`, `yarn`, `npm`
+  - Default: prompts user to select
+
+- `--skip-install-deps`: Skip installing dependencies after scaffolding
+  - Default: false (dependencies will be installed)
+
+- `--skip-initialize-git`: Skip initializing a git repository in the scaffolded app
+  - Default: false (git repository will be initialized with an initial commit)
+
+## Examples
+
+### Interactive Mode (Recommended)
+```bash
+pnpm create amp@latest
+```
+This will prompt you for:
+1. App name
+2. Whether you want to build your own dataset or use an existing one
+3. Which template to use
+4. Which package manager to use
+
+### Fully Specified
+```bash
+pnpm create amp@latest my-amp-app --template backend-express --package-manager pnpm
+```
+
+### Backend GraphQL API
+```bash
+pnpm create amp@latest my-graphql-api --template backend-apollo-graphql
+```
+
+### React App with Real-time Sync
+```bash
+pnpm create amp@latest my-react-app --template react-ampsync-electricsql
+```
+
+### Query Existing Dataset (No Local Infrastructure)
+```bash
+pnpm create amp@latest arbitrum-explorer --template react-jsonlines-transfers
+```
+
+### Skip Optional Steps
+```bash
+pnpm create amp@latest my-app --skip-install-deps --skip-initialize-git
+```
+
+## Workflow
+
+1. **Validates app name**: Ensures the provided name is a valid project name
+2. **Downloads template**: Fetches the selected template from GitHub (edgeandnode/amp-templates)
+3. **Extracts files**: Extracts only the relevant template directory to target location
+4. **Updates package.json**: Sets the correct package name in the scaffolded app
+5. **Initializes git** (optional): Creates a git repository with initial commit
+6. **Installs dependencies** (optional): Runs the package manager install command
+
+## Template Categories
+
+### Build Dataset Templates
+These templates include local infrastructure (Docker Compose) for running Amp locally with your own smart contracts:
+
+**Backend Templates:**
+- `backend-express` - Express REST API server with Arrow Flight
+- `backend-fastify` - Fastify REST API server with Arrow Flight
+- `backend-apollo-graphql` - Apollo GraphQL API server with Arrow Flight
+
+**Frontend Templates:**
+- `nextjs` - Next.js fullstack application with App Router
+- `react-arrowflight-effect-atom` - React/Vite with Arrow Flight streaming
+- `react-jsonlines-effect-atom` - React/Vite with JSON Lines HTTP queries
+- `react-jsonlines-react-query` - React/Vite with TanStack Query for caching
+- `react-ampsync-electricsql` - React/Vite with PostgreSQL sync and real-time updates
+
+Infrastructure includes:
+- Docker Compose with Anvil (local Ethereum testnet)
+- Ampd (Amp daemon) for indexing and dataset management
+- Smart contract templates (Foundry)
+- amp.config.ts for dataset configuration
+- justfile for common operations
+
+### Existing Dataset Templates
+These templates connect to remote Amp Gateway for querying existing datasets (no local infrastructure):
+
+**Backend Templates:**
+- `backend-express-gateway` - Express REST API with Amp Gateway
+- `backend-fastify-gateway` - Fastify REST API with Amp Gateway
+- `backend-apollo-graphql-gateway` - Apollo GraphQL API with Amp Gateway
+
+**Frontend Templates:**
+- `react-jsonlines-transfers` - React/Vite querying Arbitrum One RPC transfers dataset
+
+These are ideal for:
+- Quick prototyping without local setup
+- Querying public datasets (find them at playground.amp.edgeandnode.com)
+- Production deployments against hosted Amp Gateway
+- Getting started with Amp without installing anything beyond Node.js
+
+## Query Protocols
+
+Amp supports multiple query protocols:
+
+### Arrow Flight
+- **Use case**: High-performance streaming queries, real-time data
+- **Protocol**: gRPC-based streaming with Apache Arrow format
+- **Benefits**: Extremely fast, efficient binary format, ideal for large result sets
+- **Templates**: `backend-express`, `backend-fastify`, `backend-apollo-graphql`, `nextjs`, `react-arrowflight-effect-atom`
+
+### JSON Lines (JSONL)
+- **Use case**: HTTP-based queries, simple integration
+- **Protocol**: HTTP with newline-delimited JSON streaming
+- **Benefits**: Easy to consume, works with standard HTTP clients, browser-friendly
+- **Templates**: `react-jsonlines-effect-atom`, `react-jsonlines-react-query`, `react-jsonlines-transfers`
+
+### AmSync + Electric SQL
+- **Use case**: Real-time sync to PostgreSQL, complex queries, offline support
+- **Protocol**: Syncs Amp data to PostgreSQL, then uses Electric SQL for reactive updates
+- **Benefits**: Full SQL queries, real-time frontend updates, works with existing PostgreSQL tools
+- **Templates**: `react-ampsync-electricsql`
+
+## State Management Options
+
+Frontend templates include different state management approaches:
+
+- **effect-atom**: Lightweight reactive state using Effect-TS atoms
+- **TanStack Query**: Powerful caching and request management
+- **Electric SQL**: Reactive database queries with automatic UI updates
+
+## Post-Scaffolding
+
+After successful scaffolding, navigate to your app directory:
+
+```bash
+cd <app-name>
+```
+
+### For Existing Dataset Templates
+
+Simply start the development server:
+```bash
+pnpm run dev  # or npm/yarn/bun run dev
+```
+
+Connect to Amp Gateway and start querying existing datasets immediately. Visit playground.amp.edgeandnode.com to explore available datasets.
+
+### For Build Dataset Templates (Local Development)
+
+Start the infrastructure:
+```bash
+# Using just (if installed)
+just infra-up
+
+# Or using docker compose directly
+docker compose up -d
+```
+
+This starts:
+- **Anvil**: Local Ethereum testnet on port 8545
+- **Ampd**: Amp daemon for dataset indexing (runs in Docker, no local install needed)
+- **PostgreSQL** (for AmSync templates): Database for synced data
+- **Electric SQL** (for AmSync templates): Real-time sync service
+
+Deploy your smart contracts to Anvil:
+```bash
+just deploy-contracts
+```
+
+Start the development server:
+```bash
+pnpm run dev
+```
+
+## Installing Amp (ampd) - Optional for Advanced Use
+
+**Note**: This is optional! Build dataset templates include Docker Compose configurations that run `ampd` in a container, so you don't need to install it locally to get started.
+
+However, if you want to run `ampd` outside of Docker for advanced use cases, you can install it using `ampup`, the official Amp version manager:
+
+```sh
+curl --proto '=https' --tlsv1.2 -sSf https://ampup.sh/install | sh
+```
+
+This installs `ampup` and the latest version of `ampd`. You may need to restart your terminal or run:
+
+```sh
+source ~/.zshenv  # or your shell's equivalent
+```
+
+Manage versions:
+```sh
+ampup install  # Install or update to latest
+ampup use      # Switch between installed versions
+ampup --help   # See all options
+```
+
+### Using Nix (Alternative)
+
+For Nix users, `ampd` is available as a flake:
+
+```sh
+# Run directly
+nix run github:edgeandnode/amp
+
+# Install to profile
+nix profile install github:edgeandnode/amp
+
+# Try temporarily
+nix shell github:edgeandnode/amp -c ampd --version
+```
+
+Note: Nix handles version management, so `ampup` is not needed for Nix users.
+
+## Common Commands (via justfile)
+
+Build dataset templates include a `justfile` with helpful commands:
+
+```bash
+just infra-up          # Start Docker Compose infrastructure
+just infra-down        # Stop infrastructure
+just deploy-contracts  # Deploy contracts to Anvil
+just dev              # Start development server
+just build            # Build for production
+just test             # Run tests
+just fmt              # Format code
+```
+
+## Environment Configuration
+
+Templates include `.env.example` files. Copy to `.env` and configure:
+
+- RPC URLs for blockchain connections
+- Amp Gateway URLs (for gateway templates)
+- Database connection strings (for AmSync templates)
+- Contract addresses (after deployment)
+
+## Dataset Configuration (amp.config.ts)
+
+Build dataset templates include an `amp.config.ts` file that defines your Amp dataset:
+
+```typescript
+// Example amp.config.ts
+export default {
+  name: "my-dataset",
+  version: "1.0.0",
+  chains: {
+    anvil: {
+      rpcUrl: "http://localhost:8545",
+      contracts: {
+        // Your contract definitions
+      }
+    }
+  }
+}
+```
+
+This configuration tells `ampd` how to index your smart contracts and build your dataset.
+
+## Error Handling
+
+The tool will fail gracefully if:
+- The app name is invalid
+- Git initialization fails (with warning, continues execution)
+- Dependency installation fails (with warning)
+- Template download fails
+- Target directory creation fails
+
+## Requirements
+
+### For All Templates
+- **Node.js** >= 22.0.0
+- **Package Manager**: pnpm, npm, yarn, or bun
+
+### For Build Dataset Templates (Local Development)
+- **Docker and Docker Compose** (runs `ampd` in container - no local install needed)
+- **Git** (for git initialization)
+
+### Optional
+- **ampd** (via `ampup`) - Only needed if you want to run `ampd` outside of Docker
+- **just** - Command runner for easier workflow (optional, can use npm scripts instead)
+
+## TypeScript and Effect-TS
+
+All templates are built with TypeScript for type safety. Many templates leverage Effect-TS for:
+- Functional error handling
+- Type-safe data pipelines
+- Composable business logic
+- Reactive state management
+
+## Architecture Highlights
+
+- **Frontend**: React 19+ with Vite or Next.js 15 with App Router
+- **Styling**: Tailwind CSS with shadcn/ui components
+- **Backend**: Express, Fastify, or Apollo Server with TypeScript
+- **Smart Contracts**: Solidity with Foundry toolchain
+- **Data Queries**: Arrow Flight, JSON Lines, or SQL (via AmSync)
+- **Local Testnet**: Anvil (part of Foundry)
+- **Amp Configuration**: Declarative amp.config.ts for dataset definitions
+- **Dataset Management**: Ampd for indexing and serving blockchain data
+
+## Learning Resources
+
+After scaffolding, check the generated README.md for:
+- Detailed setup instructions
+- Template-specific documentation
+- Query examples
+- Dataset configuration guide
+- Deployment guides
+
+Additional resources:
+- **Amp Playground**: https://playground.amp.edgeandnode.com - Explore datasets and run queries
+- **Amp Documentation**: https://github.com/edgeandnode/amp (when available)
+- **Effect Documentation**: https://effect.website
+
+## Use Cases by Template
+
+**Choose `backend-express` or `backend-fastify`** for:
+- REST APIs over blockchain data
+- Microservices querying Amp datasets
+- Backend services for mobile apps
+
+**Choose `backend-apollo-graphql`** for:
+- GraphQL APIs with type-safe queries
+- Flexible data fetching for multiple clients
+- Stitching blockchain data with other sources
+
+**Choose `nextjs`** for:
+- Full-stack web applications
+- Server-side rendering with blockchain data
+- SEO-friendly dApps
+
+**Choose `react-arrowflight-effect-atom`** for:
+- High-performance streaming UIs
+- Real-time data visualization
+- Complex state management needs
+
+**Choose `react-jsonlines-react-query`** for:
+- Standard React SPAs
+- Apps needing request caching
+- Simple HTTP-based queries
+
+**Choose `react-ampsync-electricsql`** for:
+- Offline-first applications
+- Complex SQL queries in the frontend
+- Real-time collaborative features
+- Apps needing PostgreSQL compatibility
+
+**Choose gateway templates** for:
+- Quick prototypes
+- Querying public datasets (see playground.amp.edgeandnode.com)
+- Apps without local infrastructure needs
+- Production deployments
+- Getting started without Docker/local setup
+
+## Quick Start Paths
+
+### Path 1: Start with Existing Dataset (Fastest)
+1. Visit https://playground.amp.edgeandnode.com to explore datasets
+2. Run `pnpm create amp@latest`
+3. Choose "Use an existing Amp Dataset"
+4. Select a gateway template (e.g., `react-jsonlines-transfers`)
+5. Run `pnpm run dev` - You're querying blockchain data!
+
+### Path 2: Build Your Own Dataset (Full Control)
+1. Run `pnpm create amp@latest`
+2. Choose "Build my own Amp Dataset"
+3. Select a build template (e.g., `backend-express`)
+4. Run `just infra-up` to start Docker services (includes `ampd`)
+5. Deploy contracts with `just deploy-contracts`
+6. Run `pnpm run dev` - You're querying your custom dataset!
+
+## Development Workflow
+
+**For Existing Datasets:**
+1. Scaffold with `pnpm create amp@latest`
+2. Configure Gateway URL in `.env`
+3. Start development: `pnpm run dev`
+4. Query existing datasets from playground.amp.edgeandnode.com
+
+**For Building Custom Datasets:**
+1. Scaffold with `pnpm create amp@latest`
+2. Start infrastructure: `just infra-up` (includes Docker-based `ampd`)
+3. Deploy contracts: `just deploy-contracts`
+4. Configure dataset in `amp.config.ts`
+5. Start development: `pnpm run dev`
+6. Query your custom data
+7. Build for production: `pnpm run build`
+
+## Amp Gateway (Production)
+
+For production deployments, use Amp Gateway to serve your datasets:
+- No need to run your own `ampd` infrastructure
+- Query existing public datasets
+- Scale automatically with traffic
+- Templates with `-gateway` suffix connect to Amp Gateway
+- Discover datasets at playground.amp.edgeandnode.com
+
+## Package Information
+
+- **Package name**: `create-amp`
+- **npm**: `pnpm create amp@latest` or `npx create-amp@latest`
+- **License**: MIT
+- **Repository**: https://github.com/edgeandnode/amp-templates
+- **Built with**: Effect-TS, TypeScript, Node.js
+- **Related**: Amp (ampd) - Blockchain-native database by Edge & Node
+- **Playground**: https://playground.amp.edgeandnode.com

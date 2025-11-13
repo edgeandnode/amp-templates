@@ -1,8 +1,10 @@
-# Claude Code Assistant Reference - AMP Templates Monorepo
+# CLAUDE.md
+
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
 ## Overview
 
-This is a TypeScript/JavaScript monorepo for AMP Templates, focused on scaffolding Amp-powered web applications. The project uses pnpm workspaces, modern TypeScript tooling, and provides templates for Next.js and Vite with various data layer options.
+TypeScript/JavaScript monorepo for AMP Templates - a CLI tool and template collection for scaffolding Amp-powered applications. Built with Effect-TS, pnpm workspaces, and modern TypeScript tooling.
 
 ## Architecture
 
@@ -10,88 +12,131 @@ This is a TypeScript/JavaScript monorepo for AMP Templates, focused on scaffoldi
 
 ```text
 amp-templates/
-├── packages/                    # Package workspaces
-│   └── create-amp/             # CLI tool for scaffolding projects
-├── templates/                   # Template files
-│   ├── nextjs/                 # Next.js template
-│   ├── vite/                   # Vite template
-│   ├── data-layer/             # Data layer templates
-│   └── examples/                # Example templates
-├── examples/                    # Example applications
-└── scripts/                     # Build and utility scripts
+├── packages/
+│   └── create-amp/              # CLI tool (Effect-TS based)
+├── templates/                   # Template files downloaded via GitHub
+│   ├── backend/                 # Backend templates (Express, Fastify, Apollo GraphQL)
+│   │   ├── base/               # Shared backend files
+│   │   ├── express/            # Express + ArrowFlight (local)
+│   │   ├── fastify/            # Fastify + ArrowFlight (local)
+│   │   ├── apollo-graphql/     # Apollo GraphQL + ArrowFlight (local)
+│   │   ├── express-gateway/    # Express + Gateway (remote)
+│   │   ├── fastify-gateway/    # Fastify + Gateway (remote)
+│   │   └── apollo-graphql-gateway/ # Apollo GraphQL + Gateway (remote)
+│   ├── nextjs/                 # Next.js fullstack template
+│   │   ├── base/               # Shared Next.js files
+│   │   └── arrow-flight/       # ArrowFlight integration
+│   └── vite-react/             # Vite + React templates
+│       ├── base/               # Shared Vite files (includes docker-compose, contracts, amp.config.ts)
+│       ├── ampsync-electricsql/ # AmSync + Electric SQL
+│       ├── flight-atom/        # ArrowFlight + effect-atom
+│       ├── jsonl-atom/         # JSON Lines + effect-atom
+│       ├── jsonl-tanstack-query/ # JSON Lines + TanStack Query
+│       └── jsonl-transfers/    # JSON Lines with existing Arbitrum dataset
+└── examples/                    # Full example applications
+    ├── backend/                # Backend examples
+    ├── nextjs/                 # Next.js examples
+    ├── nextjs-electricsql/     # Next.js + Electric SQL example
+    └── vite-react/             # Vite + React examples
 ```
 
-### Package Manager & Workspaces
+### Effect-TS Architecture
 
-- **Package Manager**: pnpm v10.19.0+
-- **Workspace Configuration**: `pnpm-workspace.yaml`
-  - Packages: `packages/*`
-- **Node Version**: v22+ (specified in engines field)
+The CLI (`packages/create-amp`) is built entirely with Effect-TS:
+
+- **Effect Services**: `GitHub.GitHubService` handles template downloads from GitHub tarball
+- **Effect CLI**: Uses `@effect/cli` for command parsing, options, arguments, and prompts
+- **Effect Platform**: Uses `@effect/platform` and `@effect/platform-node` for file system operations
+- **Functional Composition**: All logic composed with Effect operators (`pipe`, `Effect.gen`, etc.)
+
+Key modules:
+- `src/Cli.ts` - Effect CLI command definition, handlers, and interactive prompts
+- `src/GitHub.ts` - Effect Service for downloading templates from GitHub via HTTP streaming
+- `src/internal/Templates.ts` - Template registry defining all available templates
+- `src/Domain.ts` - Effect Schema definitions for type-safe domain models
+- `src/Utils.ts` - Utility functions for path resolution and validation
+- `src/bin.ts` - Entry point with Effect runtime setup
+- `src/bun.ts` - Alternative entry for local development with tsx
+
+### Template Download Mechanism
+
+Templates are NOT bundled with the CLI package. Instead:
+1. CLI downloads `https://codeload.github.com/edgeandnode/amp-templates/tar.gz/main`
+2. Extracts only the specific template directory path (e.g., `/templates/backend/express`)
+3. Strips parent directories and writes directly to target project directory
+4. Post-processes `package.json` to set project name
+5. Optionally runs `git init` and package manager install
+
+### Template Types
+
+Templates are categorized into two types:
+- **"build-dataset"**: Includes local infrastructure (Docker Compose with Anvil, Ampd, etc.) for building custom datasets
+- **"existing-dataset"**: Connects to remote Amp Gateway for querying existing datasets (no local infra)
 
 ## Commands Reference
 
 ### Development Workflow
 
-#### Quick Setup (Recommended)
-
-```bash
-# One-command setup (installs deps, builds packages)
-pnpm run setup
-
-# Then run CLI
-cd packages/create-amp && pnpm dev my-app
-```
-
-#### Manual Setup
-
 ```bash
 # Install dependencies
-pnpm i
+pnpm install
 
-# Build packages
+# Build all packages (includes type checking)
 pnpm build
 
-# Generate a project
-cd packages/create-amp && pnpm dev my-app --framework nextjs --data-layer arrow-flight
+# Run tests with Vitest
+pnpm test
+
+# Run tests with coverage
+pnpm test:coverage
+
+# Lint code
+pnpm lint
+
+# Auto-fix lint issues
+pnpm lint:fix
+
+# Format code with Prettier
+pnpm format
+
+# Clean build artifacts
+pnpm clean
 ```
 
-### Build & Test
+### CLI Development
 
 ```bash
-# Build entire monorepo
-pnpm run build
+# Build the CLI package
+cd packages/create-amp
+pnpm build
 
-# Run tests
-pnpm test           # Run all tests with Vitest
+# Run CLI in development mode (uses tsx)
+cd packages/create-amp
+pnpm create-amp my-app
 
-# Type checking
-pnpm run build      # Includes type checking
+# Or with options
+cd packages/create-amp
+pnpm create-amp my-app --template backend-express --package-manager pnpm
 
-# Code quality
-pnpm run lint       # ESLint check
-pnpm run lint --fix # Auto-fix linting issues
-pnpm run format     # Format code
+# Available CLI options:
+--template <key>              # Template key from AVAILABLE_TEMPLATES
+--package-manager <pm>        # pnpm|npm|yarn|bun
+--skip-install-deps          # Skip running package manager install
+--skip-initialize-git        # Skip git init
 ```
 
-### Template Generation
+### Just Commands
+
+If you have `just` installed (justfile available):
 
 ```bash
-# Interactive project generation
-cd packages/create-amp && pnpm dev [project-name]
-
-# Generate with specific options
-cd packages/create-amp && pnpm dev my-app --framework nextjs --data-layer arrow-flight
-
-# Available options:
---framework <type>    # Framework to use (nextjs|vite)
---data-layer <type>  # Data layer to use (arrow-flight|amp-sync)
---orm <type>         # ORM to use with amp-sync (electric|drizzle)
---example <type>     # Example to scaffold (wallet|blank)
---local-setup <type> # Local setup (anvil|public|both)
---network <type>     # Blockchain network (arbitrum|solana)
---network-env <type> # Network environment (testnet|mainnet)
---skip-install       # Skip package installation
---skip-git           # Skip git initialization
+just                    # List all commands
+just build              # Build all packages
+just test               # Run tests
+just lint               # Lint code
+just lint-fix           # Lint and fix
+just fmt-ts             # Format TypeScript
+just test-coverage      # Run tests with coverage
 ```
 
 ## Code Standards
@@ -99,125 +144,103 @@ cd packages/create-amp && pnpm dev my-app --framework nextjs --data-layer arrow-
 ### TypeScript Configuration
 
 - **Base Config**: `tsconfig.base.jsonc`
-  - Strict mode enabled
+  - Strict mode enabled with `exactOptionalPropertyTypes`
   - Target: ES2022
   - Module: ESNext with bundler resolution
-  - Path aliases configured for packages
-- **Build Config**: `tsconfig.build.json`
-- **Composite projects** for better monorepo performance
+  - Composite projects for monorepo performance
+  - JSX: react-jsx
 
 ### Code Style
 
-- **Prettier Configuration** (`.prettierrc`):
+- **Prettier** (`.prettierrc`):
   - Print width: 120
   - No semicolons
   - Double quotes
   - Tailwind CSS plugin enabled
-- **ESLint**: TypeScript-ESLint with import and perfectionist plugins
-- **File type**: ES modules (`"type": "module"` in package.json)
+- **ESLint** (`eslint.config.mjs`):
+  - TypeScript-ESLint
+  - Import plugin with auto-ordering (alphabetical, groups)
+  - Perfectionist plugin for sorted exports
+  - Ignores: `templates/`, `examples/`, `dist/`, `.next/`
+- **File type**: ES modules (`"type": "module"`)
 
 ### Testing
 
-- **Framework**: Vitest
-- **Configuration**: `vitest.config.ts` + `vitest.shared.ts`
-- **Coverage**: V8 coverage reporting
-- Run with `pnpm test`
+- **Framework**: Vitest with globals enabled
+- **Config**: `vitest.config.ts` + `vitest.shared.ts`
+- **Coverage**: V8 provider
+- **Test files**: `test/**/*.{test,spec}.{ts,tsx,js,jsx}`
 
 ## Important Patterns
 
-### Template Variable System
+### Effect-TS Patterns
 
-Templates use handlebars-style variable replacement:
+When working with the CLI codebase:
 
-- `{{projectName}}` - Project name from user input
-- `{{framework}}` - Selected framework (nextjs/vite)
-- `{{dataLayer}}` - Selected data layer (arrow-flight/amp-sync)
-- `{{orm}}` - Selected ORM (electric/drizzle)
-- `{{networkDisplayName}}` - Blockchain network name
-- `{{rpcUrl}}` - RPC URL for blockchain connection
+- Use `Effect.gen` for imperative-style effect composition
+- Use `pipe` for functional composition chains
+- Define errors with `Data.TaggedError`
+- Services extend `Effect.Service()()` with accessors
+- Use Effect Schema for runtime validation and type derivation
+- Options/Arguments validated with Effect CLI primitives
 
-### CLI Structure
+Example from `Cli.ts`:
+```typescript
+const scaffoldAmpApp = Effect.fn("ScaffoldAmpApp")(function* (config: ResolvedConfig) {
+  const fs = yield* FileSystem.FileSystem
+  const path = yield* Path.Path
 
-The CLI (`packages/create-amp`) provides project scaffolding:
+  yield* fs.makeDirectory(config.appName, { recursive: true })
+  yield* GitHub.GitHubService.downloadTemplate(config.appName, template)
+  // ...
+})
+```
 
-- `/src/cli.ts` - Interactive CLI prompts and configuration
-- `/src/generator.ts` - Template processing and file generation
-- `/src/utils.ts` - Utility functions for file operations
-- `/src/types.ts` - TypeScript type definitions
+### Adding New Templates
 
-### Template Organization
+To add a new template:
 
-#### Available Templates
+1. Create template directory under `templates/backend/`, `templates/nextjs/`, or `templates/vite-react/`
+2. Add entry to `AVAILABLE_TEMPLATES` in `packages/create-amp/src/internal/Templates.ts`:
+   ```typescript
+   "template-key": {
+     key: "template-key",
+     name: "Display Name",
+     description: "Description shown in prompts",
+     directory: "/templates/path/to/template",
+     skip: new Set([...Constants.ALWAYS_SKIP_DIRECTORIES, "dist"]),
+     type: "build-dataset" // or "existing-dataset"
+   }
+   ```
+3. Add key to `AvailableTemplFrameworkKey` literal in `packages/create-amp/src/Domain.ts`
+4. Template files should include `package.json` (will be modified with project name)
+5. Use `_.gitignore` for gitignore template files (underscore prefix to avoid being ignored)
 
-**Next.js Template** (`templates/nextjs/`):
+### Template Skip Patterns
 
-- Next.js 15 with App Router
-- TypeScript configuration
-- Tailwind CSS setup
-- Minimal dependencies
+Templates use `skip` sets to exclude files during download:
+- `Constants.ALWAYS_SKIP_DIRECTORIES` = `[".git", "node_modules"]`
+- Add build output directories like `"dist"`, `".next"`, `".tanstack"` as needed
 
-**Vite Template** (`templates/vite/`):
+### Package Manager Resolution
 
-- Vite with React
-- TypeScript configuration
-- Tailwind CSS setup
-- Minimal dependencies
-
-**Data Layer Templates**:
-
-- `templates/data-layer/arrow-flight/` - Apache Arrow Flight integration
-- `templates/data-layer/amp-sync/` - Electric SQL with Drizzle ORM
-
-**Example Templates**:
-
-- `templates/examples/wallet/` - Complete wallet integration example
-
-## Development Tips
-
-### Before Making Changes
-
-1. Always run `pnpm run build` to ensure code quality
-2. Use existing patterns from similar files
-3. Check imports - use relative imports within packages
-4. Follow TypeScript strict patterns
-
-### When Adding Features
-
-1. For CLI features: Add to `packages/create-amp/src/`
-2. For template changes: Update files in `templates/`
-3. For new templates: Create new directories in `templates/`
-4. For shared utilities: Add to `packages/create-amp/src/utils.ts`
-
-### Testing Guidelines
-
-- Write tests in `*.test.ts` or `*.spec.ts` files
-- Use Vitest globals (configured)
-- Tests run across all packages automatically
-
-### Common Issues & Solutions
-
-- **Template variable issues**: Check variable names match exactly
-- **Module resolution errors**: Check `tsconfig.json` extends base config
-- **Lint errors**: Run `pnpm lint --fix` for auto-fixes
-- **Build errors**: Ensure all dependencies are installed
+CLI prompts for package manager if not specified via `--package-manager` option. Supports: pnpm, npm, yarn, bun.
 
 ## Key Technologies
 
 - **Runtime**: Node.js v22+, TypeScript 5.9+
-- **CLI Framework**: @clack/prompts for interactive prompts
-- **Templates**: Next.js 15, Vite, React, TypeScript
-- **Styling**: Tailwind CSS
-- **Testing**: Vitest
-- **Package Management**: pnpm workspaces
-- **Code Quality**: ESLint, Prettier
-- **Build Tools**: TypeScript compiler
-- **Development**: tsx (TypeScript execute)
+- **Effect-TS**: v3.19.3+ (Effect, @effect/cli, @effect/platform, @effect/schema)
+- **CLI**: @effect/cli for commands/prompts, Effect Streams for HTTP downloads
+- **Templates**: Next.js 15, Vite, React, Express, Fastify, Apollo GraphQL
+- **Build Tool**: tsdown (for CLI package)
+- **Testing**: Vitest with Effect Vitest integration (@effect/vitest)
+- **Package Management**: pnpm workspaces (v10.22.0+)
 
 ## Repository Conventions
 
 - Use workspace protocol for internal dependencies
-- Follow existing file naming patterns
-- Maintain strict TypeScript settings
 - No semicolons (Prettier enforced)
 - 120 character line width
-- Use consistent template variable naming
+- Import ordering: builtin, external, parent, sibling (alphabetical within groups)
+- Effect naming: PascalCase for errors/services, camelCase for functions
+- All async operations use Effect, not Promises

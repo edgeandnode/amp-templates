@@ -99,7 +99,7 @@ async function fetchJSONL(query: string, signal?: AbortSignal): Promise<ERC20Tra
 // Domain-specific API functions
 export async function getAllTransfers(signal?: AbortSignal): Promise<ERC20Transfer[]> {
   const query = `
-    SELECT * FROM portfolio_dapp.erc20_transfers
+    SELECT * FROM "_/portfolio_dapp@dev"."erc20_transfers"
     ORDER BY block_num DESC
   `
   return fetchJSONL(query, signal)
@@ -109,7 +109,7 @@ export async function getUserTransfers(address: Address, signal?: AbortSignal): 
   const normalizedAddress = address.toLowerCase().replace("0x", "")
 
   const query = `
-    SELECT * FROM portfolio_dapp.erc20_transfers
+    SELECT * FROM "_/portfolio_dapp@dev"."erc20_transfers"
     WHERE from_address = decode('${normalizedAddress}', 'hex')
        OR to_address = decode('${normalizedAddress}', 'hex')
     ORDER BY block_num DESC

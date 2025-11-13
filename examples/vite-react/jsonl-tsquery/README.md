@@ -81,7 +81,7 @@ just seed-transfers
 ### 7. Run Amp Local Dev Studio
 
 ```bash
-pnpm amp studio
+pnpm amp studio --open
 ```
 
 - Opens the amp dataset studio visualization tool that can be used to test dataset queries

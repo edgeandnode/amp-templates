@@ -13,7 +13,7 @@ const read = pipe(
     version: json.version,
     description: json.description,
     bin: {
-      "create-amp": "bin.js"
+      "create-amp": "bin.mjs"
     },
     type: json.type,
     engines: json.engines,

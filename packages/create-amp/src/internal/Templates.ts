@@ -18,6 +18,13 @@ export const AVAILABLE_TEMPLATES = {
     directory: "/templates/backend/fastify",
     skip: new Set([...Constants.ALWAYS_SKIP_DIRECTORIES, "dist"])
   },
+  "backend-apollo-graphql": {
+    key: "backend-apollo-graphql",
+    name: "Backend Nodejs w/ Apollo GraphQL",
+    description: "Scaffolds a GraphQL API server using Apollo Server and Fastify, querying your Amp dataset via AMP Gateway",
+    directory: "/templates/backend/apollo-graphql",
+    skip: new Set([...Constants.ALWAYS_SKIP_DIRECTORIES, "dist"])
+  },
   nextjs: {
     key: "nextjs",
     name: "Nextjs Fullstack app",

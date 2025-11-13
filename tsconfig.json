@@ -13,6 +13,9 @@
       "path": "examples/backend/apollo-graphql-gateway"
     },
     {
+      "path": "examples/backend/express"
+    },
+    {
       "path": "examples/backend/express-gateway"
     },
     {

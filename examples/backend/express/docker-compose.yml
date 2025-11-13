@@ -1,0 +1,77 @@
+name: "amp-express-backend"
+services:
+  db:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_DB_LIST: amp
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./infra/postgres/init.sh:/docker-entrypoint-initdb.d/init.sh
+      - ./infra/postgres/postgres.conf:/etc/postgresql/postgresql.conf
+      - ./infra/postgres/data:/var/lib/postgresql/data
+    command: postgres -c config_file=/etc/postgresql/postgresql.conf
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  amp:
+    image: ghcr.io/edgeandnode/amp:v0.0.20
+    ports:
+      - "1602:1602" # Arrow Flight
+      - "1603:1603" # JSON Lines
+      - "1610:1610" # Admin API
+    volumes:
+      - ./infra/amp/config.toml:/var/lib/amp/config.toml
+      - ./infra/amp/data:/var/lib/amp/data
+      - ./infra/amp/providers:/var/lib/amp/providers
+      - ./infra/amp/datasets:/var/lib/amp/datasets
+    command: ["--config", "/var/lib/amp/config.toml", "dev"]
+    depends_on:
+      db:
+        condition: service_healthy
+      anvil:
+        condition: service_started
+
+  anvil:
+    image: ghcr.io/foundry-rs/foundry:latest
+    ports:
+      - "8545:8545"
+    entrypoint: ["anvil", "--host", "0.0.0.0"]
+
+  amp-proxy:
+    image: node:22-alpine
+    ports:
+      - "3002:3002"
+    working_dir: /app
+    volumes:
+      - ./:/app
+    command: >
+      sh -c "
+        corepack enable && corepack prepare pnpm@10.19.0 --activate &&
+        pnpm install &&
+        pnpm amp proxy --port 3002 --flight-url http://amp:1602
+      "
+    depends_on:
+      amp:
+        condition: service_started
+
+  express-backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      PORT: 3001
+      AMP_FLIGHT_URL: http://amp-proxy:3002
+      DATASET_NAME: express_backend
+    ports:
+      - "3001:3001"
+    depends_on:
+      amp-proxy:
+        condition: service_started
+    restart: unless-stopped
+

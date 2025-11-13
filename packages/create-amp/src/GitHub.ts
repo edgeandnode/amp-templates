@@ -3,7 +3,6 @@ import * as ValidationError from "@effect/cli/ValidationError"
 import * as HttpClient from "@effect/platform/HttpClient"
 import * as HttpClientRequest from "@effect/platform/HttpClientRequest"
 import * as HttpClientResponse from "@effect/platform/HttpClientResponse"
-import * as NodeHttpClient from "@effect/platform-node/NodeHttpClient"
 import * as NodeSink from "@effect/platform-node/NodeSink"
 import * as Effect from "effect/Effect"
 import * as Stream from "effect/Stream"
@@ -15,7 +14,6 @@ const codeloadBaseUrl = "https://codeload.github.com"
 
 export class GitHubService extends Effect.Service<GitHubService>()("CreateAmpCli/services/GitHubService", {
   accessors: true,
-  dependencies: [NodeHttpClient.layerUndici],
   effect: Effect.gen(function* () {
     const client = yield* HttpClient.HttpClient
     const codeloadClient = client.pipe(
@@ -31,10 +29,13 @@ export class GitHubService extends Effect.Service<GitHubService>()("CreateAmpCli
             () =>
               Tar.extract({
                 cwd: projectName,
-                strip: 2 + config.directory.split("/").length,
+                strip: config.directory.split("/").length,
                 filter: (path) => path.includes(`amp-templates-main${config.directory}`)
               }),
-            () => ValidationError.invalidValue(HelpDoc.p(`Failed to download template ${config.name}`))
+            (err) => {
+              console.error("Failure downloading templ", err)
+              return ValidationError.invalidValue(HelpDoc.p(`Failed to download template ${config.name}`))
+            }
           )
         )
       )
@@ -42,3 +43,4 @@ export class GitHubService extends Effect.Service<GitHubService>()("CreateAmpCli
     return { downloadTemplate } as const
   })
 }) {}
+export const layer = GitHubService.Default

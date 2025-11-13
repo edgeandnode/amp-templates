@@ -1,5 +1,5 @@
 /**
- * Apollo GraphQL Server for {{projectName}}
+ * Apollo GraphQL Server for querying remote AMP datasets via Gateway
  * 
  * This server provides a GraphQL API for querying Arbitrum One blockchain data
  * from the edgeandnode/arbitrum_one@0.0.1 dataset via AMP Gateway.
@@ -65,7 +65,7 @@ async function startServer() {
         const health = await ampClient.getHealth()
         return {
           status: health.status,
-          service: "{{projectName}}-apollo-graphql",
+          service: "amp-apollo-graphql-gateway-backend",
           timestamp: health.timestamp,
           gateway: AMP_GATEWAY_URL,
           hasAuthToken: !!AMP_AUTH_TOKEN,
@@ -73,7 +73,7 @@ async function startServer() {
       } catch (error) {
         return {
           status: "unhealthy",
-          service: "{{projectName}}-apollo-graphql",
+          service: "amp-apollo-graphql-gateway-backend",
           timestamp: new Date().toISOString(),
           gateway: AMP_GATEWAY_URL,
           hasAuthToken: !!AMP_AUTH_TOKEN,

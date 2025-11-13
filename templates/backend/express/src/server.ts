@@ -1,5 +1,5 @@
 /**
- * Express backend server for {{projectName}}
+ * Express backend server for Amp Arrow Flight integration
  *
  * This server provides:
  * - Arrow Flight integration for querying blockchain data via Amp
@@ -88,7 +88,7 @@ async function executeQuery(query: string): Promise<unknown[]> {
 
 // Health check endpoint
 app.get("/health", (req, res) => {
-  res.json({ status: "healthy", service: "{{projectName}}-backend" })
+  res.json({ status: "healthy", service: "amp-express-backend" })
 })
 
 // Root endpoint
@@ -209,5 +209,5 @@ app.post("/api/queries/execute", async (req, res) => {
 app.listen(PORT, "0.0.0.0", () => {
   console.log(`Server listening on http://localhost:${PORT}`)
   console.log(`Amp Flight URL: ${AMP_FLIGHT_URL}`)
-  console.log(`Dataset: {{projectName}}_data`)
+  console.log(`Dataset: anvil`)
 })

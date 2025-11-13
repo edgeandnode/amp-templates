@@ -1,68 +1,24 @@
-# {{projectName}}
+# Amp Effect Atom Portfolio (JSON Lines API) Example
 
-A real-time portfolio tracking application built with Vite, React, Effect Atom, and AMP. Track ERC20 token balances and transfer tokens with MetaMask wallet integration, powered by the Amp data platform.
-
-## Architecture
-
-This application demonstrates a React web app built on the Amp blockchain data indexing architecture:
-
-```
-Anvil (Local Blockchain)
-    |
-    v
-Amp Server (indexed blockchain data queryable through JSON Lines API)
-    |
-    v
-Effect Atom Runtime (reactive state management)
-    |
-    v
-React App (real-time UI updates)
-```
-
-### Key Components
-
-**Effect Atom**
-
-- Reactive state management with automatic refresh capabilities
-- `Atom.family()` creates separate atom instances for each user address
-- Polling mechanism refreshes transfer data every 2 seconds (configurable)
-- Manual refresh triggers for immediate UI updates
-
-**JSON Lines API Integration**
-
-- JSON Lines API provides streaming data transfer over HTTP
-- SQL queries executed via JSON Lines endpoint against indexed blockchain data
-- Newline-delimited JSON (NDJSON) for efficient streaming
-- DataFusion SQL engine with support for complex queries
-- Schema validation via Effect Schema for type-safe data parsing
-
-**Data Flow**
-
-1. Amp server indexes ERC20 Transfer events from Anvil blockchain
-2. Frontend queries transfer data via JSON Lines API using SQL
-3. Effect Atom manages reactive state and polling
-4. Wagmi multicall fetches token metadata (symbol, decimals, name) and balances
+A real-time portfolio tracking application built with Vite, React, Effect Atom, and Amp. Track ERC20 token balances and transfer tokens with MetaMask wallet integration, powered by the Amp data platform.
 
 ## Prerequisites
 
 - Node.js v22+
-- pnpm v10.19.0+
-- Docker & Docker Compose
-- MetaMask browser extension
+- Docker & Docker Compose (for running services)
 - Foundry (for smart contract deployment)
-- GitHub token with `read:packages` permission
+- Just task runner (recommended, `cargo install just`)
+- MetaMask or other browser wallet extension
 
 ## Getting Started
 
 ### 1. Authenticate with GitHub Container Registry
 
-The `amp` Docker image is hosted in GitHub's container registry. Create a personal access token (classic) with `read:packages` permission at https://github.com/settings/tokens, then login:
+The `amp` Docker image is hosted in a private GitHub's container registry. In order to access it, you'll have to login to ghcr.io with Docker. Create a new personal access token (classic) with the `read:packages` permission at https://github.com/settings/tokens. Now run the following command and insert the newly generated token as your password when prompted.
 
 ```bash
 docker login ghcr.io --username <YOUR_GITHUB_USERNAME>
 ```
-
-Enter your personal access token as the password when prompted.
 
 ### 2. Install Dependencies
 
@@ -70,52 +26,55 @@ Enter your personal access token as the password when prompted.
 just install
 ```
 
-### 3. Quick Start
+This will install:
 
-#### Start infrastructure services
+- `ampd` and `ampctl` required for working with amp core engine
+- Npmjs packge dependencies
+
+### 3. Setup and Start Infrastructure Services
 
 ```bash
-just up
+just setup
 ```
 
 This will start:
 
-- PostgreSQL (ports 5432, 6434)
-- Amp server (ports 1603 JSON Lines API, 1610 Admin)
-- Anvil local blockchain (port 8545)
+- Docker services for
+  - PostgreSQL (ports 5432, 6434)
+  - Amp server (ports 1603 JSON Lines API, 1610 Admin)
+  - Anvil local blockchain (port 8545)
+- Register and deploy `anvil` chain raw dataset with Amp server
+- Amp development watch process for dataset config in `amp.config.ts`
 
-#### Start development servers
-
-```bash
-just dev
-```
-
-This runs in parallel:
-
-- Amp dev service
-- Vite dev server (http://localhost:5173)
-
-#### Deploy smart contracts
+### 4. Deploy Smart Contracts
 
 ```bash
 just deploy-contracts
 ```
 
-This deploys test ERC20 tokens and distributes initial balances.
+This will run:
 
-#### Seed transfer transactions
+- Forge smart contract dependencies installation
+- Deploying of test ERC20 tokens and distributing initial balances on local anvil chain
+
+### 5. Seed Transfer Transactions
 
 ```bash
 just seed-transfers
 ```
 
-This creates sample transfer transactions for testing.
+This creates sample transfer transactions of deployed tokens for testing
 
-#### View the app
+### 6. Start App Server
 
-Open [http://localhost:5173](http://localhost:5173) to see real-time blockchain data.
+```bash
+just dev
+```
 
-### View logs
+This runs the Vite dev server.
+Open [http://localhost:5173](http://localhost:5173) and refer to [application notes](#application-notes) below
+
+### 7. View Logs
 
 ```bash
 # All services
@@ -124,58 +83,58 @@ just logs
 # Specific service
 just logs amp
 just logs db
+just logs anvil
 ```
 
-### Clean shutdown
+### 8. Stop Infrastructure Services
 
 ```bash
 just down
 ```
 
-This stops all services and removes volumes.
+This stops all running services and remove volumes
 
-## Project Structure
+### 9. Cleanup Services
 
-```
-portfolio-dapp/
-├── src/
-│   ├── lib/
-│   │   ├── atoms.ts         # Effect Atom definitions
-│   │   ├── query.ts         # JSON Lines query helper
-│   │   ├── runtime.ts       # Effect runtime configuration
-│   │   └── schemas.ts       # Data schemas
-│   ├── hooks/
-│   │   ├── useAutoRefresh.ts        # Polling mechanism
-│   │   ├── usePortfolioBalances.ts  # Balance calculation
-│   │   └── usePortfolioQuery.ts     # Transfer data queries
-│   ├── components/
-│   │   ├── PortfolioTable.tsx       # Token holdings display
-│   │   ├── TransactionHistory.tsx   # Transfer history
-│   │   └── TransferModal.tsx        # Token transfer UI
-│   └── App.tsx              # Main application
-├── contracts/               # Solidity smart contracts
-├── amp.config.ts           # Amp dataset configuration
-├── docker-compose.yml      # Infrastructure services
-└── justfile               # Command runner tasks
+```bash
+just clean
 ```
 
-## Connect MetaMask
+Cleans docker images
 
-Add Anvil network to MetaMask:
+## Application Notes
+
+**Note: Token holdings and transfer history will show when you connect with Wallets shown below so you need to make sure to configure your wallet client to connect to Anvil local chain and import wallet #1 and/or wallet #2 as described**
+
+Step through the features in the application by following the steps below:
+
+#### 1. Add Anvil network to MetaMask (or other browser wallet extensions):
 
 - **Network Name:** `Anvil Local`
 - **RPC URL:** `http://localhost:8545`
 - **Chain ID:** `31337`
 - **Currency Symbol:** `ETH`
 
-Import test account (Anvil defaul wallet 1 & 2 private keys):
+#### 2. Import test account (Anvil default wallet #1 & #2 private keys):
 
-- **Account #1:** `0x59c6995e998f97a5a0044966f0945389dc9e86dae88c7a8412f4603b6b78690d`
-- **Account #2:** `0x5de4111afa1a4b94908f83103eb1f1706367c2e68ca870fc3fb9a804cdab365a`
+- **Wallet #1 address:** `0x70997970c51812dc3a010c7d01b50e0d17dc79c8`
+  - **Private key:** `0x59c6995e998f97a5a0044966f0945389dc9e86dae88c7a8412f4603b6b78690d`
+- **Wallet #2 address:** `0x3c44cdddb6a900fa2b585dd299e03d12fa4293bc`
+  - **Private key:** `0x5de4111afa1a4b94908f83103eb1f1706367c2e68ca870fc3fb9a804cdab365a`
 
-Navigate to `http://localhost:5173` and connect your wallet.
+#### 3. Navigate to `http://localhost:5173` and click `Connect` button to view blockchain data
 
-## Key Features
+- Select either wallet and make sure the connected network is `Anvil`
+- Page will load with several token holders shown
+- Toggle between `Portfolio` and `Transaction History` to view chain data from Amp
+
+#### 4. Make transfers using `Transfer` button on `Portfolio` tab.
+
+- With Wallet #1, select any token and hit `Transfer`, then input Wallet #2's address as recipient and a positive token amount
+- Have another browser open with Wallet #2 connected
+- Click `Submit` on the Wallet #1 window and see the holdings or transfer history table update, along with toast notification message with received token details
+
+### Features
 
 **Real-time Updates**
 
@@ -216,9 +175,9 @@ lsof -i :5173,1603,8545
 - Check Amp logs: `just logs amp`
 - Test JSON Lines API query:
   ```bash
-  curl -X POST http://localhost:1603/query \
-    -H "Content-Type: text/plain" \
-    -d "SELECT * FROM portfolio_dapp.erc20_transfers LIMIT 1"
+  curl -X POST http://localhost:1603 \
+    -H 'Content-Type: text/plain' \
+    -d 'SELECT * FROM "_/portfolio_dapp@dev"."erc20_transfers" LIMIT 5'
   ```
 - Run seed script: `just seed-transfers`
 
@@ -228,32 +187,86 @@ lsof -i :5173,1603,8545
 - Reset account if transactions stuck (Settings → Advanced → Reset Account)
 - Clear activity and nonce data if needed
 
-**Effect Atom not refreshing:**
+## Project Structure
 
-- Check that `useAutoRefresh` receives the correct address
-- Verify atom family parameters match between definition and usage
-- Ensure `keepAlive` is set to prevent atom disposal
+```
+portfolio-dapp/
+├── src/
+│   ├── lib/
+│   │   ├── atoms.ts         # Effect Atom definitions
+│   │   ├── query.ts         # JSON Lines query helper
+│   │   ├── runtime.ts       # Effect runtime configuration
+│   │   └── schemas.ts       # Data schemas
+│   ├── hooks/
+│   │   ├── useAutoRefresh.ts        # Auto-refresh polling for transfer updates
+│   │   ├── useERC20Transfers.ts     # Transfer data hook with Result type
+│   │   ├── usePortfolioBalances.ts  # Token balances via Wagmi with metadata
+│   │   └── usePortfolioQuery.ts     # User-specific transfer queries
+│   ├── components/
+│   │   ├── PortfolioSection.tsx     # Portfolio container with loading states
+│   │   ├── PortfolioTable.tsx       # Token holdings display
+│   │   ├── TransactionHistory.tsx   # Transaction container with loading states
+│   │   ├── TransactionTable.tsx     # Sortable transfer history table
+│   │   ├── TransferModal.tsx        # Token transfer UI
+│   │   └── WalletConnect.tsx        # Wallet connection button
+│   ├── config/
+│   │   └── wagmi.ts                 # Wagmi configuration
+│   ├── types/
+│   │   └── portfolio.ts             # TypeScript type definitions
+│   ├── App.tsx                      # Main application
+│   ├── App.css
+│   ├── main.tsx
+│   └── index.css
+├── contracts/                      # Solidity smart contracts
+├── amp.config.ts                   # Amp dataset configuration
+├── docker-compose.yml              # Infrastructure services
+└── justfile                        # Command runner tasks
+```
 
-**JSON Lines API errors:**
+## Architecture
 
-- Check binary address format: use `decode('hex_string', 'hex')`
-- Verify SQL syntax is valid DataFusion SQL
-- Ensure newline-delimited JSON responses are parsed correctly
-- Check Amp server is running: `just logs amp`
+This application demonstrates a React web app built on the Amp blockchain data indexing architecture:
 
-## Tech Stack
+```
+Anvil (Local Blockchain)
+    |
+    v
+Amp Server (indexed blockchain data queryable through JSON Lines API)
+    |
+    v
+Effect Atom Runtime (reactive state management)
+    |
+    v
+React App (real-time UI updates)
+```
 
-- **Frontend:** React 19, Vite, TypeScript, Tailwind CSS 4
-- **State Management:** Effect Atom (reactive state with polling)
-- **Data Layer:** JSON Lines API, Amp (blockchain indexing), Effect Schema
-- **Blockchain:** Foundry (Anvil local testnet), Solidity 0.8.30
-- **Wallet Integration:** Wagmi 2, Viem 2
-- **UI Components:** Radix UI, TanStack Table / Form
-- **DevOps:** Docker Compose, Just (command runner)
+### Key Components
+
+**Data Flow**
+
+1. Amp server indexes ERC20 Transfer events from Anvil blockchain
+2. Frontend queries transfer data via JSON Lines API using SQL
+3. Effect Atom manages reactive state and polling
+4. Wagmi multicall fetches token metadata (symbol, decimals, name) and balances
+
+**Effect Atom**
+
+- Reactive state management with automatic refresh capabilities
+- `Atom.family()` creates separate atom instances for each user address
+- Polling mechanism refreshes transfer data every 2 seconds (configurable)
+- Manual refresh triggers for immediate UI updates
+
+**JSON Lines API Integration**
+
+- SQL queries executed via API endpoint against indexed blockchain data by Amp
+- DataFusion SQL engine with support for complex queries
+- Schema validation via custom TypeScript validators for type-safe data parsing
+- Provides data transfer over HTTP in Newline-delimited JSON (NDJSON) for efficient streaming
 
 ## Learn More
 
-- [Effect Atom Documentation](https://github.com/effect-ts/atom)
-- [Amp Documentation](https://github.com/edgeandnode/amp)
-- [Wagmi Documentation](https://wagmi.sh)
+- [Amp](https://github.com/edgeandnode/amp)
+- [TanStack Query](https://tanstack.com/query/latest)
 - [Foundry Book](https://book.getfoundry.sh)
+- [Just Command Runner](https://just.systems/)
+- [Wagmi Documentation](https://wagmi.sh)

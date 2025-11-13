@@ -28,3 +28,9 @@
 [submodule "examples/vite-react/jsonl-tsquery/contracts/lib/openzeppelin-contracts"]
 	path = examples/vite-react/jsonl-tsquery/contracts/lib/openzeppelin-contracts
 	url = https://github.com/OpenZeppelin/openzeppelin-contracts
+[submodule "examples/backend/express/contracts/lib/forge-std"]
+	path = examples/backend/express/contracts/lib/forge-std
+	url = https://github.com/foundry-rs/forge-std
+[submodule "examples/backend/express/contracts/lib/openzeppelin-contracts"]
+	path = examples/backend/express/contracts/lib/openzeppelin-contracts
+	url = https://github.com/openzeppelin/openzeppelin-contracts

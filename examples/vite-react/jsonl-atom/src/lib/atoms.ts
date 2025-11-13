@@ -6,7 +6,7 @@ import { runtime } from "./runtime"
 import { ERC20Transfer } from "./schemas"
 
 const allTransfersQuery = `
-  SELECT * FROM portfolio_dapp.erc20_transfers
+  SELECT * FROM "_/portfolio_dapp@dev"."erc20_transfers"
   ORDER BY block_num DESC
 `
 
@@ -26,7 +26,7 @@ export const userTransfersAtom = Atom.family((address: Address) => {
   // Use decode() to convert hex string to FixedSizeBinary(20) for comparison
   // Addresses are stored as FixedSizeBinary(20) in the database
   const userTransfersQuery = `
-    SELECT * FROM portfolio_dapp.erc20_transfers
+    SELECT * FROM "_/portfolio_dapp@dev"."erc20_transfers"
     WHERE from_address = decode('${normalizedAddress}', 'hex')
        OR to_address = decode('${normalizedAddress}', 'hex')
     ORDER BY block_num DESC

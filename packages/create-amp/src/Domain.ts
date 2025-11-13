@@ -3,6 +3,10 @@ import * as Schema from "effect/Schema"
 export const AvailableTemplFrameworkKey = Schema.Literal(
   "backend-express",
   "backend-fastify",
+  "backend-apollo-graphql",
+  "backend-express-gateway",
+  "backend-fastify-gateway",
+  "backend-apollo-graphql-gateway",
   "nextjs",
   "react-ampsync-electricsql",
   "react-arrowflight-effect-atom",

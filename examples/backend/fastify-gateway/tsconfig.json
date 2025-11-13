@@ -1,0 +1,14 @@
+{
+  "extends": "../../../tsconfig.base.jsonc",
+  "compilerOptions": {
+    "composite": true,
+    "outDir": "dist",
+    "rootDir": "src",
+    "noImplicitAny": false,
+    "noEmitOnError": true,
+    "allowImportingTsExtensions": false
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "dist"]
+}
+

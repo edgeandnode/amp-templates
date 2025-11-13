@@ -12,7 +12,6 @@ import { Atom } from "@effect-atom/atom-react"
  */
 const transport = createConnectTransport({
   baseUrl: window.location.origin,
-  httpVersion: "1.1",
   interceptors: [
     (next) => async (req) => {
       try {

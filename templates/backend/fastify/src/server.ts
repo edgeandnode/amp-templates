@@ -1,5 +1,5 @@
 /**
- * Fastify backend server for {{projectName}}
+ * Fastify backend server for Amp Arrow Flight integration
  *
  * This server provides:
  * - Arrow Flight integration for querying blockchain data via Amp
@@ -91,13 +91,13 @@ async function executeQuery(query: string): Promise<unknown[]> {
 
 // Health check endpoint
 fastify.get("/health", async () => {
-  return { status: "healthy", service: "{{projectName}}-backend" }
+  return { status: "healthy", service: "amp-fastify-backend" }
 })
 
 // Root endpoint
 fastify.get("/", async () => {
   return {
-    message: "{{projectName}} Fastify Backend",
+    message: "Amp - Fastify Backend",
     version: "0.1.0",
     endpoints: {
       health: "/health",
@@ -220,7 +220,7 @@ const start = async () => {
     await fastify.listen({ port: PORT, host: "0.0.0.0" })
     fastify.log.info(`Server listening on http://localhost:${PORT}`)
     fastify.log.info(`Amp Flight URL: ${AMP_FLIGHT_URL}`)
-    fastify.log.info(`Dataset: {{projectName}}_data`)
+    fastify.log.info(`Dataset: anvil`)
   } catch (err) {
     fastify.log.error(err)
     process.exit(1)

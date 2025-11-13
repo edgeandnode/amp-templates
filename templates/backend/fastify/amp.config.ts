@@ -1,7 +1,7 @@
 import { defineDataset } from "@edgeandnode/amp"
 
 export default defineDataset(() => ({
-  name: "{{projectName}}_data",
+  name: "anvil",
   network: "anvil",
   version: "1.0.0",
   dependencies: {

@@ -20,6 +20,38 @@ export const AVAILABLE_TEMPLATES = {
     skip: new Set([...Constants.ALWAYS_SKIP_DIRECTORIES, "dist"]),
     type: "build-dataset"
   },
+  "backend-apollo-graphql": {
+    key: "backend-apollo-graphql",
+    name: "Backend Nodejs w/ Apollo GraphQL",
+    description: "Scaffolds a GraphQL API server using Apollo Server and Fastify, querying local Amp datasets via Arrow Flight",
+    directory: "/templates/backend/apollo-graphql",
+    skip: new Set([...Constants.ALWAYS_SKIP_DIRECTORIES, "dist"]),
+    type: "build-dataset"
+  },
+  "backend-express-gateway": {
+    key: "backend-express-gateway",
+    name: "Backend Nodejs w/ Express (Gateway)",
+    description: "Scaffolds a REST API server using Express, querying remote Amp datasets via AMP Gateway",
+    directory: "/templates/backend/express-gateway",
+    skip: new Set([...Constants.ALWAYS_SKIP_DIRECTORIES, "dist"]),
+    type: "existing-dataset"
+  },
+  "backend-fastify-gateway": {
+    key: "backend-fastify-gateway",
+    name: "Backend Nodejs w/ Fastify (Gateway)",
+    description: "Scaffolds a REST API server using Fastify, querying remote Amp datasets via AMP Gateway",
+    directory: "/templates/backend/fastify-gateway",
+    skip: new Set([...Constants.ALWAYS_SKIP_DIRECTORIES, "dist"]),
+    type: "existing-dataset"
+  },
+  "backend-apollo-graphql-gateway": {
+    key: "backend-apollo-graphql-gateway",
+    name: "Backend Nodejs w/ Apollo GraphQL (Gateway)",
+    description: "Scaffolds a GraphQL API server using Apollo Server and Fastify, querying remote Amp datasets via AMP Gateway",
+    directory: "/templates/backend/apollo-graphql-gateway",
+    skip: new Set([...Constants.ALWAYS_SKIP_DIRECTORIES, "dist"]),
+    type: "existing-dataset"
+  },
   nextjs: {
     key: "nextjs",
     name: "Nextjs Fullstack app",

@@ -13,7 +13,7 @@
     "blockchain"
   ],
   "bin": {
-    "create-amp": "./dist/bin.js"
+    "create-amp": "./dist/bin.mjs"
   },
   "files": [
     "dist",

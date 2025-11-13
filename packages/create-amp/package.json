@@ -33,7 +33,7 @@
   "scripts": {
     "build": "tsdown && pnpm copy-package-json",
     "build:ts": "tsdown",
-    "dev": "tsx ./src/bun.ts",
+    "create-amp": "tsx ./src/bun.ts",
     "clean": "rimraf dist/*",
     "check": "tsc -b tsconfig.json",
     "lint": "eslint \"**/{src,test,examples,scripts,dtslint}/**/*.{ts,mjs}\"",
@@ -50,6 +50,7 @@
     "@effect/language-service": "^0.55.3",
     "@effect/platform": "^0.93.1",
     "@effect/platform-node": "^0.100.0",
+    "@effect/printer-ansi": "^0.47.0",
     "@effect/vitest": "^0.27.0",
     "@eslint/compat": "1.4.1",
     "@eslint/eslintrc": "3.3.1",

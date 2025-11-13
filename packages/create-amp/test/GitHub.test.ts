@@ -13,7 +13,8 @@ const mockConfig = Domain.AvailableTemplSchema.make({
   name: "Next.js Blank Template",
   description: "A blank Next.js template for AMP applications",
   directory: "/templates/nextjs",
-  skip: new Set<string>()
+  skip: new Set<string>(),
+  type: "build-dataset"
 })
 
 describe("GitHubService", () => {

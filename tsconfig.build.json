@@ -2,8 +2,5 @@
   "$schema": "http://json.schemastore.org/tsconfig",
   "extends": "./tsconfig.base.jsonc",
   "include": [],
-  "references": [
-    { "path": "packages/create-amp-ref/tsconfig.build.json" },
-    { "path": "packages/create-amp/tsconfig.build.json" }
-  ]
+  "references": [{ "path": "packages/create-amp/tsconfig.build.json" }]
 }

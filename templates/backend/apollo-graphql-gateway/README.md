@@ -56,7 +56,7 @@ HOST=0.0.0.0
 NODE_ENV=development
 ```
 
-### 4. Start/Run Server
+### 3. Start/Run Server
 
 ```bash
 # Start development server

@@ -280,6 +280,9 @@ importers:
 
   examples/backend/fastify-gateway:
     dependencies:
+      '@edgeandnode/amp':
+        specifier: ^0.0.33
+        version: 0.0.33(e8a1d4370528bd6085a46cd8d3e243ff)
       '@fastify/cors':
         specifier: ^11.1.0
         version: 11.1.0

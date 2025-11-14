@@ -18,7 +18,8 @@
   "files": [
     "dist",
     "llms.txt",
-    "CHANGELOG.md"
+    "CHANGELOG.md",
+    "README.md"
   ],
   "repository": {
     "type": "git",
@@ -41,7 +42,8 @@
     "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md}\"",
     "test": "vitest run",
     "coverage": "vitest run --coverage",
-    "copy-package-json": "tsx scripts/copy-package-json.ts"
+    "copy-package-json": "tsx scripts/copy-package-json.ts",
+    "prepublish": "pnpm run build"
   },
   "devDependencies": {
     "@effect/cli": "^0.72.1",

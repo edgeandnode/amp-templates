@@ -1,48 +1,47 @@
-# Amp pollo GraphQL Server
+# Amp Apollo GraphQL Server
 
-A GraphQL API server for querying Arbitrum One blockchain data using Apollo Server and AMP Gateway.
+A GraphQL API server for querying Arbitrum One blockchain data using Apollo Server and Amp Gateway.
 
 ## Overview
 
-This backend provides a GraphQL API that queries the `edgeandnode/arbitrum_one@0.0.1` dataset via the remote AMP Gateway. No local AMP setup or dataset is required.
+This backend provides a GraphQL API that queries live blockchain dataset via the remote AMP Gateway. No local AMP setup or dataset is required.
 
 ## Features
 
 - **Apollo Server 4** with latest GraphQL features
-- **Fastify** for high-performance HTTP server
 - **Remote AMP Gateway** integration (no local setup needed)
-- **Authentication** via AMP CLI token
-- **Arbitrum One Data** (blocks, transactions, logs)
+- **Authentication** via AMP CLI auth token header
 - **GraphQL Playground** for development
-- **TypeScript** with full type safety
-- **Query validation** and security measures
 
 ## Quick Start
 
 ### Prerequisites
 
 - Node.js v22+
-- pnpm v10.19.0+
-- AMP CLI auth token
 
-### 1. Get AMP Auth Token
 
-First, authenticate with AMP CLI to get your auth token:
+### 1. Install Dependencies
 
 ```bash
-# Install AMP CLI if not already installed
-pnpm install -g @edgeandnode/amp
-
-# Login to AMP
-amp auth login
-
-# Get your token (copy this value)
-amp auth token
+pnpm install
 ```
 
-### 2. Environment Setup
+### 2. Configure Environment
 
-Create a `.env` file in the project root:
+Copy the example environment file and configure it:
+
+```bash
+cp .env.example .env
+```
+
+Login to Amp and get Amp gateway access token:
+
+```bash
+pnpm amp auth login
+pnpm amp auth token
+```
+
+Edit `.env` and update the values:
 
 ```env
 # Required: AMP Gateway URL
@@ -57,12 +56,9 @@ HOST=0.0.0.0
 NODE_ENV=development
 ```
 
-### 3. Install & Run
+### 4. Start/Run Server
 
 ```bash
-# Install dependencies
-pnpm install
-
 # Start development server
 pnpm dev
 ```
@@ -175,12 +171,14 @@ query {
 
 ## Dataset Information
 
-This server queries the **edgeandnode/arbitrum_one@0.0.1** dataset, which includes:
+This server queries the `**edgeandnode/arbitrum_one@0.0.1**` dataset, which includes:
 
 - **Blocks**: Arbitrum One block data
 - **Transactions**: Transaction details and metadata
 - **Transaction Receipts**: Execution results and gas usage
 - **Logs**: Event logs and contract interactions
+
+Visit the Amp playground [https://playground.amp.edgeandnode.com/](https://playground.amp.edgeandnode.com/) to explore other available datasets and replace the dataset reference in the application to start using it
 
 ### Available Tables
 

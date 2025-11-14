@@ -4,11 +4,11 @@
 [submodule "examples/vite-react/electricsql/portfolio-dapp/contracts/lib/openzeppelin-contracts"]
 	path = examples/vite-react/electricsql/portfolio-dapp/contracts/lib/openzeppelin-contracts
 	url = https://github.com/OpenZeppelin/openzeppelin-contracts
-[submodule "examples/vite-react/arrow-flight/portfolio/contracts/lib/forge-std"]
-	path = examples/vite-react/arrow-flight/portfolio/contracts/lib/forge-std
+[submodule "examples/vite-react/arrow-flight/contracts/lib/forge-std"]
+	path = examples/vite-react/arrow-flight/contracts/lib/forge-std
 	url = https://github.com/foundry-rs/forge-std
-[submodule "examples/vite-react/arrow-flight/portfolio/contracts/lib/openzeppelin-contracts"]
-	path = examples/vite-react/arrow-flight/portfolio/contracts/lib/openzeppelin-contracts
+[submodule "examples/vite-react/arrow-flight/contracts/lib/openzeppelin-contracts"]
+	path = examples/vite-react/arrow-flight/contracts/lib/openzeppelin-contracts
 	url = https://github.com/OpenZeppelin/openzeppelin-contracts
 [submodule "examples/backend/fastify/contracts/lib/forge-std"]
 	path = examples/backend/fastify/contracts/lib/forge-std
@@ -28,3 +28,9 @@
 [submodule "examples/vite-react/jsonl-tsquery/contracts/lib/openzeppelin-contracts"]
 	path = examples/vite-react/jsonl-tsquery/contracts/lib/openzeppelin-contracts
 	url = https://github.com/OpenZeppelin/openzeppelin-contracts
+[submodule "examples/backend/express/contracts/lib/forge-std"]
+	path = examples/backend/express/contracts/lib/forge-std
+	url = https://github.com/foundry-rs/forge-std
+[submodule "examples/backend/express/contracts/lib/openzeppelin-contracts"]
+	path = examples/backend/express/contracts/lib/openzeppelin-contracts
+	url = https://github.com/openzeppelin/openzeppelin-contracts

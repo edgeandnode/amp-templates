@@ -3,7 +3,22 @@ default:
     @just --list
 
 # Install dependencies
-install:
+install: install-pnpm install-amp
+
+# Ampup installation (ampctl tool to deploy anvil network dataset)
+install-amp:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    if ! command -v ampctl &> /dev/null; then
+        echo "ampctl not found, installing..."
+        curl --proto '=https' --tlsv1.2 -sSf https://ampup.sh/install | sh
+        source ~/.zshenv
+    else
+        echo "ampctl is already installed, skipping installation"
+    fi
+
+# Package dependencies installation
+install-pnpm:
     pnpm install
 
 # Start service dependencies
@@ -50,14 +65,22 @@ seed-transfers:
 
 # Run all development services in parallel
 [parallel]
-dev: dev-amp dev-app
+dev: dev-watch dev-app
 
 # Run the app in development mode
-[private]
 dev-app:
     pnpm dev
 
-# Start the amp development server (watch config changes)
-[private]
-dev-amp:
+# Start the amp development server (watch config file changes)
+dev-watch:
     pnpm amp dev
+
+# Start service dependencies and deploy initial anvil raw dataset
+setup: up deploy-anvil-dataset
+
+# Deploy anvil raw dataset
+[private]
+deploy-anvil-dataset:
+    ampctl manifest generate --network anvil --kind evm-rpc --out anvil.json
+    ampctl dataset register _/anvil -t 0.0.1 ./anvil.json
+    ampctl dataset deploy _/anvil@0.0.1

@@ -85,7 +85,7 @@ async function startServer() {
     // Root endpoint with API information
     fastify.get("/", async () => {
       return {
-        name: "amp-apollo-graphql-backend- Apollo GraphQL Server",
+        name: "Amp Apollo GraphQL Server",
         version: "0.1.0",
         description: "GraphQL API for querying Arbitrum One blockchain data via AMP Gateway",
         endpoints: {

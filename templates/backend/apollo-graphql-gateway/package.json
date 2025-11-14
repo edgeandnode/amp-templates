@@ -1,6 +1,6 @@
 {
   "name": "amp-templ-backend-apollo-graphql-gateway",
-  "version": "0.1.0",
+  "version": "0.0.1",
   "type": "module",
   "private": true,
   "scripts": {
@@ -16,6 +16,7 @@
   "dependencies": {
     "@apollo/server": "^5.1.0",
     "@as-integrations/fastify": "^3.1.0",
+    "@edgeandnode/amp": "^0.0.33",
     "dotenv": "^17.2.3",
     "fastify": "^5.6.2",
     "graphql": "^16.12.0",

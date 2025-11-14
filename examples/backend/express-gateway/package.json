@@ -1,6 +1,6 @@
 {
-  "name": "amp-express-gateway-backend",
-  "version": "0.1.0",
+  "name": "amp-templ-backend-express-gateway",
+  "version": "0.0.1",
   "type": "module",
   "private": true,
   "scripts": {
@@ -13,6 +13,7 @@
     "lint:fix": "pnpm lint --fix"
   },
   "dependencies": {
+    "@edgeandnode/amp": "^0.0.33",
     "cors": "^2.8.5",
     "dotenv": "^17.2.3",
     "express": "^5.1.0"
@@ -27,10 +28,7 @@
     "tsx": "^4.20.6",
     "typescript": "^5.9.3"
   },
-  "packageManager": "pnpm@10.19.0",
   "engines": {
-    "node": ">=22.0.0",
-    "pnpm": ">=10.19.0"
+    "node": ">=22.0.0"
   }
 }
-

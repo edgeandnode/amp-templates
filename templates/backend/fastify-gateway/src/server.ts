@@ -327,27 +327,27 @@ const start = async () => {
 // Graceful shutdown
 const signals = ["SIGINT", "SIGTERM"]
 signals.forEach((signal) => {
-    process.on(signal, async () => {
-        fastify.log.info(`\nReceived ${signal}, shutting down gracefully...`)
-        try {
-            await fastify.close()
-            fastify.log.info("Server stopped gracefully")
-            process.exit(0)
-        } catch (error) {
-            fastify.log.error(`Error during shutdown: ${error instanceof Error ? error.message : String(error)}`)
-            process.exit(1)
-        }
-    })
+  process.on(signal, async () => {
+    fastify.log.info(`\nReceived ${signal}, shutting down gracefully...`)
+    try {
+      await fastify.close()
+      fastify.log.info("Server stopped gracefully")
+      process.exit(0)
+    } catch (error) {
+      fastify.log.error(`Error during shutdown: ${error instanceof Error ? error.message : String(error)}`)
+      process.exit(1)
+    }
+  })
 })
 
 // Handle unhandled promise rejections
 process.on("unhandledRejection", (reason, promise) => {
-    fastify.log.error(`Unhandled Promise Rejection at: ${String(promise)}, reason: ${reason instanceof Error ? reason.message : String(reason)}`)
+  fastify.log.error(`Unhandled Promise Rejection at: ${String(promise)}, reason: ${reason instanceof Error ? reason.message : String(reason)}`)
 })
 
 // Start the server
 start().catch((error) => {
-    fastify.log.error(`Failed to start server: ${error instanceof Error ? error.message : String(error)}`)
-    process.exit(1)
+  fastify.log.error(`Failed to start server: ${error instanceof Error ? error.message : String(error)}`)
+  process.exit(1)
 })
 

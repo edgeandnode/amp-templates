@@ -3,15 +3,10 @@
     "target": "ES2022",
     "module": "ESNext",
     "moduleResolution": "bundler",
-    "allowImportingTsExtensions": false,
-    "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "strict": true,
-    "noImplicitAny": false,
     "skipLibCheck": true,
-    "declaration": true,
-    "declarationMap": true,
     "sourceMap": true,
     "outDir": "dist",
     "rootDir": "src",
@@ -22,4 +17,3 @@
   "include": ["src/**/*"],
   "exclude": ["node_modules", "dist"]
 }
-

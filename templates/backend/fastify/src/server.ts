@@ -6,7 +6,7 @@
  * - REST API endpoints for blocks and transfers
  */
 
-import { createConnectTransport } from "@connectrpc/connect-web"
+import { createConnectTransport } from "@connectrpc/connect-node"
 import { ArrowFlight } from "@edgeandnode/amp"
 import cors from "@fastify/cors"
 import Fastify from "fastify"
@@ -21,6 +21,7 @@ const AMP_FLIGHT_URL = process.env.AMP_FLIGHT_URL || "http://localhost:3002"
 // Create Connect transport for Arrow Flight
 const transport = createConnectTransport({
   baseUrl: AMP_FLIGHT_URL,
+  httpVersion: "1.1",
 })
 
 // Create Arrow Flight layer

@@ -1,0 +1,101 @@
+# Apollo GraphQL Backend Development Tasks
+
+# Show available tasks
+default:
+    @just --list
+
+# Start all infrastructure services
+start:
+    docker-compose up -d
+
+# Stop all services
+stop:
+    docker-compose down
+
+# Reset all data (removes volumes)
+reset:
+    docker-compose down -v
+
+# View service logs
+logs service="":
+    #!/usr/bin/env sh
+    if [ "{{ service }}" = "" ]; then
+        docker-compose logs -f
+    else
+        docker-compose logs -f {{ service }}
+    fi
+
+# Check service status
+status:
+    docker-compose ps
+
+# Deploy dataset to Amp
+deploy-dataset:
+    pnpm amp register
+
+# Deploy smart contracts
+deploy-contracts:
+    forge script script/Deploy.s.sol:Deploy --rpc-url http://localhost:8545 --broadcast --unlocked
+
+# Generate blockchain activity
+generate-activity:
+    cd contracts && forge script script/GenerateActivity.s.sol:GenerateActivity --rpc-url http://localhost:8545 --broadcast --unlocked --sender 0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266
+
+# Complete setup: start services, deploy contracts, generate activity, start backend
+setup:
+    @echo "🚀 Starting complete AMP setup..."
+    @just start
+    @echo "Waiting for services to start..."
+    @sleep 30
+    @echo "Deploying contracts and generating blockchain activity..."
+    @just generate-activity
+    @echo "Starting Amp dev mode to register datasets..."
+    @just start-amp-dev
+    @echo "Starting backend server..."
+    @just start-backend
+    @echo "Setup complete! Testing API..."
+    @sleep 10
+    @curl -s "http://localhost:4000/health" | jq
+    @echo "\n✅ Ready! Available endpoints:"
+    @echo "  • Health: curl http://localhost:4000/health"
+    @echo "  • GraphQL: curl http://localhost:4000/graphql"
+    @echo "  • GraphQL Playground: http://localhost:4000/graphql"
+
+# Start Amp dev mode (for dataset registration and hot reloading)
+start-amp-dev:
+    pnpm amp dev &
+
+# Start backend server locally
+start-backend:
+    AMP_FLIGHT_URL=http://localhost:3004 pnpm dev &
+
+# Generate blockchain activity (includes contract deployment)
+seed-transfers:
+    @just generate-activity
+
+# Build backend
+build:
+    pnpm build
+
+# Start backend locally (for development)
+dev:
+    AMP_FLIGHT_URL=http://localhost:3004 pnpm dev
+
+# Test the API endpoints
+test-api:
+    @echo "🧪 Testing GraphQL endpoints..."
+    @echo "Health check:"
+    @curl -s "http://localhost:4000/health" | jq
+    @echo "\nGraphQL Health query:"
+    @curl -s -X POST "http://localhost:4000/graphql" -H "Content-Type: application/json" -d '{"query":"{ health { status service timestamp } }"}' | jq
+    @echo "\nGraphQL Custom query:"
+    @curl -s -X POST "http://localhost:4000/graphql" -H "Content-Type: application/json" -d '{"query":"{ executeQuery(query: \"SELECT COUNT(*) as block_count FROM anvil.blocks\") { data rowCount } }"}' | jq
+
+# List registered datasets
+datasets:
+    pnpm amp datasets list
+
+# Clean up everything
+clean:
+    docker-compose down -v
+    docker system prune -f

@@ -42,4 +42,21 @@ tmp/
 
 .history/
 
+# AMP & Database generated data
+infra/postgres/data/
+infra/amp/data/
+infra/amp/datasets/
+
+# Foundry/Forge generated files
+contracts/broadcast/
+contracts/cache/
+contracts/out/
+foundry.lock
+
+# Test artifacts and verification files
+*TEST*.md
+*BACKEND*.md
+*VERIFICATION*.md
+*FIXES*.md
+
 

@@ -1,11 +1,25 @@
 {
   "compilerOptions": {
-    "composite": true,
+    "target": "ES2022",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "lib": ["ES2022", "DOM"],
     "outDir": "dist",
     "rootDir": "src",
+    "strict": true,
+    "esModuleInterop": true,
+    "downlevelIteration": true,
+    "skipLibCheck": true,
+    "resolveJsonModule": true,
+    "declaration": true,
+    "sourceMap": true,
+    "composite": true,
     "noImplicitAny": false,
     "noEmitOnError": true,
-    "allowImportingTsExtensions": false
+    "allowImportingTsExtensions": false,
+    "emitDeclarationOnly": false,
+    "noEmit": false,
+    "types": ["node"]
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules", "dist"]

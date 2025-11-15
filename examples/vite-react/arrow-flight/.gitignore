@@ -25,6 +25,8 @@ contracts/broadcast/**/dry-run/
 # Forge / Anvil Docs and Env file
 contracts/docs/
 contracts/.env
+contracts/cache/
+contracts/out/
 
 # PostgreSQL data directory (runtime database files)
 infra/postgres/data/

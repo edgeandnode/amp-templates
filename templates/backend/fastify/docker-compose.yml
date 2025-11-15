@@ -50,6 +50,7 @@ services:
     working_dir: /app
     volumes:
       - ./:/app
+      - amp_proxy_node_modules:/app/node_modules
     command: >
       sh -c "
         corepack enable && corepack prepare pnpm@10.19.0 --activate &&
@@ -60,18 +61,6 @@ services:
       amp:
         condition: service_started
 
-  fastify-backend:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    environment:
-      PORT: 3001
-      AMP_FLIGHT_URL: http://amp-proxy:3002
-      DATASET_NAME: fastify_backend
-    ports:
-      - "3001:3001"
-    depends_on:
-      amp-proxy:
-        condition: service_started
-    restart: unless-stopped
+volumes:
+  amp_proxy_node_modules:
 

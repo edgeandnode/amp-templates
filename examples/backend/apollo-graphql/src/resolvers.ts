@@ -2,7 +2,7 @@
  * GraphQL resolvers for querying blockchain data via Arrow Flight
  */
 
-import { createConnectTransport } from "@connectrpc/connect-web"
+import { createConnectTransport } from "@connectrpc/connect-node"
 import { ArrowFlight } from "@edgeandnode/amp"
 import { Effect } from "effect"
 import { Table } from "apache-arrow"
@@ -24,6 +24,7 @@ const DATASET_NAME = process.env.DATASET_NAME || "anvil"
 // Create Connect transport for Arrow Flight
 const transport = createConnectTransport({
   baseUrl: AMP_FLIGHT_URL,
+  httpVersion: "1.1",
 })
 
 // Create Arrow Flight layer
@@ -109,29 +110,10 @@ export const resolvers = {
       const offset = args.offset || 0
 
       const query = `
-        SELECT 
+        SELECT
           block_num,
           timestamp,
-          hash,
-          parent_hash,
-          ommers_hash,
-          miner,
-          state_root,
-          transactions_root,
-          receipt_root,
-          logs_bloom,
-          difficulty,
-          total_difficulty,
-          gas_limit,
-          gas_used,
-          extra_data,
-          mix_hash,
-          nonce,
-          base_fee_per_gas,
-          withdrawals_root,
-          blob_gas_used,
-          excess_blob_gas,
-          parent_beacon_root
+          hash
         FROM ${DATASET_NAME}.blocks
         ORDER BY block_num DESC
         LIMIT ${limit} OFFSET ${offset}

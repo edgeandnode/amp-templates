@@ -1,4 +1,4 @@
-# Fastify Backend Development Tasks
+# Express Backend Development Tasks
 
 # Show available tasks
 default:
@@ -68,7 +68,6 @@ start-amp-dev:
 
 # Start backend server locally
 start-backend:
-    docker-compose stop fastify-backend || true
     AMP_FLIGHT_URL=http://localhost:3002 pnpm dev &
 
 # Generate blockchain activity (includes contract deployment)

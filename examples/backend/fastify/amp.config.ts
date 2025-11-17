@@ -5,11 +5,7 @@ export default defineDataset(() => ({
   network: "anvil",
   version: "1.0.0",
   dependencies: {
-    anvil: {
-      owner: "graphprotocol",
-      name: "anvil",
-      version: "0.1.0",
-    },
+    anvil: "graphprotocol/anvil@0.1.0",
   },
   tables: {
     blocks: {

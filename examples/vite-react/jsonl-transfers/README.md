@@ -134,6 +134,8 @@ All API responses are validated using Zod schemas defined in `src/lib/schemas.ts
 
 ## Customizing the Query
 
+Visit the Amp playground [https://playground.amp.thegraph.com/](https://playground.amp.edgeandnode.com/) to explore other available datasets and replace reference below to start using other datasets
+
 To modify what data is fetched, edit the query in `src/lib/api.ts`:
 
 ```typescript

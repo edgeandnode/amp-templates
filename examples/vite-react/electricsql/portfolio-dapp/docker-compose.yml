@@ -20,7 +20,7 @@ services:
       retries: 5
 
   amp:
-    image: ghcr.io/edgeandnode/amp:v0.0.20
+    image: ghcr.io/edgeandnode/amp:latest
     ports:
       - "1602:1602" # Arrow Flight
       - "1603:1603" # JSON Lines
@@ -44,8 +44,8 @@ services:
     entrypoint: ["anvil", "--host", "0.0.0.0"]
 
   ampsync:
-    image: ghcr.io/edgeandnode/ampsync:v0.0.20
-    command: ["sync"]
+    image: ghcr.io/edgeandnode/ampsync:latest
+    command: ["sync", "--dataset", "_/portfolio_dapp@dev"]
     environment:
       AMP_DATASET_NAME: portfolio_dapp
       AMP_FLIGHT_ADDR: http://amp:1602

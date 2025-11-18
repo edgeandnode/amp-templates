@@ -16,7 +16,7 @@
   "dependencies": {
     "@apollo/server": "^5.1.0",
     "@as-integrations/fastify": "^3.1.0",
-    "@edgeandnode/amp": "^0.0.33",
+    "@edgeandnode/amp": "^0.0.38",
     "dotenv": "^17.2.3",
     "fastify": "^5.6.2",
     "graphql": "^16.12.0",

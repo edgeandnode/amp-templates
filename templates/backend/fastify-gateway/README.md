@@ -44,7 +44,7 @@ Edit `.env` and update the values:
 
 ```env
 # Required: AMP Gateway URL
-AMP_GATEWAY_URL=https://gateway.amp.staging.edgeandnode.com
+AMP_GATEWAY_URL=https://gateway.amp.staging.thegraph.com/
 
 # Required: Your AMP authentication token
 AMP_AUTH_TOKEN=your_token_here
@@ -154,7 +154,7 @@ This server queries the `**edgeandnode/arbitrum_one@0.0.1**` dataset, which incl
 - **Transaction Receipts**: Execution results and gas usage
 - **Logs**: Event logs and contract interactions
 
-Visit the Amp playground [https://playground.amp.edgeandnode.com/](https://playground.amp.edgeandnode.com/) to explore other available datasets and replace the dataset reference in the application to start using it
+Visit the Amp playground [https://playground.amp.thegraph.com/](https://playground.amp.thegraph.com/) to explore other available datasets and replace the dataset reference in the application to start using it
 
 ## Development
 
@@ -183,7 +183,7 @@ pnpm lint
 |----------|---------|-------------|
 | `PORT` | 3001 | Server port |
 | `HOST` | 0.0.0.0 | Server host |
-| `AMP_GATEWAY_URL` | https://gateway.amp.staging.edgeandnode.com | AMP Gateway URL |
+| `AMP_GATEWAY_URL` | https://gateway.amp.staging.thegraph.com/ | AMP Gateway URL |
 | `AMP_AUTH_TOKEN` | - | AMP authentication token (required) |
 | `DATASET_NAME` | edgeandnode/arbitrum_one@0.0.1 | Dataset name. Replace as neede |
 
@@ -218,5 +218,5 @@ Verify that `AMP_GATEWAY_URL` is correct and accessible from your network.
 
 - [AMP Documentation](https://github.com/edgeandnode/amp)
 - [Fastify Documentation](https://www.fastify.io/docs/latest/)
-- [AMP Gateway](https://gateway.amp.staging.edgeandnode.com)
+- [AMP Gateway](https://gateway.amp.staging.thegraph.com/)
 

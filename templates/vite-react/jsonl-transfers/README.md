@@ -48,14 +48,14 @@ Login to Amp and get gateway access token:
 
 ```bash
 pnpm amp auth login
-pnpm amp auth token
+pnpm amp auth token --duration=1d       # run again to regenerate token when expired
 ```
 
 Edit `.env` and update the values:
 
 ```env
 # AMP Query Gateway URL
-VITE_AMP_JSONL_URL=http://localhost:1603
+VITE_AMP_JSONL_URL=https://gateway.amp.staging.thegraph.com/
 
 VITE_AMP_ACCESS_TOKEN={Amp-gateway-token}
 
@@ -66,7 +66,7 @@ VITE_POLLING_INTERVAL=2000
 VITE_REQUEST_TIMEOUT=30000
 ```
 
-### 4. Start Development Servers
+### 3. Start Development Servers
 
 Run React app:
 
@@ -134,6 +134,8 @@ All API responses are validated using Zod schemas defined in `src/lib/schemas.ts
 
 ## Customizing the Query
 
+Visit the Amp playground [https://playground.amp.thegraph.com/](https://playground.amp.thegraph.com/) to explore other available datasets and replace reference below to start using other datasets
+
 To modify what data is fetched, edit the query in `src/lib/api.ts`:
 
 ```typescript
@@ -142,6 +144,10 @@ const result_limit = 20
 
 // Example: Filter by block range
 const starting_block = 100
+
+// Example: Retrieve events from Ethereum mainnet logs dataset
+const dataset_ref = "edgeandnode/ethereum_mainnet@0.0.1"
+const dataset_table = "logs"
 ```
 
 ## Error Handling
@@ -167,9 +173,15 @@ This runs type checking, linting, and formatting checks.
 
 ## Troubleshooting
 
-### "Authentication required" error
+### "Authentication required / Token Expired" error
 
 Check/update `VITE_AMP_ACCESS_TOKEN` in your `.env` file if the AMP server responds with authentication error.
+
+```bash
+# Regenerate expired gateway access token
+pnpm amp auth token --duration=1d
+```
+
 
 ### Polling too fast/slow
 
@@ -191,7 +203,7 @@ VITE_REQUEST_TIMEOUT=60000
 
 ## Learn More
 
-- [AMP Documentation](https://docs.edgeandnode.com/amp)
+- [AMP Documentation](https://github.com/edgeandnode/amp)
 - [TanStack Query](https://tanstack.com/query/latest)
 - [Vite Documentation](https://vite.dev)
 - [Zod Documentation](https://zod.dev)

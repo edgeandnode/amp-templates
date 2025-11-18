@@ -143,8 +143,9 @@ export function TransactionTable({ transfers, address, loading = false }: Transa
 
           return (
             <span
-              className={`rounded-full px-2 py-1 text-xs font-medium ${isSent ? "bg-red-500/10 text-red-400" : "bg-green-500/10 text-green-400"
-                }`}
+              className={`rounded-full px-2 py-1 text-xs font-medium ${
+                isSent ? "bg-red-500/10 text-red-400" : "bg-green-500/10 text-green-400"
+              }`}
             >
               {isSent ? "Sent" : "Received"}
             </span>

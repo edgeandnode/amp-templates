@@ -38,7 +38,7 @@ const ERC20_METADATA_ABI = [
 
 interface TransactionTableProps {
   transfers: ERC20Transfer[]
-  address?: string
+  address?: string | undefined
   loading?: boolean
 }
 
@@ -56,11 +56,13 @@ export function TransactionTable({ transfers, address, loading = false }: Transa
 
   // Fetch token metadata
   const { data: tokenMetadata } = useReadContracts({
-    contracts: uniqueTokenAddresses.flatMap((tokenAddress) => [
-      { address: tokenAddress as `0x${string}`, abi: ERC20_METADATA_ABI, functionName: "symbol" },
-      { address: tokenAddress as `0x${string}`, abi: ERC20_METADATA_ABI, functionName: "name" },
-      { address: tokenAddress as `0x${string}`, abi: ERC20_METADATA_ABI, functionName: "decimals" },
-    ]),
+    contracts: uniqueTokenAddresses
+      .filter((tokenAddress): tokenAddress is string => !!tokenAddress)
+      .flatMap((tokenAddress) => [
+        { address: tokenAddress as `0x${string}`, abi: ERC20_METADATA_ABI, functionName: "symbol" },
+        { address: tokenAddress as `0x${string}`, abi: ERC20_METADATA_ABI, functionName: "name" },
+        { address: tokenAddress as `0x${string}`, abi: ERC20_METADATA_ABI, functionName: "decimals" },
+      ]),
   })
 
   // Create a map of token address to metadata
@@ -180,7 +182,7 @@ export function TransactionTable({ transfers, address, loading = false }: Transa
           const decimals = metadata?.decimals ?? 18
 
           const amount = info.row.original.amountRaw
-          const formatted = formatUnits(amount, decimals)
+          const formatted = formatUnits(BigInt(amount), decimals)
 
           return (
             <div>

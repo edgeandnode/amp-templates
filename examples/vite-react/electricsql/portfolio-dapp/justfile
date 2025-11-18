@@ -65,7 +65,8 @@ seed-transfers:
     forge script contracts/script/DoTransfers.s.sol --broadcast --rpc-url http://localhost:8545
 
 # Run the app in development mode
-dev: pnpm dev
+dev: 
+    pnpm dev
 
 # Start the amp development server (watch config file changes)
 dev-watch:

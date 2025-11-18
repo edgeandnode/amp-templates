@@ -47,7 +47,7 @@ This will start:
   - Anvil local blockchain (port 8545)
 - Register and deploy `anvil` chain raw dataset with Amp server
 - Amp dev server with hot reloading
-  - Any saved changes to `amp.config.ts` will be deployed to the local Amp engine automatically 
+  - Any saved changes to `amp.config.ts` will be deployed to the local Amp engine automatically
 
 ### 4. Start development server
 
@@ -59,7 +59,6 @@ This runs in parallel:
 
 - Vite dev server for the React app [http://localhost:5173](http://localhost:5173). See [application notes](#application-notes)
 - Electric SQL Shape proxy server [http://localhost:3001](http://localhost:3001)
-
 
 ### 5. Deploy Smart Contracts
 
@@ -148,7 +147,6 @@ Step through the features in the application by following the steps below:
 - With Wallet #1, select any token and hit `Transfer`, then input Wallet #2's address as recipient and a positive token amount
 - Have another browser open with Wallet #2 connected
 - Click `Submit` on the Wallet #1 window and see the holdings or transfer history table update, along with toast notification message with received token details
-
 
 ## Development Workflow
 

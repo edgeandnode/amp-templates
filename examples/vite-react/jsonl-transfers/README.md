@@ -203,7 +203,7 @@ VITE_REQUEST_TIMEOUT=60000
 
 ## Learn More
 
-- [AMP Documentation](https://docs.edgeandnode.com/amp)
+- [AMP Documentation](https://github.com/edgeandnode/amp)
 - [TanStack Query](https://tanstack.com/query/latest)
 - [Vite Documentation](https://vite.dev)
 - [Zod Documentation](https://zod.dev)

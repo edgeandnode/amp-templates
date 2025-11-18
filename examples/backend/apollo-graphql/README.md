@@ -46,7 +46,7 @@ Create a `.env` file in the project root:
 
 ```env
 # Required: Arrow Flight URL
-AMP_GATEWAY_URL=https://gateway.amp.staging.edgeandnode.com
+AMP_GATEWAY_URL=https://gateway.amp.staging.thegraph.com/
 
 # Required: Your AMP authentication token
 AMP_FLIGHT_URL=your_token_here
@@ -229,7 +229,7 @@ In development mode, visit http://localhost:4000/graphql to access the GraphQL P
 Ensure these are set in production:
 
 ```env
-AMP_GATEWAY_URL=https://gateway.amp.staging.edgeandnode.com
+AMP_GATEWAY_URL=https://gateway.amp.staging.thegraph.com/
 AMP_FLIGHT_URL=your_production_token
 PORT=4000
 NODE_ENV=production

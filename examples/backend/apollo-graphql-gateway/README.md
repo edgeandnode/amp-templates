@@ -178,7 +178,7 @@ This server queries the `**edgeandnode/arbitrum_one@0.0.1**` dataset, which incl
 - **Transaction Receipts**: Execution results and gas usage
 - **Logs**: Event logs and contract interactions
 
-Visit the Amp playground [https://playground.amp.thegraph.com/](https://playground.amp.edgeandnode.com/) to explore other available datasets and replace the dataset reference in the application to start using it
+Visit the Amp playground [https://playground.amp.thegraph.com/](https://playground.amp.thegraph.com/) to explore other available datasets and replace the dataset reference in the application to start using it
 
 ### Available Tables
 

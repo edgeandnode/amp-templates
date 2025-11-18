@@ -17,7 +17,7 @@ import type { BlockData, LogData, TransactionData } from "./types/amp-data.js"
 // Configuration
 const PORT = Number(process.env.PORT) || 3001
 const HOST = process.env.HOST || "0.0.0.0"
-const AMP_GATEWAY_URL = process.env.AMP_GATEWAY_URL || "https://gateway.amp.staging.edgeandnode.com"
+const AMP_GATEWAY_URL = process.env.AMP_GATEWAY_URL || "https://gateway.amp.staging.thegraph.com/"
 const AMP_AUTH_TOKEN = process.env.AMP_AUTH_TOKEN // Get auth token from environment
 const DATASET_NAME = process.env.DATASET_NAME || "edgeandnode/arbitrum_one@0.0.1"
 const NODE_ENV = process.env.NODE_ENV || "development"

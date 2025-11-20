@@ -18,7 +18,7 @@
   "dependencies": {
     "@connectrpc/connect": "^2.1.1",
     "@connectrpc/connect-web": "^2.1.0",
-    "@edgeandnode/amp": "^0.0.40",
+    "@edgeandnode/amp": "^0.0.46",
     "@effect-atom/atom": "^0.4.2",
     "@effect-atom/atom-react": "^0.4.0",
     "@graphprotocol/gds-react": "https://pkg.pr.new/graphprotocol/gds/@graphprotocol/gds-react@31e7393",

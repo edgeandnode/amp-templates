@@ -38,7 +38,7 @@ Login to Amp and get Amp gateway access token:
 
 ```bash
 pnpm amp auth login
-pnpm amp auth token
+pnpm amp auth token "7 days"
 ```
 
 Edit `.env` and update the values:

@@ -37,7 +37,7 @@ Login to Amp and get Amp gateway access token:
 
 ```bash
 pnpm amp auth login
-pnpm amp auth token
+pnpm amp auth token "7 days"
 ```
 
 Edit `.env` and update the values:
@@ -216,7 +216,7 @@ Verify that `AMP_GATEWAY_URL` is correct and accessible from your network.
 
 ## Learn More
 
-- [AMP Documentation](https://github.com/edgeandnode/amp)
+- [AMP Documentation](https://github.com/edgeandnode/ampup)
 - [Fastify Documentation](https://www.fastify.io/docs/latest/)
 - [AMP Gateway](https://gateway.amp.staging.thegraph.com/)
 

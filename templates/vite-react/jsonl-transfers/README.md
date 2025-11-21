@@ -48,7 +48,7 @@ Login to Amp and get gateway access token:
 
 ```bash
 pnpm amp auth login
-pnpm amp auth token --duration=1d       # run again to regenerate token when expired
+pnpm amp auth token "7 days"       # run again to regenerate token when expired
 ```
 
 Edit `.env` and update the values:
@@ -179,7 +179,7 @@ Check/update `VITE_AMP_ACCESS_TOKEN` in your `.env` file if the AMP server respo
 
 ```bash
 # Regenerate expired gateway access token
-pnpm amp auth token --duration=1d
+pnpm amp auth token "7 days"
 ```
 
 
@@ -203,7 +203,7 @@ VITE_REQUEST_TIMEOUT=60000
 
 ## Learn More
 
-- [AMP Documentation](https://github.com/edgeandnode/amp)
+- [AMP Documentation](https://github.com/edgeandnode/ampup)
 - [TanStack Query](https://tanstack.com/query/latest)
 - [Vite Documentation](https://vite.dev)
 - [Zod Documentation](https://zod.dev)

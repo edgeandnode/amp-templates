@@ -40,7 +40,7 @@ export class TimeoutError extends Error {
 // Headers builder
 function buildHeaders(): HeadersInit {
   const headers: HeadersInit = {
-    Accept: "application/x-ndjson",
+    Accept: "application/jsonl",
     "Content-Type": "application/json",
   }
 

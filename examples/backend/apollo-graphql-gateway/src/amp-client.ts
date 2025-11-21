@@ -26,11 +26,11 @@ export class AmpClient {
     const startTime = Date.now()
 
     try {
-      const response = await fetch(`${this.gatewayUrl}/api/jsonl`, {
+      const response = await fetch(`${this.gatewayUrl}`, {
         method: "POST",
         headers: {
           "Content-Type": "text/plain",
-          "Accept": "application/x-ndjson",
+          "Accept": "application/jsonl",
           ...(this.authToken && { "Authorization": `Bearer ${this.authToken}` }),
         },
         body: query

@@ -38,14 +38,14 @@ Login to Amp and get Amp gateway access token:
 
 ```bash
 pnpm amp auth login
-pnpm amp auth token
+pnpm amp auth token "7 days"
 ```
 
 Edit `.env` and update the values:
 
 ```env
 # Required: AMP Gateway URL
-AMP_GATEWAY_URL=https://gateway.amp.staging.edgeandnode.com
+AMP_GATEWAY_URL=https://gateway.amp.staging.thegraph.com/
 
 # Required: Your AMP authentication token
 AMP_AUTH_TOKEN=your_token_here
@@ -178,7 +178,7 @@ This server queries the `**edgeandnode/arbitrum_one@0.0.1**` dataset, which incl
 - **Transaction Receipts**: Execution results and gas usage
 - **Logs**: Event logs and contract interactions
 
-Visit the Amp playground [https://playground.amp.edgeandnode.com/](https://playground.amp.edgeandnode.com/) to explore other available datasets and replace the dataset reference in the application to start using it
+Visit the Amp playground [https://playground.amp.thegraph.com/](https://playground.amp.thegraph.com/) to explore other available datasets and replace the dataset reference in the application to start using it
 
 ### Available Tables
 
@@ -227,7 +227,7 @@ In development mode, visit http://localhost:4000/graphql to access the GraphQL P
 Ensure these are set in production:
 
 ```env
-AMP_GATEWAY_URL=https://gateway.amp.staging.edgeandnode.com
+AMP_GATEWAY_URL=https://gateway.amp.staging.thegraph.com/
 AMP_AUTH_TOKEN=your_production_token
 PORT=4000
 NODE_ENV=production

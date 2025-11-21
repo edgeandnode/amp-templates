@@ -22,7 +22,7 @@ export const resolvers = {
         status: health.status,
         service: "amp-apollo-graphql-gateway-backend",
         timestamp: health.timestamp,
-        gateway: process.env.AMP_GATEWAY_URL || "https://gateway.amp.staging.edgeandnode.com",
+        gateway: process.env.AMP_GATEWAY_URL || "https://gateway.amp.staging.thegraph.com/",
       }
     },
 
